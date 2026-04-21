@@ -1,4 +1,4 @@
 .env
-results/
+res/
 .vscode/
 __pycache__/

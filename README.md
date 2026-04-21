@@ -40,9 +40,9 @@ Dataset: HiToM
 
 Use this table for quick model/method comparison. Add one new row for each completed run.
 
-| Model | Method | Prompt Version | Final Accuracy | Correct/Total | Result File | Run Date | Notes |
+| Model | Method | Prompt Version | Final Accuracy | Correct/Total | Result File | Notes |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| deepseek-chat (DeepSeek-V3.2) | VP | v1 | 0.6242 | 749/1200 | results/hitom_vp_results.jsonl | 2026-04-22 | Current baseline |
+| deepseek-chat (DeepSeek-V3.2) | VP | v1 | 0.6242 | 749/1200 | results/hitom_vp_results.jsonl | Current baseline |
 
 ### Accuracy by question_order (Long Format)
 
