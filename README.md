@@ -40,10 +40,10 @@ Dataset: HiToM
 
 Use this table for quick model/method comparison. Add one new row for each completed run.
 
-| Model | Method | Prompt Version | Final Accuracy | Correct/Total | Result File | Notes |
-| --- | --- | --- | --- | --- | --- | --- |
-| deepseek-chat (DeepSeek-V3.2) | VP | v1 | 0.6242 | 749/1200 | results/hitom_vp_results.jsonl | Current baseline |
-| deepseek-chat (DeepSeek-V3.2) | COTP | v1 | 0.6800 | 816/1200 | experiment_results/deepseek_hitom_cotp_full.jsonl | Better than VP |
+| Model | Method | Prompt Version | Final Accuracy | Correct/Total | Result File |
+| --- | --- | --- | --- | --- | --- |
+| deepseek-chat (DeepSeek-V3.2) | VP | v1 | 0.6242 | 749/1200 | experiment_results/deepseek_hitom_vp_full.jsonl |
+| deepseek-chat (DeepSeek-V3.2) | COTP | v1 | 0.6800 | 816/1200 | experiment_results/deepseek_hitom_cotp_full.jsonl | 
 
 ### question_order Comparison (Wide Format)
 
