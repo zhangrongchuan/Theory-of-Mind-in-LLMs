@@ -41,27 +41,18 @@ Dataset: HiToM
 Use this table for quick model/method comparison. Add one new row for each completed run.
 
 | Model | Method | Prompt Version | Final Accuracy | Correct/Total | Result File | Notes |
-| --- | --- | --- | --- | --- | --- | --- | --- |
+| --- | --- | --- | --- | --- | --- | --- |
 | deepseek-chat (DeepSeek-V3.2) | VP | v1 | 0.6242 | 749/1200 | results/hitom_vp_results.jsonl | Current baseline |
+| deepseek-chat (DeepSeek-V3.2) | COTP | v1 | 0.6800 | 816/1200 | experiment_results/deepseek_hitom_cotp_full.jsonl | Better than VP |
 
-### Accuracy by question_order (Long Format)
+### question_order Comparison (Wide Format)
 
-Use this long-format table for detailed analysis. For each run, append 5 rows (order 0 to 4).
+Use this table for cross-model and cross-method comparison by order. Add one new row per completed run.
 
-| Model | Method | Prompt Version | Question Order | Correct/Total | Accuracy |
-| --- | --- | --- | --- | --- | --- |
-| deepseek-chat (DeepSeek-V3.2) | VP | v1 | 0 | 226/240 | 0.9417 |
-| deepseek-chat (DeepSeek-V3.2) | VP | v1 | 1 | 142/240 | 0.5917 |
-| deepseek-chat (DeepSeek-V3.2) | VP | v1 | 2 | 130/240 | 0.5417 |
-| deepseek-chat (DeepSeek-V3.2) | VP | v1 | 3 | 130/240 | 0.5417 |
-| deepseek-chat (DeepSeek-V3.2) | VP | v1 | 4 | 121/240 | 0.5042 |
-
-### Recommended Naming Convention
-
-- Model: exact API/model name, for example deepseek-chat, gpt-4.1, qwen2.5-72b-instruct.
-- Method: VP, COTP, or other method name.
-- Prompt Version: v1, v2, v3 (increase whenever prompt text changes).
-- Result File: keep one jsonl file per run, for example results/hitom_deepseek_vp_v1.jsonl.
+| Model | Method | Prompt Version | Order 0 | Order 1 | Order 2 | Order 3 | Order 4 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| deepseek-chat (DeepSeek-V3.2) | VP | v1 | 0.9417 (226/240) | 0.5917 (142/240) | 0.5417 (130/240) | 0.5417 (130/240) | 0.5042 (121/240) |
+| deepseek-chat (DeepSeek-V3.2) | COTP | v1 | 0.9750 (234/240) | 0.7292 (175/240) | 0.6875 (165/240) | 0.5417 (130/240) | 0.4667 (112/240) |
 
 ## Notes
 
