@@ -1,17 +1,72 @@
 import json
+import argparse
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from prompt import build_prompt
-from model import call_model_deepseek
+from model import call_model_deepseek, call_model_ollama, call_model_ollama_SoO
 from utils import load_json, normalize_sample, judge_prediction, normalize_text
 
+from decompose_ToM import DecomposeToM
+from perceptom import PercepToM
+from soo import SoO  # <-- Imported the new SoO class
 
 # =========================
 # run single test sample
 # =========================
 def run_one_sample(sample: Dict[str, Any], method: str) -> Dict[str, Any]:
-    prompt = build_prompt(sample, method=method)
-    output_text = call_model_deepseek(prompt)
+    method_upper = method.upper()
+    
+    # ---------------------------------------------------------
+    # BRANCH: PercepToM
+    # ---------------------------------------------------------
+    if method_upper == "PERCEPTOM":
+        try:
+            tom_solver = PercepToM(llm_callable=call_model_ollama)
+            output_text = tom_solver.run(sample)
+            prompt = f"PercepToM Pipeline initiated for Question: {sample['question']}"
+        except Exception as e:
+            print(f"CRASH DETECTED in PercepToM: {e}")
+            output_text = ""
+            prompt = "Error during execution"
+
+    # ---------------------------------------------------------
+    # BRANCH: Decompose-ToM
+    # ---------------------------------------------------------
+    elif method_upper == "DTOM":
+        try:
+            tom_solver = DecomposeToM(llm_callable=call_model_ollama)
+            raw_story = sample.get("story", sample.get("context", "")) 
+            raw_question = sample["question"]
+            
+            output_text = tom_solver.run(story=raw_story, question=raw_question)
+            prompt = f"Decompose-ToM Pipeline initiated for:\nStory: {raw_story}\nQuestion: {raw_question}"
+        except Exception as e:
+            print(f"CRASH DETECTED in DToM: {e}")
+            output_text = ""
+            prompt = "Error during execution"
+
+    # ---------------------------------------------------------
+    # BRANCH: SoO
+    # ---------------------------------------------------------
+    elif method_upper == "SOO":
+        try:
+            # Initialize with the specialized SoO model call from model.py
+            tom_solver = SoO(llm_callable=call_model_ollama_SoO)
+            output_text = tom_solver.run(sample)
+            prompt = f"SoO Pipeline initiated for Question: {sample['question']}"
+        except Exception as e:
+            print(f"CRASH DETECTED in SoO: {e}")
+            output_text = ""
+            prompt = "Error during execution"
+
+    # ---------------------------------------------------------
+    # BRANCH: EXISTING LOGIC (CoTP, VP)
+    # ---------------------------------------------------------
+    else:
+        # Paper arg is removed entirely
+        prompt = build_prompt(sample, method=method)
+        output_text = call_model_ollama(prompt)
+    
     judged = judge_prediction(output_text, sample)
 
     return {
@@ -19,11 +74,11 @@ def run_one_sample(sample: Dict[str, Any], method: str) -> Dict[str, Any]:
         "story_id": sample["story_id"],
         "method": method,
         "question_order": sample["question_order"],
-        "deception": sample["deception"],
-        "story_length": sample["story_length"],
+        "deception": sample.get("deception", None),
+        "story_length": sample.get("story_length", None),
         "question": sample["question"],
         "answer": sample["answer"],
-        "prompt": prompt,
+        "prompt": prompt, 
         **judged,
     }
 
@@ -54,6 +109,12 @@ def run_dataset(
             try:
                 result = run_one_sample(sample, method=method)
             except Exception as e:
+                # Safely fallback without crashing on class-based methods
+                if method.upper() in ["VP", "COTP"]:
+                    fallback_prompt = build_prompt(sample, method=method)
+                else:
+                    fallback_prompt = f"{method} execution crashed before prompt generation."
+
                 result = {
                     "sample_id": sample["sample_id"],
                     "story_id": sample["story_id"],
@@ -63,7 +124,7 @@ def run_dataset(
                     "story_length": sample["story_length"],
                     "question": sample["question"],
                     "answer": sample["answer"],
-                    "prompt": build_prompt(sample, method=method),
+                    "prompt": fallback_prompt,
                     "pred_raw": None,
                     "pred_final": None,
                     "gold": normalize_text(sample["answer"]),
@@ -118,15 +179,42 @@ def report_accuracy_by_order(result_path: str) -> None:
 # main
 # =========================
 if __name__ == "__main__":
-    # path to your input data and output results
-    input_path = "data/hitom.json"
-    output_path = "res/hitom_cotp_results.jsonl"
+    parser = argparse.ArgumentParser(description="Run ToM Benchmarks")
+    parser.add_argument(
+        "--category", 
+        type=str, 
+        choices=["CoTP", "VR"], 
+        required=True, 
+        help="Category of the Hi-ToM dataset to use (CoTP or VR)"
+    )
+    parser.add_argument(
+        "--method", 
+        type=str, 
+        choices=["PercepToM", "SoO", "DTOM"], 
+        required=True, 
+        help="Method of the paper to benchmark (PercepToM, SoO, or DTOM)"
+    )
+    parser.add_argument(
+        "--max_samples", 
+        type=int, 
+        default=1200, 
+        help="Maximum number of samples to process (default: 1200)"
+    )
+    
+    args = parser.parse_args()
+
+    input_path = "data/hitom.json" 
+    output_path = f"res/hitom_{args.category.lower()}_results_{args.method.lower()}.jsonl"
+
+    print(f"Starting benchmark...")
+    print(f"Dataset: {args.category} | Method: {args.method}")
+    print(f"Input: {input_path} | Output: {output_path}")
 
     run_dataset(
         input_path=input_path,
         output_path=output_path,
-        method="CoTP",      # it could be "CoTP/VP"
-        max_samples=1200,
+        method=args.method,      
+        max_samples=args.max_samples,
     )
 
     report_accuracy_by_order(output_path)
