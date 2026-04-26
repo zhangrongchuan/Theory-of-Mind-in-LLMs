@@ -1,5 +1,23 @@
-from typing import Dict,  Any
+import re
+from typing import Dict, Any
 from utils import format_choices_for_prompt
+
+def extract_target_name(question: str) -> str:
+    """
+    Extracts the character name whose mental state is being queried.
+    Example: 'Where does Avery really think the lettuce is?' -> 'Avery'
+    """
+    # Pattern for "Where does {name} [think/believe/feel/know]..."
+    match = re.search(r"Where does ([A-Z][a-z]+) (?:really )?(?:think|believe|feel|know|want)", question)
+    if match:
+        return match.group(1)
+    
+    # Pattern for "How does {name} think..."
+    match = re.search(r"How does ([A-Z][a-z]+) think", question)
+    if match:
+        return match.group(1)
+
+    return None # Return None if no character is mentalizing (e.g., world-state questions)
 
 def build_prompt(sample: Dict[str, Any], method: str) -> str:
     '''
