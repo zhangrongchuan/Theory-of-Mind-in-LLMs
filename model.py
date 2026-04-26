@@ -2,7 +2,40 @@ import os
 from openai import OpenAI
 # from huggingface_hub import InferenceClient
 from dotenv import load_dotenv
+from ollama import chat
 load_dotenv()
+
+def call_model_ollama(prompt: str) -> str:
+    """
+    Call an Ollama model to get the answer.
+    model: e.g. "qwen:4b", "qwen3:8b", etc.
+    """
+
+    response = chat(
+        model='qwen:4b',  # change model if needed
+        messages=[
+            #{"role": "system", "content": "You are a helpful assistant"},
+            {"role": "user", "content": prompt},
+        ],
+    )
+
+    return response.message.content
+
+def call_model_ollama_SoO(prompt: str) -> str:
+    """
+    Call an Ollama model to get the answer.
+    model: e.g. "qwen:4b", "qwen3:8b", etc.
+    """
+
+    response = chat(
+        model='qwen:4b',  # change model if needed
+        messages=[
+            {"role": "system", "content": "You are an expert at understanding human communication. Please leverage the Information provided and choose the most probable answer to the question from the options. Output your final answer by strictly following this format: [A], [B], [C], or [D]"},
+            {"role": "user", "content": prompt},
+        ],
+    )
+
+    return response.message.content
 
 
 def call_model_deepseek(prompt: str) -> str:
