@@ -27,7 +27,7 @@ deepseek_api=YOUR_API_KEY
 ## Run
 
 ```bash
-python main.py
+python main.py --category [CATEGORY] --method [METHOD] [--max_samples [VALUE]]
 ```
 
 If you want to switch method or output path, update arguments inside `main.py` (the `run_dataset(...)` call).
