@@ -5,7 +5,7 @@ This project evaluates Theory of Mind (ToM) reasoning on the HiToM dataset using
 ## Project Goal
 
 - Run ToM evaluation on HiToM samples.
-- Support multiple prompting methods ( eg: `VP` and `COTP`).
+- Support multiple prompting methods (eg: `VP`, `COTP`, `S3AP`, `SIMTOM`, `DWM`, `PercepToM`, `SoO`, and `DTOM`).
 - Save per-sample predictions and compute final accuracy and accuracy by `question_order`.
 
 
@@ -54,7 +54,58 @@ Use this table for cross-model and cross-method comparison by order. Add one new
 | deepseek-chat (DeepSeek-V3.2) | VP | v1 | 0.9417 (226/240) | 0.5917 (142/240) | 0.5417 (130/240) | 0.5417 (130/240) | 0.5042 (121/240) |
 | deepseek-chat (DeepSeek-V3.2) | COTP | v1 | 0.9750 (234/240) | 0.7292 (175/240) | 0.6875 (165/240) | 0.5417 (130/240) | 0.4667 (112/240) |
 
+## S3AP / Social World Models
+
+`S3AP` implements the static third-person method from *Social World Models*
+(arXiv:2509.00559). For each sample, it first parses the story into a
+query-independent S3AP social world representation, then answers the multiple
+choice question using the original story plus that representation as extra
+information.
+
+Run example:
+
+```bash
+python main.py --category CoTP --method S3AP --max_samples 10
+```
+
+## SIMTOM
+
+`SIMTOM` implements the two-stage perspective-taking method from *Think Twice:
+Perspective-Taking Improves Large Language Models' Theory-of-Mind Capabilities*
+(arXiv:2311.10227). It first filters the story to events known by the target
+character, then answers the original multiple-choice question using that
+filtered perspective.
+
+Run example:
+
+```bash
+python main.py --category CoTP --method SIMTOM --max_samples 10
+```
+
+## DWM
+
+`DWM` implements the Discrete World Models prompting technique from *A Notion
+of Complexity for Theory of Mind via Discrete World Models*
+(arXiv:2406.11911). It splits a story into sequential chunks, asks the model to
+write compact state descriptions after each chunk, then answers the original
+question using those explicit world-state descriptions.
+
+Run example:
+
+```bash
+python main.py --category CoTP --method DWM --max_samples 10
+```
+
+`DWM` uses 3 story splits by default.
+
 ## Notes
 
 - `VP` prompt requests a single option letter output (`A`-`O`).
 - Output parsing in `utils.py` supports strict single-letter, `Answer: X`, and fallback letter extraction.
+- `S3AP` writes the generated representation and parser prompt into each JSONL
+  row as `s3ap_representation` and `s3ap_parser_prompt`.
+- `SIMTOM` writes the filtered perspective and perspective-taking prompt into
+  each JSONL row as `simtom_perspective` and `simtom_perspective_prompt`.
+- `DWM` writes story chunks, state prompts, and generated state descriptions
+  into each JSONL row as `dwm_chunks`, `dwm_state_prompts`, and
+  `dwm_state_descriptions`.

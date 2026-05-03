@@ -2,7 +2,7 @@ import os
 from openai import OpenAI
 # from huggingface_hub import InferenceClient
 from dotenv import load_dotenv
-from ollama import chat
+# from ollama import chat
 load_dotenv()
 
 def call_model_ollama(prompt: str) -> str:

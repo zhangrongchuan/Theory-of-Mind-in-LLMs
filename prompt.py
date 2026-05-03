@@ -6,14 +6,20 @@ def extract_target_name(question: str) -> str:
     """
     Extracts the character name whose mental state is being queried.
     Example: 'Where does Avery really think the lettuce is?' -> 'Avery'
+    960 question ask using where does, 240 question ask using where is.
     """
     # Pattern for "Where does {name} [think/believe/feel/know]..."
     match = re.search(r"Where does ([A-Z][a-z]+) (?:really )?(?:think|believe|feel|know|want)", question)
     if match:
         return match.group(1)
     
-    # Pattern for "How does {name} think..."
-    match = re.search(r"How does ([A-Z][a-z]+) think", question)
+    # # Pattern for "How does {name} think..."
+    # match = re.search(r"How does ([A-Z][a-z]+) think", question)
+    # if match:
+    #     return match.group(1)
+    
+     # Pattern for "Where is the {name} [think/believe/feel/know]..."
+    match = re.search(r"Where is the ([A-Z][a-z]+) (?:really )?(?:think|believe|feel|know|want)", question)
     if match:
         return match.group(1)
 

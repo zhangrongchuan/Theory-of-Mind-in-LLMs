@@ -6,15 +6,19 @@ from prompt import build_prompt
 from model import call_model_deepseek, call_model_ollama, call_model_ollama_SoO
 from utils import load_json, normalize_sample, judge_prediction, normalize_text
 
-from decompose_ToM import DecomposeToM
-from perceptom import PercepToM
-from soo import SoO  # <-- Imported the new SoO class
+from method.decompose_ToM import DecomposeToM
+from method.perceptom import PercepToM
+from method.soo import SoO
+from method.s3ap import S3AP
+from method.simtom import SimToM
+from method.dwm import DiscreteWorldModel
 
 # =========================
 # run single test sample
 # =========================
 def run_one_sample(sample: Dict[str, Any], method: str) -> Dict[str, Any]:
-    method_upper = method.upper()
+    method_upper = method.upper().replace("³", "3")
+    extra_fields: Dict[str, Any] = {}
     
     # ---------------------------------------------------------
     # BRANCH: PercepToM
@@ -60,6 +64,55 @@ def run_one_sample(sample: Dict[str, Any], method: str) -> Dict[str, Any]:
             prompt = "Error during execution"
 
     # ---------------------------------------------------------
+    # BRANCH: S3AP / Social World Models
+    # ---------------------------------------------------------
+    elif method_upper == "S3AP":
+        try:
+            tom_solver = S3AP(llm_callable=call_model_deepseek)
+            output_text = tom_solver.run(sample)
+            prompt = tom_solver.last_qa_prompt or f"S3AP Pipeline initiated for Question: {sample['question']}"
+            extra_fields["s3ap_representation"] = tom_solver.last_s3ap_representation
+            extra_fields["s3ap_parser_prompt"] = tom_solver.last_parser_prompt
+        except Exception as e:
+            print(f"CRASH DETECTED in S3AP: {e}")
+            output_text = ""
+            prompt = "Error during execution"
+
+    # ---------------------------------------------------------
+    # BRANCH: SIMTOM
+    # ---------------------------------------------------------
+    elif method_upper == "SIMTOM":
+        try:
+            tom_solver = SimToM(llm_callable=call_model_deepseek)
+            output_text = tom_solver.run(sample)
+            prompt = tom_solver.last_qa_prompt or f"SIMTOM Pipeline initiated for Question: {sample['question']}"
+            extra_fields["simtom_perspective"] = tom_solver.last_perspective
+            extra_fields["simtom_perspective_prompt"] = tom_solver.last_perspective_prompt
+        except Exception as e:
+            print(f"CRASH DETECTED in SIMTOM: {e}")
+            output_text = ""
+            prompt = "Error during execution"
+
+    # ---------------------------------------------------------
+    # BRANCH: DWM / Discrete World Models
+    # ---------------------------------------------------------
+    elif method_upper == "DWM":
+        try:
+            tom_solver = DiscreteWorldModel(
+                llm_callable=call_model_deepseek,
+                num_splits=3,
+            )
+            output_text = tom_solver.run(sample)
+            prompt = tom_solver.last_qa_prompt or f"DWM Pipeline initiated for Question: {sample['question']}"
+            extra_fields["dwm_chunks"] = tom_solver.last_chunks
+            extra_fields["dwm_state_descriptions"] = tom_solver.last_state_descriptions
+            extra_fields["dwm_state_prompts"] = tom_solver.last_state_prompts
+        except Exception as e:
+            print(f"CRASH DETECTED in DWM: {e}")
+            output_text = ""
+            prompt = "Error during execution"
+
+    # ---------------------------------------------------------
     # BRANCH: EXISTING LOGIC (CoTP, VP)
     # ---------------------------------------------------------
     else:
@@ -80,6 +133,7 @@ def run_one_sample(sample: Dict[str, Any], method: str) -> Dict[str, Any]:
         "answer": sample["answer"],
         "prompt": prompt, 
         **judged,
+        **extra_fields,
     }
 
 
@@ -110,7 +164,7 @@ def run_dataset(
                 result = run_one_sample(sample, method=method)
             except Exception as e:
                 # Safely fallback without crashing on class-based methods
-                if method.upper() in ["VP", "COTP"]:
+                if method.upper().replace("³", "3") in ["VP", "COTP"]:
                     fallback_prompt = build_prompt(sample, method=method)
                 else:
                     fallback_prompt = f"{method} execution crashed before prompt generation."
@@ -183,16 +237,16 @@ if __name__ == "__main__":
     parser.add_argument(
         "--category", 
         type=str, 
-        choices=["CoTP", "VR"], 
+        choices=["CoTP", "VP"], 
         required=True, 
-        help="Category of the Hi-ToM dataset to use (CoTP or VR)"
+        help="Category label for the Hi-ToM run (CoTP or VP)"
     )
     parser.add_argument(
         "--method", 
         type=str, 
-        choices=["PercepToM", "SoO", "DTOM"], 
+        choices=["VP", "COTP", "PercepToM", "SoO", "DTOM", "S3AP", "SIMTOM", "DWM"], 
         required=True, 
-        help="Method of the paper to benchmark (PercepToM, SoO, or DTOM)"
+        help="Method of the paper to benchmark"
     )
     parser.add_argument(
         "--max_samples", 
