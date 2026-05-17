@@ -55,7 +55,9 @@ Use this table for cross-model and cross-method comparison by order. Add one new
 | deepseek-chat (DeepSeek-V3.2) | COTP | v1 | 0.9750 (234/240) | 0.7292 (175/240) | 0.6875 (165/240) | 0.5417 (130/240) | 0.4667 (112/240) |
 
 Benchmarks for Presentation
+
 | Model | Method | Order 0 | Order 1 | Order 2 | Order 3 | Order 4 |
+| --- | --- | --- | --- | --- | --- | --- |
 | Qwen3-0.6B | SoO | 0.3710 (23/60) | 0.4333 (26/60) | 0.2623 (16/60) | 0.2500 (15/60) | 0.3333 (19/60)|
 | Qwen3-1.7B | SoO | 0.6167 (37/60) | 0.5000 (30/60) | 0.2667 (16/60) | 0.2000 (12/60) | 0.2000 (12/60) |
 | Qwen3-0.6B | PercepToM | 0.5738 (35/60) | 0.3684 (21/60) | 0.4426 (27/60) | 0.3281 (21/60) | 0.3158 (18/60) |
