@@ -1,0 +1,211 @@
+================================================================================
+THEORY OF MIND EXPERIMENT RESULTS - COMPREHENSIVE ANALYSIS
+================================================================================
+
+--------------------------------------------------------------------------------
+1. BASIC STATISTICS BY EXPERIMENT
+--------------------------------------------------------------------------------
+experiment           | total | correct | accuracy | order_0 | order_1 | order_2 | order_3 | order_4 | deception_true | deception_false
+--------------------------------------------------------------------------------------------------------------------------------------
+PERCEPTOM_Qwen3-0.6B | 300   | 122     | 40.67%   | 35/60   | 23/60   | 23/60   | 20/60   | 21/60   | 57/162         | 65/138         
+PERCEPTOM_Qwen3-1.7B | 300   | 205     | 68.33%   | 54/60   | 42/58   | 40/64   | 31/59   | 38/59   | 93/154         | 112/146        
+SIMTOM_Qwen3-0.6B    | 300   | 122     | 40.67%   | 27/60   | 24/60   | 20/60   | 21/60   | 30/60   | 64/161         | 58/139         
+SIMTOM_Qwen3-1.7B    | 300   | 159     | 53.00%   | 54/60   | 36/60   | 28/60   | 20/60   | 21/60   | 81/161         | 78/139         
+SOO_Qwen3-0.6B       | 300   | 101     | 33.67%   | 23/60   | 26/60   | 16/60   | 15/60   | 21/60   | 48/161         | 53/139         
+SOO_Qwen3-1.7B       | 300   | 107     | 35.67%   | 37/60   | 30/60   | 16/60   | 12/60   | 12/60   | 51/161         | 56/139         
+VP_Qwen3-0.6B        | 300   | 109     | 36.33%   | 27/60   | 25/60   | 19/60   | 13/60   | 25/60   | 56/161         | 53/139         
+VP_Qwen3-1.7B        | 300   | 119     | 39.67%   | 24/60   | 20/60   | 20/60   | 26/60   | 29/60   | 65/161         | 54/139         
+
+--------------------------------------------------------------------------------
+2. METHOD COMPARISON (ALL MODELS AGGREGATED)
+--------------------------------------------------------------------------------
+method    | total | correct | accuracy
+--------------------------------------
+PercepToM | 600   | 327     | 54.50%  
+SIMTOM    | 600   | 281     | 46.83%  
+SoO       | 493   | 166     | 33.67%  
+UNKNOWN   | 107   | 42      | 39.25%  
+VP        | 600   | 228     | 38.00%  
+
+--------------------------------------------------------------------------------
+3. ACCURACY BY QUESTION ORDER (ToM COMPLEXITY)
+--------------------------------------------------------------------------------
+question_order | method    | total | correct | accuracy
+-------------------------------------------------------
+0              | PercepToM | 120   | 89      | 74.17%  
+0              | SIMTOM    | 120   | 81      | 67.50%  
+0              | SoO       | 97    | 45      | 46.39%  
+0              | UNKNOWN   | 23    | 15      | 65.22%  
+0              | VP        | 120   | 51      | 42.50%  
+1              | PercepToM | 118   | 65      | 55.08%  
+1              | SIMTOM    | 120   | 60      | 50.00%  
+1              | SoO       | 101   | 47      | 46.53%  
+1              | UNKNOWN   | 19    | 9       | 47.37%  
+1              | VP        | 120   | 45      | 37.50%  
+2              | PercepToM | 124   | 63      | 50.81%  
+2              | SIMTOM    | 120   | 48      | 40.00%  
+2              | SoO       | 95    | 24      | 25.26%  
+2              | UNKNOWN   | 25    | 8       | 32.00%  
+2              | VP        | 120   | 39      | 32.50%  
+3              | PercepToM | 119   | 51      | 42.86%  
+3              | SIMTOM    | 120   | 41      | 34.17%  
+3              | SoO       | 95    | 22      | 23.16%  
+3              | UNKNOWN   | 25    | 5       | 20.00%  
+3              | VP        | 120   | 39      | 32.50%  
+4              | PercepToM | 119   | 59      | 49.58%  
+4              | SIMTOM    | 120   | 51      | 42.50%  
+4              | SoO       | 105   | 28      | 26.67%  
+4              | UNKNOWN   | 15    | 5       | 33.33%  
+4              | VP        | 120   | 54      | 45.00%  
+
+--------------------------------------------------------------------------------
+4. ACCURACY: DECEPTION VS NON-DECEPTION
+--------------------------------------------------------------------------------
+deception      | method    | total | correct | accuracy
+-------------------------------------------------------
+no_deception   | PercepToM | 284   | 177     | 62.32%  
+no_deception   | SIMTOM    | 278   | 136     | 48.92%  
+no_deception   | SoO       | 229   | 86      | 37.55%  
+no_deception   | UNKNOWN   | 49    | 23      | 46.94%  
+no_deception   | VP        | 278   | 107     | 38.49%  
+with_deception | PercepToM | 316   | 150     | 47.47%  
+with_deception | SIMTOM    | 322   | 145     | 45.03%  
+with_deception | SoO       | 264   | 80      | 30.30%  
+with_deception | UNKNOWN   | 58    | 19      | 32.76%  
+with_deception | VP        | 322   | 121     | 37.58%  
+
+--------------------------------------------------------------------------------
+5. 'IMPOSSIBLE' QUESTIONS (No Method Succeeded)
+--------------------------------------------------------------------------------
+Total impossible questions: 22
+
+Breakdown by question order:
+  Order 1: 6 questions
+  Order 2: 5 questions
+  Order 3: 7 questions
+  Order 4: 4 questions
+
+Breakdown by deception:
+  With deception: 14 questions
+  No deception: 8 questions
+
+Sample impossible questions:
+  - Sample 699: Where does Hannah think Benjamin thinks Liam thinks Avery thinks the peach is?...
+    Answer: red_basket | Order: 4 | Deception: True
+  - Sample 71: Where does Ella think Mila thinks William thinks the melon is?...
+    Answer: green_box | Order: 3 | Deception: False
+  - Sample 53: Where does Avery think Abigail thinks the lime is?...
+    Answer: blue_suitcase | Order: 2 | Deception: False
+  - Sample 829: Where does Mila really think the persimmon is?...
+    Answer: green_bucket | Order: 1 | Deception: True
+  - Sample 767: Where does Amelia think Charlotte thinks Isla thinks the lettuce is?...
+    Answer: blue_cupboard | Order: 3 | Deception: True
+
+--------------------------------------------------------------------------------
+6. 'EASY' QUESTIONS (All Methods Succeeded)
+--------------------------------------------------------------------------------
+Total easy questions: 10
+
+Breakdown by question order:
+  Order 0: 4 questions
+  Order 1: 4 questions
+  Order 2: 1 questions
+  Order 4: 1 questions
+
+--------------------------------------------------------------------------------
+7. METHOD COMPLEMENTARITY (When does each method win?)
+--------------------------------------------------------------------------------
+This shows how many questions each method got RIGHT where another got WRONG.
+
+method    | wins_vs_SIMTOM | wins_vs_SoO | wins_vs_UNKNOWN | wins_vs_VP
+-----------------------------------------------------------------------
+PercepToM | 82             | 113         | 35              | 116       
+SIMTOM    | 36             | 85          | 26              | 90        
+SoO       | 14             | 32          | 19              | 58        
+UNKNOWN   | 7              | 5           | 20              | 19        
+VP        | 30             | 50          | 71              | 28        
+
+--------------------------------------------------------------------------------
+8. PARTIAL SUCCESS QUESTIONS (Some Methods Right, Others Wrong)
+--------------------------------------------------------------------------------
+Total questions with partial success: 238
+
+Success pattern distribution:
+  1 correct, 3 incorrect methods: 54 questions
+  1 correct, 4 incorrect methods: 19 questions
+  2 correct, 2 incorrect methods: 49 questions
+  2 correct, 3 incorrect methods: 26 questions
+  3 correct, 1 incorrect methods: 48 questions
+  3 correct, 2 incorrect methods: 17 questions
+  4 correct, 1 incorrect methods: 25 questions
+
+Sample partial success questions:
+  - Sample 171: Order 3
+    Correct: SIMTOM
+    Incorrect: PercepToM, SoO, VP
+  - Sample 100: Order 0
+    Correct: PercepToM, SIMTOM, SoO
+    Incorrect: VP
+  - Sample 289: Order 4
+    Correct: PercepToM, VP
+    Incorrect: SIMTOM, SoO
+  - Sample 739: Order 1
+    Correct: SIMTOM, SoO
+    Incorrect: PercepToM, VP
+  - Sample 178: Order 3
+    Correct: SIMTOM
+    Incorrect: PercepToM, SoO, VP
+
+--------------------------------------------------------------------------------
+9. ERROR PATTERN ANALYSIS
+--------------------------------------------------------------------------------
+Errors by Question Order (higher order = more complex ToM):
+  Order 0: 199/480 errors (41.5%)
+  Order 1: 252/478 errors (52.7%)
+  Order 2: 302/484 errors (62.4%)
+  Order 3: 321/479 errors (67.0%)
+  Order 4: 282/479 errors (58.9%)
+
+Errors by Deception:
+  No deception: 589/1118 errors (52.7%)
+  With deception: 767/1282 errors (59.8%)
+
+Errors by Story Length:
+  Length 1: 461/908 errors (50.8%)
+  Length 2: 404/711 errors (56.8%)
+  Length 3: 491/781 errors (62.9%)
+
+--------------------------------------------------------------------------------
+10. MODEL AGREEMENT ANALYSIS
+--------------------------------------------------------------------------------
+Samples evaluated by multiple methods: 300
+  All correct: 10 (3.3%)
+  All wrong: 0 (0.0%)
+  Mixed/Disagreement: 290 (96.7%)
+
+================================================================================
+11. RECOMMENDATIONS FOR NEW METHOD DESIGN
+================================================================================
+
+* TARGET THE IMPOSSIBLE: 22 questions stumped ALL methods.
+  Focus new method on addressing these particularly challenging cases.
+
+* LEVERAGE COMPLEMENTARITY: 238 questions had mixed results.
+  A hybrid approach combining methods might succeed where individual methods fail.
+
+* COMPLEX ToM CHALLENGE: Question order 4 has highest error rate.
+  Error rate at order 4: 282/479
+
+* DECEPTION HANDLING: Error rate 59.8% with deception vs 52.7% without.
+  New method should improve handling of deceptive scenarios.
+
+* POTENTIAL STRATEGIES:
+  - Ensemble approach: Combine multiple methods' outputs
+  - Cascading: Start with simple method, escalate to complex if uncertain
+  - Meta-reasoning: Train model to select appropriate method per-question
+  - Deception detection: Explicitly identify and handle false statements
+  - Iterative verification: Check consistency of predictions
+
+================================================================================
+END OF ANALYSIS
+================================================================================
