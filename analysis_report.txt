@@ -23,7 +23,7 @@ method    | total | correct | accuracy
 --------------------------------------
 PercepToM | 600   | 323     | 53.83%  
 SIMTOM    | 600   | 281     | 46.83%  
-SoO       | 900   | 315     | 35.00%  
+SoO       | 600   | 208     | 34.67%  
 VP        | 600   | 228     | 38.00%  
 
 --------------------------------------------------------------------------------
@@ -33,23 +33,23 @@ question_order | method    | total | correct | accuracy
 -------------------------------------------------------
 0              | PercepToM | 120   | 88      | 73.33%  
 0              | SIMTOM    | 120   | 81      | 67.50%  
-0              | SoO       | 180   | 97      | 53.89%  
+0              | SoO       | 120   | 60      | 50.00%  
 0              | VP        | 120   | 51      | 42.50%  
 1              | PercepToM | 120   | 65      | 54.17%  
 1              | SIMTOM    | 120   | 60      | 50.00%  
-1              | SoO       | 180   | 86      | 47.78%  
+1              | SoO       | 120   | 56      | 46.67%  
 1              | VP        | 120   | 45      | 37.50%  
 2              | PercepToM | 120   | 59      | 49.17%  
 2              | SIMTOM    | 120   | 48      | 40.00%  
-2              | SoO       | 180   | 48      | 26.67%  
+2              | SoO       | 120   | 32      | 26.67%  
 2              | VP        | 120   | 39      | 32.50%  
 3              | PercepToM | 120   | 52      | 43.33%  
 3              | SIMTOM    | 120   | 41      | 34.17%  
-3              | SoO       | 180   | 39      | 21.67%  
+3              | SoO       | 120   | 27      | 22.50%  
 3              | VP        | 120   | 39      | 32.50%  
 4              | PercepToM | 120   | 59      | 49.17%  
 4              | SIMTOM    | 120   | 51      | 42.50%  
-4              | SoO       | 180   | 45      | 25.00%  
+4              | SoO       | 120   | 33      | 27.50%  
 4              | VP        | 120   | 54      | 45.00%  
 
 --------------------------------------------------------------------------------
@@ -59,11 +59,11 @@ deception      | method    | total | correct | accuracy
 -------------------------------------------------------
 no_deception   | PercepToM | 278   | 171     | 61.51%  
 no_deception   | SIMTOM    | 278   | 136     | 48.92%  
-no_deception   | SoO       | 417   | 165     | 39.57%  
+no_deception   | SoO       | 278   | 109     | 39.21%  
 no_deception   | VP        | 278   | 107     | 38.49%  
 with_deception | PercepToM | 322   | 152     | 47.20%  
 with_deception | SIMTOM    | 322   | 145     | 45.03%  
-with_deception | SoO       | 483   | 150     | 31.06%  
+with_deception | SoO       | 322   | 99      | 30.75%  
 with_deception | VP        | 322   | 121     | 37.58%  
 
 --------------------------------------------------------------------------------
@@ -147,20 +147,20 @@ Sample partial success questions:
 9. ERROR PATTERN ANALYSIS
 --------------------------------------------------------------------------------
 Errors by Question Order (higher order = more complex ToM):
-  Order 0: 223/540 errors (41.3%)
-  Order 1: 284/540 errors (52.6%)
-  Order 2: 346/540 errors (64.1%)
-  Order 3: 369/540 errors (68.3%)
-  Order 4: 331/540 errors (61.3%)
+  Order 0: 200/480 errors (41.7%)
+  Order 1: 254/480 errors (52.9%)
+  Order 2: 302/480 errors (62.9%)
+  Order 3: 321/480 errors (66.9%)
+  Order 4: 283/480 errors (59.0%)
 
 Errors by Deception:
-  No deception: 672/1251 errors (53.7%)
-  With deception: 881/1449 errors (60.8%)
+  No deception: 589/1112 errors (53.0%)
+  With deception: 771/1288 errors (59.9%)
 
 Errors by Story Length:
-  Length 1: 526/1017 errors (51.7%)
-  Length 2: 461/801 errors (57.6%)
-  Length 3: 566/882 errors (64.2%)
+  Length 1: 462/904 errors (51.1%)
+  Length 2: 405/712 errors (56.9%)
+  Length 3: 493/784 errors (62.9%)
 
 --------------------------------------------------------------------------------
 10. MODEL AGREEMENT ANALYSIS
@@ -181,9 +181,9 @@ Samples evaluated by multiple methods: 300
   A hybrid approach combining methods might succeed where individual methods fail.
 
 * COMPLEX ToM CHALLENGE: Question order 4 has highest error rate.
-  Error rate at order 4: 331/540
+  Error rate at order 4: 283/480
 
-* DECEPTION HANDLING: Error rate 60.8% with deception vs 53.7% without.
+* DECEPTION HANDLING: Error rate 59.9% with deception vs 53.0% without.
   New method should improve handling of deceptive scenarios.
 
 * POTENTIAL STRATEGIES:
