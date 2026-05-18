@@ -6,25 +6,42 @@ from typing import Dict, List, Any, Optional
 # =========================
 # process choice text into dict
 # =========================
-def parse_choices(choice_text: str) -> Dict[str, str]:
+def parse_choices(choice_text: Any) -> Dict[str, str]:
     """
     输入:
         "A. blue_drawer, B. green_crate, C. red_bucket"
     输出:
         {"A": "blue_drawer", "B": "green_crate", "C": "red_bucket"}
     """
-    pattern = r"([A-Z])\.\s*([^,]+)"
-    matches = re.findall(pattern, choice_text)
+    if isinstance(choice_text, list):
+        choice_text = "\n".join(str(x) for x in choice_text)
+    else:
+        choice_text = str(choice_text)
+
+    pattern = r"([A-Z])\.\s*(.*?)(?=(?:\s*,\s*|\s+)[A-Z]\.\s*|$)"
+    matches = re.findall(pattern, choice_text.strip(), flags=re.DOTALL)
     out = {}
     for k, v in matches:
-        out[k.strip()] = v.strip()
+        out[k.strip()] = v.strip().rstrip(",")
     return out
 
 
-def format_choices_for_prompt(choice_text: str) -> str:
+def format_choices_for_prompt(choice_text: Any) -> str:
     choices = parse_choices(choice_text)
     lines = [f"{k}. {v}" for k, v in choices.items()]
     return "\n".join(lines)
+
+
+def normalize_choices_raw(item: Dict[str, Any]) -> str:
+    choice_data = item.get("options", item.get("choices"))
+    if choice_data is None:
+        raise KeyError("sample is missing 'options' or 'choices'")
+
+    choices = parse_choices(choice_data)
+    if not choices:
+        raise ValueError(f"could not parse choices for sample_id={item.get('sample_id')}")
+
+    return "\n".join(f"{letter}. {value}" for letter, value in choices.items())
 
 # =========================
 # 1. load data
@@ -53,13 +70,14 @@ def normalize_text(s: str) -> str:
 def normalize_sample(item: Dict[str, Any]) -> Dict[str, Any]:
     story = item["story"].strip()
     question = item["question"].strip()
-    choices = item["choices"].strip()
+    choices = normalize_choices_raw(item)
     answer = item["answer"].strip()
 
     return {
         "sample_id": item.get("sample_id"),
         "story_id": make_story_id(story),
         "prompting_type_raw": item.get("prompting_type"),
+        "answer_letter": item.get("gold"),
         "deception": item.get("deception"),
         "story_length": item.get("story_length"),
         "question_order": int(item.get("question_order")),

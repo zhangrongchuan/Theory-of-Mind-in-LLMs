@@ -1,9 +1,10 @@
 import json
 import argparse
+import re
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from prompt import build_prompt
-from model import call_model_deepseek, call_model_ollama, call_model_ollama_SoO
+from model import call_model_deepseek, call_model_ollama, call_model_ollama_SoO, call_model_qwen8b, call_model_huggingface
 from utils import load_json, normalize_sample, judge_prediction, normalize_text
 
 from method.decompose_ToM import DecomposeToM
@@ -13,10 +14,74 @@ from method.s3ap import S3AP
 from method.simtom import SimToM
 from method.dwm import DiscreteWorldModel
 
+
+def build_result(
+    sample: Dict[str, Any],
+    method: str,
+    prompt: str,
+    output_text: str,
+    extra_fields: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    judged = judge_prediction(output_text, sample)
+
+    return {
+        "sample_id": sample["sample_id"],
+        "story_id": sample["story_id"],
+        "method": method,
+        "question_order": sample["question_order"],
+        "deception": sample.get("deception", None),
+        "story_length": sample.get("story_length", None),
+        "question": sample["question"],
+        "answer": sample["answer"],
+        "prompt": prompt,
+        **judged,
+        **(extra_fields or {}),
+    }
+
+
+def build_error_result(
+    sample: Dict[str, Any],
+    method: str,
+    error: Exception,
+    fallback_prompt: Optional[str] = None,
+) -> Dict[str, Any]:
+    if fallback_prompt is None:
+        if method.upper().replace("³", "3") in ["VP", "COTP"]:
+            fallback_prompt = build_prompt(sample, method=method)
+        else:
+            fallback_prompt = f"{method} execution crashed before prompt generation."
+
+    return {
+        "sample_id": sample["sample_id"],
+        "story_id": sample["story_id"],
+        "method": method,
+        "question_order": sample["question_order"],
+        "deception": sample["deception"],
+        "story_length": sample["story_length"],
+        "question": sample["question"],
+        "answer": sample["answer"],
+        "prompt": fallback_prompt,
+        "pred_raw": None,
+        "pred_final": None,
+        "gold": normalize_text(sample["answer"]),
+        "correct": 0,
+        "error": str(error),
+    }
+
+
+def model_name_slug(model_name: str) -> str:
+    return re.sub(r"[^A-Za-z0-9]+", "_", model_name).strip("_")
+
+
 # =========================
 # run single test sample
 # =========================
-def run_one_sample(sample: Dict[str, Any], method: str) -> Dict[str, Any]:
+def run_one_sample(
+    sample: Dict[str, Any],
+    method: str,
+    qwen_model: str = "Qwen/Qwen3-1.7B",
+    qwen_max_new_tokens: int = 1024,
+) -> Dict[str, Any]:
     method_upper = method.upper().replace("³", "3")
     extra_fields: Dict[str, Any] = {}
     
@@ -25,7 +90,11 @@ def run_one_sample(sample: Dict[str, Any], method: str) -> Dict[str, Any]:
     # ---------------------------------------------------------
     if method_upper == "PERCEPTOM":
         try:
-            tom_solver = PercepToM(llm_callable=call_model_ollama)
+            tom_solver = PercepToM(llm_callable=lambda prompt: call_model_huggingface(
+                    prompt,
+                    model_name=qwen_model,
+                    max_new_tokens=qwen_max_new_tokens,
+                ))
             output_text = tom_solver.run(sample)
             prompt = f"PercepToM Pipeline initiated for Question: {sample['question']}"
         except Exception as e:
@@ -38,7 +107,7 @@ def run_one_sample(sample: Dict[str, Any], method: str) -> Dict[str, Any]:
     # ---------------------------------------------------------
     elif method_upper == "DTOM":
         try:
-            tom_solver = DecomposeToM(llm_callable=call_model_ollama)
+            tom_solver = DecomposeToM(llm_callable=call_model_deepseek)
             raw_story = sample.get("story", sample.get("context", "")) 
             raw_question = sample["question"]
             
@@ -55,7 +124,11 @@ def run_one_sample(sample: Dict[str, Any], method: str) -> Dict[str, Any]:
     elif method_upper == "SOO":
         try:
             # Initialize with the specialized SoO model call from model.py
-            tom_solver = SoO(llm_callable=call_model_ollama_SoO)
+            tom_solver = SoO(llm_callable=lambda prompt: call_model_huggingface(
+                    prompt,
+                    model_name=qwen_model,
+                    max_new_tokens=qwen_max_new_tokens,
+                ))
             output_text = tom_solver.run(sample)
             prompt = f"SoO Pipeline initiated for Question: {sample['question']}"
         except Exception as e:
@@ -68,7 +141,7 @@ def run_one_sample(sample: Dict[str, Any], method: str) -> Dict[str, Any]:
     # ---------------------------------------------------------
     elif method_upper == "S3AP":
         try:
-            tom_solver = S3AP(llm_callable=call_model_deepseek)
+            tom_solver = S3AP(llm_callable=call_model_qwen8b)
             output_text = tom_solver.run(sample)
             prompt = tom_solver.last_qa_prompt or f"S3AP Pipeline initiated for Question: {sample['question']}"
             extra_fields["s3ap_representation"] = tom_solver.last_s3ap_representation
@@ -83,11 +156,19 @@ def run_one_sample(sample: Dict[str, Any], method: str) -> Dict[str, Any]:
     # ---------------------------------------------------------
     elif method_upper == "SIMTOM":
         try:
-            tom_solver = SimToM(llm_callable=call_model_deepseek)
+            tom_solver = SimToM(
+                llm_callable=lambda prompt: call_model_huggingface(
+                    prompt,
+                    model_name=qwen_model,
+                    max_new_tokens=qwen_max_new_tokens,
+                )
+            )
             output_text = tom_solver.run(sample)
             prompt = tom_solver.last_qa_prompt or f"SIMTOM Pipeline initiated for Question: {sample['question']}"
             extra_fields["simtom_perspective"] = tom_solver.last_perspective
             extra_fields["simtom_perspective_prompt"] = tom_solver.last_perspective_prompt
+            extra_fields["model_backend"] = "huggingface"
+            extra_fields["model_name"] = qwen_model
         except Exception as e:
             print(f"CRASH DETECTED in SIMTOM: {e}")
             output_text = ""
@@ -118,23 +199,25 @@ def run_one_sample(sample: Dict[str, Any], method: str) -> Dict[str, Any]:
     else:
         # Paper arg is removed entirely
         prompt = build_prompt(sample, method=method)
-        output_text = call_model_ollama(prompt)
+        if method_upper == "VP":
+            output_text = call_model_huggingface(
+                prompt,
+                model_name=qwen_model,
+                max_new_tokens=qwen_max_new_tokens,
+            )
+            extra_fields["model_backend"] = "huggingface"
+            extra_fields["model_name"] = qwen_model
+        else:
+            output_text = call_model_deepseek(prompt)
+            extra_fields["model_backend"] = "deepseek"
     
-    judged = judge_prediction(output_text, sample)
-
-    return {
-        "sample_id": sample["sample_id"],
-        "story_id": sample["story_id"],
-        "method": method,
-        "question_order": sample["question_order"],
-        "deception": sample.get("deception", None),
-        "story_length": sample.get("story_length", None),
-        "question": sample["question"],
-        "answer": sample["answer"],
-        "prompt": prompt, 
-        **judged,
-        **extra_fields,
-    }
+    return build_result(
+        sample=sample,
+        method=method,
+        prompt=prompt,
+        output_text=output_text,
+        extra_fields=extra_fields,
+    )
 
 
 # =========================
@@ -143,10 +226,35 @@ def run_one_sample(sample: Dict[str, Any], method: str) -> Dict[str, Any]:
 def run_dataset(
     input_path: str,
     output_path: str,
+    category: Optional[str] = None,
     method: str = "VP",
     max_samples: Optional[int] = None,
+    qwen_model: str = "Qwen/Qwen3-1.7B",
+    qwen_max_new_tokens: int = 1024,
 ) -> None:
     raw_data = load_json(input_path)
+
+    if category is not None:
+        category_key = category.lower()
+        filtered_data = [
+            x for x in raw_data
+            if str(x.get("prompting_type", "")).lower() == category_key
+        ]
+        if not filtered_data:
+            available = sorted(
+                {
+                    str(x.get("prompting_type"))
+                    for x in raw_data
+                    if x.get("prompting_type") is not None
+                }
+            )
+            available_text = ", ".join(available) if available else "none"
+            raise ValueError(
+                f"No samples found for category '{category}'. "
+                f"Available prompting_type values: {available_text}."
+            )
+        raw_data = filtered_data
+
     samples = [normalize_sample(x) for x in raw_data]
 
     if max_samples is not None:
@@ -154,49 +262,50 @@ def run_dataset(
 
     output_file = Path(output_path)
     output_file.parent.mkdir(parents=True, exist_ok=True)
+    tmp_output_file = output_file.with_name(output_file.name + ".tmp")
 
     total = len(samples)
+    if total == 0:
+        raise ValueError("No samples to run after filtering.")
+
     correct = 0
+    order_stats: Dict[Any, Dict[str, int]] = {}
 
-    with open(output_file, "w", encoding="utf-8") as f:
-        for i, sample in enumerate(samples, start=1):
-            try:
-                result = run_one_sample(sample, method=method)
-            except Exception as e:
-                # Safely fallback without crashing on class-based methods
-                if method.upper().replace("³", "3") in ["VP", "COTP"]:
-                    fallback_prompt = build_prompt(sample, method=method)
-                else:
-                    fallback_prompt = f"{method} execution crashed before prompt generation."
+    with open(tmp_output_file, "w", encoding="utf-8", newline="\n") as f:
+        def write_result(i: int, result: Dict[str, Any]) -> None:
+            nonlocal correct
+            correct += int(result["correct"])
+            order = result["question_order"]
+            order_stats.setdefault(order, {"correct": 0, "total": 0})
+            order_stats[order]["correct"] += int(result["correct"])
+            order_stats[order]["total"] += 1
 
-                result = {
-                    "sample_id": sample["sample_id"],
-                    "story_id": sample["story_id"],
-                    "method": method,
-                    "question_order": sample["question_order"],
-                    "deception": sample["deception"],
-                    "story_length": sample["story_length"],
-                    "question": sample["question"],
-                    "answer": sample["answer"],
-                    "prompt": fallback_prompt,
-                    "pred_raw": None,
-                    "pred_final": None,
-                    "gold": normalize_text(sample["answer"]),
-                    "correct": 0,
-                    "error": str(e),
-                }
-
-            correct += result["correct"]
-            f.write(json.dumps(result, ensure_ascii=False) + "\n")
+            f.write(json.dumps(result, ensure_ascii=False, separators=(",", ":")) + "\n")
 
             print(
-                f"[{i}/{total}] sample_id={sample['sample_id']} "
+                f"[{i}/{total}] sample_id={result['sample_id']} "
                 f"correct={result['correct']} "
                 f"running_acc={correct / i:.4f}"
             )
 
+        for i, sample in enumerate(samples, start=1):
+            try:
+                result = run_one_sample(
+                    sample,
+                    method=method,
+                    qwen_model=qwen_model,
+                    qwen_max_new_tokens=qwen_max_new_tokens,
+                )
+            except Exception as e:
+                result = build_error_result(sample, method=method, error=e)
+
+            write_result(i, result)
+
+    tmp_output_file.replace(output_file)
+
     print(f"\nfinished。result saved to path: {output_path}")
     print(f"Final Accuracy: {correct}/{total} = {correct / total:.4f}")
+    print_accuracy_by_order_stats(order_stats)
 
 
 # =========================
@@ -205,11 +314,25 @@ def run_dataset(
 def load_jsonl(path: str) -> List[Dict[str, Any]]:
     rows = []
     with open(path, "r", encoding="utf-8") as f:
-        for line in f:
+        for line_no, line in enumerate(f, start=1):
             line = line.strip()
             if line:
-                rows.append(json.loads(line))
+                try:
+                    rows.append(json.loads(line))
+                except json.JSONDecodeError as e:
+                    raise ValueError(
+                        f"Invalid JSONL at {path}:{line_no}: {e.msg} "
+                        f"(column {e.colno})"
+                    ) from e
     return rows
+
+
+def print_accuracy_by_order_stats(stats: Dict[Any, Dict[str, int]]) -> None:
+    print("\nAccuracy by question_order")
+    for order in sorted(stats.keys()):
+        c = stats[order]["correct"]
+        t = stats[order]["total"]
+        print(f"order {order}: {c}/{t} = {c/t:.4f}")
 
 
 def report_accuracy_by_order(result_path: str) -> None:
@@ -222,11 +345,7 @@ def report_accuracy_by_order(result_path: str) -> None:
         stats[order]["correct"] += int(r["correct"])
         stats[order]["total"] += 1
 
-    print("\nAccuracy by question_order")
-    for order in sorted(stats.keys()):
-        c = stats[order]["correct"]
-        t = stats[order]["total"]
-        print(f"order {order}: {c}/{t} = {c/t:.4f}")
+    print_accuracy_by_order_stats(stats)
 
 
 # =========================
@@ -254,21 +373,40 @@ if __name__ == "__main__":
         default=1200, 
         help="Maximum number of samples to process (default: 1200)"
     )
+    parser.add_argument(
+        "--qwen_model",
+        type=str,
+        default="Qwen/Qwen3-1.7B",
+        help="Local HuggingFace Qwen model for VP and SIMTOM (default: Qwen/Qwen3-1.7B)"
+    )
+    parser.add_argument(
+        "--qwen_max_new_tokens",
+        type=int,
+        default=1024,
+        help="max_new_tokens for local HuggingFace Qwen generation (default: 1024)"
+    )
     
     args = parser.parse_args()
 
     input_path = "data/hitom.json" 
-    output_path = f"res/hitom_{args.category.lower()}_results_{args.method.lower()}.jsonl"
+    output_stem = f"hitom_{args.category.lower()}_results_{args.method.lower()}"
+    if args.method.upper().replace("³", "3") == "VP":
+        output_stem = f"{output_stem}_{model_name_slug(args.qwen_model)}"
+    output_path = f"res/{output_stem}.jsonl"
 
     print(f"Starting benchmark...")
     print(f"Dataset: {args.category} | Method: {args.method}")
+    if args.method.upper().replace("³", "3") in {"VP", "SIMTOM"}:
+        print(f"Qwen model: {args.qwen_model}")
     print(f"Input: {input_path} | Output: {output_path}")
 
     run_dataset(
         input_path=input_path,
         output_path=output_path,
+        category=args.category,
         method=args.method,      
         max_samples=args.max_samples,
+        qwen_model=args.qwen_model,
+        qwen_max_new_tokens=args.qwen_max_new_tokens,
     )
 
-    report_accuracy_by_order(output_path)
