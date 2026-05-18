@@ -1,0 +1,23 @@
+sample_id,story_id,question,answer,question_order,deception,story_length,attempts
+699,53fea77d55c4193499b2f93f5a3354b1,Where does Hannah think Benjamin thinks Liam thinks Avery thinks the peach is?,red_basket,4,True,1,8
+71,635432239c4354cf306395a83d237979,Where does Ella think Mila thinks William thinks the melon is?,green_box,3,False,1,8
+53,772e2c7f25ce7d4a7b9147955e96de57,Where does Avery think Abigail thinks the lime is?,blue_suitcase,2,False,1,8
+829,59e526f6aa9adda7cd1c8a2c77147566,Where does Mila really think the persimmon is?,green_bucket,1,True,3,8
+767,3a38a7a1db45ed5c89fc36a7bc2a04c7,Where does Amelia think Charlotte thinks Isla thinks the lettuce is?,blue_cupboard,3,True,2,8
+759,0156d95d17505a708c4cb919b1b4ab75,Where does Lily think Jacob thinks the melon is?,blue_treasure_chest,2,True,2,8
+785,c6cec7661a4b4e87e1259f112ce7d4e3,Where does William think Nathan thinks Isabella thinks Chloe thinks the peach is?,red_basket,4,True,2,8
+276,fa9a51fb22badf5dc484f4ab0abfd94b,Where does Aiden think Avery thinks Carter thinks the cabbage is?,green_bucket,3,True,3,8
+777,dbe06c021b0859b6530bf23fdeb53ceb,Where does Evelyn think Hannah thinks Liam thinks the sweet_potato is?,red_drawer,3,True,2,8
+157,62120a3f484cf9a686d534721e8f0ee8,Where does Lily think Noah thinks the corn is?,blue_treasure_chest,2,False,2,8
+222,c9d7169c619785dae636cbbab4703a71,Where does Isla really think the peas is?,blue_cupboard,1,False,3,8
+872,3729e5ca39202e9bab61d208bdf1f4a1,Where does Jack think Abigail thinks Mila thinks the onion is?,green_crate,3,True,3,8
+30,660b6d5cbacdd15c92e04df953b69abe,Where does Ella really think the orange is?,red_envelope,1,False,1,8
+832,3729e5ca39202e9bab61d208bdf1f4a1,Where does Mila really think the onion is?,red_bucket,1,True,3,8
+187,664eac406bcce8c7ec033b6d716b5ed2,Where does Owen think Liam thinks Emma thinks Noah thinks the watermelon is?,green_bucket,4,False,2,8
+264,b00134512d3612b4a5fd032af5ec6e41,Where does Jackson think Amelia thinks Hannah thinks the peas is?,green_basket,3,False,3,8
+779,0156d95d17505a708c4cb919b1b4ab75,Where does Evelyn think Lily thinks Jacob thinks the melon is?,blue_treasure_chest,3,True,2,8
+839,ae725e3e5bfdcf794254184a07f28446,Where does Owen really think the turnip is?,blue_pantry,1,True,3,8
+141,2bce3b14e31d18e5dfaed6dc880ed368,Where does Lily think Amelia thinks the corn is?,red_container,2,False,2,8
+899,ae725e3e5bfdcf794254184a07f28446,Where does Isla think Carter thinks Mila thinks Owen thinks the turnip is?,green_pantry,4,True,3,8
+639,53fea77d55c4193499b2f93f5a3354b1,Where does Avery really think the peach is?,blue_treasure_chest,1,True,1,8
+840,f0bc5bfc808b0b518bf46d9bfa760ebe,Where does Jackson think Jack thinks the peas is?,blue_suitcase,2,True,3,8

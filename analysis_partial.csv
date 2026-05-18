@@ -1,0 +1,239 @@
+sample_id,story_id,question,answer,question_order,deception,story_length,correct_methods,incorrect_methods,num_correct,num_incorrect
+171,c007399d631c250725da53f8fc21e7bb,Where does Ava think Alexander thinks Charlotte thinks the pear is?,red_box,3,False,2,SIMTOM,"PercepToM, SoO, VP",1,3
+100,bc20f8789564dc59ea6ab633e58c2751,Where is the cucumber really?,green_treasure_chest,0,False,2,"PercepToM, SIMTOM, SoO",VP,3,1
+289,dd4cf3ae1ba1e4e9b050dc8204adaa62,Where does William think Charlotte thinks Logan thinks Evelyn thinks the sweet_potato is?,red_container,4,False,3,"PercepToM, VP","SIMTOM, SoO",2,2
+739,0156d95d17505a708c4cb919b1b4ab75,Where does Jacob really think the melon is?,green_drawer,1,True,2,"SIMTOM, SoO","PercepToM, VP",2,2
+178,2990e141f37d036cb71825a1cb866863,Where does Amelia think Nathan thinks Jackson thinks the tomato is?,blue_crate,3,False,2,SIMTOM,"PercepToM, SoO, VP",1,3
+661,ef995be2f9e2c2cd4cd24f2c00419234,Where does Liam think Avery thinks Lily thinks the lemon is?,blue_treasure_chest,3,True,1,VP,"PercepToM, SIMTOM, SoO",1,3
+245,45e570c59c45caebb81271cd1f0a8b7a,Where does Lily think Hannah thinks the turnip is?,red_basket,2,False,3,SIMTOM,"PercepToM, SoO, VP",1,3
+126,e0a62cc64e8d6d8bd73650fb4eafed7c,Where does Nathan really think the melon is?,blue_treasure_chest,1,False,2,"PercepToM, SIMTOM, SoO",VP,3,1
+817,fa9a51fb22badf5dc484f4ab0abfd94b,Where is the cabbage really?,green_crate,0,True,3,SIMTOM,"PercepToM, SoO, VP",1,3
+666,40aa312070bc04d38c08f788d33553dd,Where does Hannah think Liam thinks Emma thinks the tomato is?,red_container,3,True,1,VP,"PercepToM, SIMTOM, SoO",1,3
+894,b8a7bca9636c30da9518f132ab41cd7a,Where does Isla think Aiden thinks Sophia thinks Abigail thinks the peach is?,red_bucket,4,True,3,PercepToM,"SIMTOM, SoO, VP",1,3
+197,62120a3f484cf9a686d534721e8f0ee8,Where does Mila think Isla thinks Lily thinks Noah thinks the corn is?,blue_treasure_chest,4,False,2,PercepToM,"SIMTOM, SoO, VP",1,3
+683,4d35ac4ec197582ce0727db6d1fdc500,Where does Abigail think Mila thinks Benjamin thinks Jackson thinks the cherry is?,green_bucket,4,True,1,"PercepToM, VP","SIMTOM, SoO",2,2
+244,b00134512d3612b4a5fd032af5ec6e41,Where does Amelia think Hannah thinks the peas is?,green_basket,2,False,3,PercepToM,"SIMTOM, SoO, VP",1,3
+632,df1b9a222a51fe48c21a6c0f91f42343,Where does Owen really think the onion is?,red_crate,1,True,1,"PercepToM, SIMTOM, SoO",VP,3,1
+603,4d35ac4ec197582ce0727db6d1fdc500,Where is the cherry really?,green_bucket,0,True,1,PercepToM,"SIMTOM, SoO, VP",1,3
+774,99e2d5fbd47c1cc4881a45db41624dde,Where does Ava think Noah thinks Charlotte thinks the potato is?,blue_cupboard,3,True,2,"PercepToM, SIMTOM, SoO",VP,3,1
+692,df1b9a222a51fe48c21a6c0f91f42343,Where does Noah think Liam thinks Elizabeth thinks Owen thinks the onion is?,red_crate,4,True,1,"PercepToM, SIMTOM, SoO",VP,3,1
+212,80f134c2b3a15a9e2e4e3f863215a570,Where is the corn really?,green_bottle,0,False,3,"PercepToM, SIMTOM","SoO, VP",2,2
+57,e36aa3c8217cdda66f4ae6f49ecfbf46,Where does Jackson think Benjamin thinks the corn is?,blue_treasure_chest,2,False,1,"PercepToM, VP","SIMTOM, SoO",2,2
+851,6023073f445c10ee01a12e568182a890,Where does Hannah think Avery thinks the spinach is?,red_crate,2,True,3,"PercepToM, SIMTOM","SoO, VP",2,2
+689,671f4fbfb36efe386409a3b8dc1373bb,Where does Jackson think Alexander thinks Jacob thinks Carter thinks the potato is?,blue_bathtub,4,True,1,"PercepToM, SoO","SIMTOM, VP",2,2
+102,b9d2745ca6b8df5861ea249902ccc581,Where is the peas really?,blue_crate,0,False,2,"PercepToM, SIMTOM","SoO, VP",2,2
+794,99e2d5fbd47c1cc4881a45db41624dde,Where does Nathan think Ava thinks Noah thinks Charlotte thinks the potato is?,blue_cupboard,4,True,2,SoO,"PercepToM, SIMTOM, VP",1,3
+64,d7c94ead1caf8c69689e94821b094210,Where does Charlotte think Benjamin thinks Logan thinks the potato is?,green_envelope,3,False,1,"PercepToM, SIMTOM","SoO, VP",2,2
+813,e2d4e3614489ba7a2a38e67ced123bf5,Where is the carrot really?,green_crate,0,True,3,"PercepToM, SIMTOM","SoO, VP",2,2
+874,b8a7bca9636c30da9518f132ab41cd7a,Where does Aiden think Sophia thinks Abigail thinks the peach is?,red_bucket,3,True,3,PercepToM,"SIMTOM, SoO, VP",1,3
+215,a176df69c2450074bdf357ef0d948deb,Where is the persimmon really?,red_basket,0,False,3,"PercepToM, SIMTOM, SoO",VP,3,1
+52,96e54d8259380c33ff812c9d86d14d88,Where does Nathan think Abigail thinks the cabbage is?,green_crate,2,False,1,"PercepToM, SIMTOM","SoO, VP",2,2
+48,0ceb5f9ad91513f3840d8ee18ade8091,Where does Ella think Abigail thinks the banana is?,blue_bottle,2,False,1,"PercepToM, SIMTOM, SoO",VP,3,1
+12,96e54d8259380c33ff812c9d86d14d88,Where is the cabbage really?,blue_crate,0,False,1,"PercepToM, SoO","SIMTOM, VP",2,2
+678,e41a052c4722e31ec46cf1fe53afecbe,Where does Ella think Lily thinks Logan thinks the green_pepper is?,red_drawer,3,True,1,VP,"PercepToM, SIMTOM, SoO",1,3
+23,515c6bd00274e770e12acab52e034942,Where does Noah really think the spinach is?,green_bucket,1,False,1,"PercepToM, SIMTOM, SoO",VP,3,1
+94,bc5aaa9968743da70a82448bd3bac4ea,Where does Amelia think Ella thinks Owen thinks Avery thinks the watermelon is?,blue_container,4,False,1,"PercepToM, SIMTOM, VP",SoO,3,1
+709,0115b0df4589c151f6c35a7c68a66126,Where is the persimmon really?,green_pantry,0,True,2,"PercepToM, SIMTOM, SoO",VP,3,1
+737,dbe06c021b0859b6530bf23fdeb53ceb,Where does Liam really think the sweet_potato is?,blue_container,1,True,2,PercepToM,"SIMTOM, SoO, VP",1,3
+749,0115b0df4589c151f6c35a7c68a66126,Where does Evelyn think Ava thinks the persimmon is?,blue_crate,2,True,2,VP,"PercepToM, SIMTOM, SoO",1,3
+152,788115883cbdf57fb2004c92c341299b,Where does Avery think Carter thinks the watermelon is?,blue_suitcase,2,False,2,PercepToM,"SIMTOM, SoO, VP",1,3
+147,664eac406bcce8c7ec033b6d716b5ed2,Where does Emma think Noah thinks the watermelon is?,green_bucket,2,False,2,PercepToM,"SIMTOM, SoO, VP",1,3
+741,ad06a04770d4d93147fa4cb285ac9da3,Where does Emily think Owen thinks the onion is?,blue_crate,2,True,2,"PercepToM, VP","SIMTOM, SoO",2,2
+637,faef2be249144a021d02334848c23e03,Where does William really think the cabbage is?,red_box,1,True,1,PercepToM,"SIMTOM, SoO, VP",1,3
+856,6adb793fb115b4182d9f12ec0b00b477,Where does Benjamin think William thinks the turnip is?,red_bottle,2,True,3,"PercepToM, SoO, VP",SIMTOM,3,1
+0,12a920a8de0b1f6e0ba7b9c960eaf1a4,Where is the lettuce really?,green_drawer,0,False,1,"PercepToM, SIMTOM, SoO",VP,3,1
+191,c007399d631c250725da53f8fc21e7bb,Where does William think Ava thinks Alexander thinks Charlotte thinks the pear is?,red_box,4,False,2,PercepToM,"SIMTOM, SoO, VP",1,3
+113,980220023ca9f315d6cfded809fae967,Where is the lemon really?,green_bottle,0,False,2,"PercepToM, SIMTOM","SoO, VP",2,2
+799,0156d95d17505a708c4cb919b1b4ab75,Where does Ava think Evelyn thinks Lily thinks Jacob thinks the melon is?,blue_treasure_chest,4,True,2,"PercepToM, SIMTOM, VP",SoO,3,1
+797,dbe06c021b0859b6530bf23fdeb53ceb,Where does Emma think Evelyn thinks Hannah thinks Liam thinks the sweet_potato is?,red_drawer,4,True,2,PercepToM,"SIMTOM, SoO, VP",1,3
+822,1b59001b3a89e875854dce7cd3e42da9,Where does Jacob really think the spinach is?,green_crate,1,True,3,SIMTOM,"PercepToM, SoO, VP",1,3
+279,f3d05672d2171f78440a2ebea7c7c99c,Where does Liam think Jackson thinks Evelyn thinks the spinach is?,green_drawer,3,False,3,"PercepToM, VP","SIMTOM, SoO",2,2
+167,664eac406bcce8c7ec033b6d716b5ed2,Where does Liam think Emma thinks Noah thinks the watermelon is?,green_bucket,3,False,2,"PercepToM, SoO","SIMTOM, VP",2,2
+804,a83c427e773b5aa0201f876b1f8cfff6,Where is the sweet_potato really?,red_box,0,True,3,"PercepToM, SIMTOM, SoO",VP,3,1
+831,6023073f445c10ee01a12e568182a890,Where does Avery really think the spinach is?,green_pantry,1,True,3,"PercepToM, SoO","SIMTOM, VP",2,2
+235,a176df69c2450074bdf357ef0d948deb,Where does William really think the persimmon is?,red_basket,1,False,3,"PercepToM, SIMTOM, VP",SoO,3,1
+225,45e570c59c45caebb81271cd1f0a8b7a,Where does Hannah really think the turnip is?,blue_pantry,1,False,3,"PercepToM, SIMTOM, VP",SoO,3,1
+32,96e54d8259380c33ff812c9d86d14d88,Where does Abigail really think the cabbage is?,green_crate,1,False,1,"PercepToM, SIMTOM, SoO",VP,3,1
+860,f0bc5bfc808b0b518bf46d9bfa760ebe,Where does Logan think Jackson thinks Jack thinks the peas is?,blue_suitcase,3,True,3,VP,"PercepToM, SIMTOM, SoO",1,3
+896,6adb793fb115b4182d9f12ec0b00b477,Where does Liam think Sophia thinks Benjamin thinks William thinks the turnip is?,green_crate,4,True,3,"PercepToM, SIMTOM","SoO, VP",2,2
+97,e36aa3c8217cdda66f4ae6f49ecfbf46,Where does Charlotte think Liam thinks Jackson thinks Benjamin thinks the corn is?,blue_treasure_chest,4,False,1,PercepToM,"SIMTOM, SoO, VP",1,3
+105,c4766185426d128102af0819d7644e68,Where is the melon really?,red_pantry,0,False,2,"PercepToM, SIMTOM, VP",SoO,3,1
+814,b8a7bca9636c30da9518f132ab41cd7a,Where is the peach really?,red_pantry,0,True,3,"PercepToM, VP","SIMTOM, SoO",2,2
+816,6adb793fb115b4182d9f12ec0b00b477,Where is the turnip really?,green_crate,0,True,3,"PercepToM, SIMTOM","SoO, VP",2,2
+213,db9353124cb85444b3ae58cbac7a024a,Where is the cucumber really?,red_pantry,0,False,3,"PercepToM, SIMTOM","SoO, VP",2,2
+660,bc9383d05608f8c3559fc93653fba17b,Where does Jack think Hannah thinks William thinks the carrot is?,red_basket,3,True,1,"PercepToM, SIMTOM, VP",SoO,3,1
+192,788115883cbdf57fb2004c92c341299b,Where does Sophia think Isla thinks Avery thinks Carter thinks the watermelon is?,blue_suitcase,4,False,2,VP,"PercepToM, SIMTOM, SoO",1,3
+290,eb8d26bb20a9bcd929a08adae9c64793,Where does Isla think Emma thinks Lily thinks William thinks the melon is?,green_bathtub,4,False,3,"PercepToM, SIMTOM, SoO",VP,3,1
+189,01970fd2132c0b0f886eb0a69e0411f8,Where does Alexander think Jack thinks Aiden thinks Hannah thinks the orange is?,red_pantry,4,False,2,"PercepToM, VP","SIMTOM, SoO",2,2
+139,23a17cb047d24f0d853f82232add5d1d,Where does Nathan really think the peas is?,blue_suitcase,1,False,2,"PercepToM, SIMTOM","SoO, VP",2,2
+631,ca03aa129b89cee3984ba8c056d8aa2d,Where does Ava really think the tangerine is?,red_basket,1,True,1,"PercepToM, SIMTOM, VP",SoO,3,1
+888,fe0c0f35fa3d6d58ccdd2b5f557f8bef,Where does Nathan think Elizabeth thinks Carter thinks Isla thinks the watermelon is?,blue_bottle,4,True,3,PercepToM,"SIMTOM, SoO, VP",1,3
+781,ad06a04770d4d93147fa4cb285ac9da3,Where does Sophia think Isabella thinks Emily thinks Owen thinks the onion is?,red_crate,4,True,2,PercepToM,"SIMTOM, SoO, VP",1,3
+773,0ee66448a4a1400acdbde2c00e6eae0b,Where does Isabella think Amelia thinks Nathan thinks the pear is?,blue_pantry,3,True,2,"PercepToM, SIMTOM, VP",SoO,3,1
+3,515c6bd00274e770e12acab52e034942,Where is the spinach really?,green_bucket,0,False,1,"PercepToM, SIMTOM, SoO",VP,3,1
+853,e2d4e3614489ba7a2a38e67ced123bf5,Where does Nathan think Abigail thinks the carrot is?,red_envelope,2,True,3,"PercepToM, SIMTOM, VP",SoO,3,1
+616,1793f2e09bb56a134df76fef1df448bd,Where is the green_pepper really?,blue_treasure_chest,0,True,1,"PercepToM, SIMTOM, SoO",VP,3,1
+663,4d35ac4ec197582ce0727db6d1fdc500,Where does Mila think Benjamin thinks Jackson thinks the cherry is?,green_bucket,3,True,1,"SIMTOM, VP","PercepToM, SoO",2,2
+754,99e2d5fbd47c1cc4881a45db41624dde,Where does Noah think Charlotte thinks the potato is?,blue_cupboard,2,True,2,"SIMTOM, SoO","PercepToM, VP",2,2
+133,980220023ca9f315d6cfded809fae967,Where does Isla really think the lemon is?,red_container,1,False,2,PercepToM,"SIMTOM, SoO, VP",1,3
+605,b44067fe4fbd2b0925fa0d9cdf573c38,Where is the watermelon really?,green_basket,0,True,1,PercepToM,"SIMTOM, SoO, VP",1,3
+29,f8874d81bc8d5c8e917a3abc8f4c0672,Where does William really think the plum is?,green_bucket,1,False,1,PercepToM,"SIMTOM, SoO, VP",1,3
+780,9ca677c000f105919ece50fe8633d41b,Where does Ella think Aiden thinks Amelia thinks Owen thinks the persimmon is?,blue_pantry,4,True,2,PercepToM,"SIMTOM, SoO, VP",1,3
+84,d7c94ead1caf8c69689e94821b094210,Where does Hannah think Charlotte thinks Benjamin thinks Logan thinks the potato is?,green_envelope,4,False,1,"PercepToM, SIMTOM","SoO, VP",2,2
+205,45e570c59c45caebb81271cd1f0a8b7a,Where is the turnip really?,blue_pantry,0,False,3,"PercepToM, SIMTOM, VP",SoO,3,1
+274,c16bc0b28f68d586c01852a6a3b1c7b9,Where does Mila think Aiden thinks Jacob thinks the sweet_potato is?,green_bottle,3,False,3,"PercepToM, SoO, VP",SIMTOM,3,1
+877,fa9a51fb22badf5dc484f4ab0abfd94b,Where does Aiden think Avery thinks Carter thinks the cabbage is?,green_bucket,3,True,3,"SIMTOM, VP","PercepToM, SoO",2,2
+643,4d35ac4ec197582ce0727db6d1fdc500,Where does Benjamin think Jackson thinks the cherry is?,green_bucket,2,True,1,SIMTOM,"PercepToM, SoO, VP",1,3
+134,68f847fc8f1f9e91bc85aa8cd24d77ee,Where does Abigail really think the corn is?,green_bucket,1,False,2,"SoO, VP","PercepToM, SIMTOM",2,2
+848,fe0c0f35fa3d6d58ccdd2b5f557f8bef,Where does Carter think Isla thinks the watermelon is?,blue_container,2,True,3,PercepToM,"SIMTOM, SoO, VP",1,3
+251,c406fc2c90f9b4525347737dda3e6f7f,Where does Owen think Jack thinks the beans is?,blue_suitcase,2,False,3,"PercepToM, SoO, VP",SIMTOM,3,1
+601,ef995be2f9e2c2cd4cd24f2c00419234,Where is the lemon really?,blue_bathtub,0,True,1,"PercepToM, SoO","SIMTOM, VP",2,2
+733,0ee66448a4a1400acdbde2c00e6eae0b,Where does Nathan really think the pear is?,blue_pantry,1,True,2,"PercepToM, SIMTOM, SoO",VP,3,1
+688,ec875944337e0c263b8172d076da8f1a,Where does Jack think Aiden thinks Owen thinks Abigail thinks the spinach is?,blue_suitcase,4,True,1,"SIMTOM, VP","PercepToM, SoO",2,2
+890,f30ac6f8e22de44259c3fe82879b4716,Where does Amelia think Jack thinks Benjamin thinks Abigail thinks the spinach is?,green_pantry,4,True,3,"PercepToM, SIMTOM","SoO, VP",2,2
+254,c16bc0b28f68d586c01852a6a3b1c7b9,Where does Aiden think Jacob thinks the sweet_potato is?,green_bottle,2,False,3,PercepToM,"SIMTOM, SoO, VP",1,3
+627,ac32ac41ce5455399116ad7bb8e2f712,Where does Isla really think the lettuce is?,red_box,1,True,1,PercepToM,"SIMTOM, SoO, VP",1,3
+160,bc20f8789564dc59ea6ab633e58c2751,Where does Charlotte think Ava thinks Evelyn thinks the cucumber is?,green_treasure_chest,3,False,2,PercepToM,"SIMTOM, SoO, VP",1,3
+756,9bdf9964de37a7e375966b8386e99b9d,Where does Ella think Owen thinks the cherry is?,green_bucket,2,True,2,"PercepToM, SIMTOM","SoO, VP",2,2
+830,f30ac6f8e22de44259c3fe82879b4716,Where does Abigail really think the spinach is?,green_pantry,1,True,3,"PercepToM, SIMTOM","SoO, VP",2,2
+37,e36aa3c8217cdda66f4ae6f49ecfbf46,Where does Benjamin really think the corn is?,green_crate,1,False,1,SIMTOM,"PercepToM, SoO, VP",1,3
+137,62120a3f484cf9a686d534721e8f0ee8,Where does Noah really think the corn is?,blue_treasure_chest,1,False,2,PercepToM,"SIMTOM, SoO, VP",1,3
+629,671f4fbfb36efe386409a3b8dc1373bb,Where does Carter really think the potato is?,blue_bathtub,1,True,1,"PercepToM, SoO, VP",SIMTOM,3,1
+698,e41a052c4722e31ec46cf1fe53afecbe,Where does Elizabeth think Ella thinks Lily thinks Logan thinks the green_pepper is?,red_drawer,4,True,1,VP,"PercepToM, SIMTOM, SoO",1,3
+674,b792da75225761d8425b6e82e923542f,Where does Carter think Ava thinks Amelia thinks the tangerine is?,red_basket,3,True,1,"PercepToM, SIMTOM, VP",SoO,3,1
+1,131842aa52602a52e7f5a92c0f1e5ea1,Where is the tomato really?,blue_container,0,False,1,"PercepToM, SIMTOM, SoO",VP,3,1
+695,8c6bff074e259ad8a45b7423079f3d0a,Where does Aiden think Carter thinks Isla thinks Jack thinks the tomato is?,red_crate,4,True,1,PercepToM,"SIMTOM, SoO, VP",1,3
+880,f0bc5bfc808b0b518bf46d9bfa760ebe,Where does Isabella think Logan thinks Jackson thinks Jack thinks the peas is?,blue_suitcase,4,True,3,VP,"PercepToM, SIMTOM, SoO",1,3
+40,12a920a8de0b1f6e0ba7b9c960eaf1a4,Where does Charlotte think Avery thinks the lettuce is?,green_bathtub,2,False,1,"PercepToM, VP","SIMTOM, SoO",2,2
+730,e8eea838c94ad54eb16c4428ff65b8c1,Where does Benjamin really think the grapes is?,blue_suitcase,1,True,2,"SIMTOM, SoO, VP",PercepToM,3,1
+11,635432239c4354cf306395a83d237979,Where is the melon really?,red_bottle,0,False,1,"PercepToM, SIMTOM, SoO",VP,3,1
+757,dbe06c021b0859b6530bf23fdeb53ceb,Where does Hannah think Liam thinks the sweet_potato is?,red_drawer,2,True,2,VP,"PercepToM, SIMTOM, SoO",1,3
+870,f30ac6f8e22de44259c3fe82879b4716,Where does Jack think Benjamin thinks Abigail thinks the spinach is?,green_pantry,3,True,3,PercepToM,"SIMTOM, SoO, VP",1,3
+834,b8a7bca9636c30da9518f132ab41cd7a,Where does Abigail really think the peach is?,red_pantry,1,True,3,"PercepToM, SIMTOM, SoO",VP,3,1
+644,f543cd117be5205b7978bcf7b97714b4,Where does Sophia think Logan thinks the asparagus is?,red_crate,2,True,1,SIMTOM,"PercepToM, SoO, VP",1,3
+21,131842aa52602a52e7f5a92c0f1e5ea1,Where does Jacob really think the tomato is?,blue_container,1,False,1,"PercepToM, SIMTOM, SoO",VP,3,1
+4,d7c94ead1caf8c69689e94821b094210,Where is the potato really?,red_bottle,0,False,1,"PercepToM, SIMTOM, SoO",VP,3,1
+793,0ee66448a4a1400acdbde2c00e6eae0b,Where does Owen think Isabella thinks Amelia thinks Nathan thinks the pear is?,blue_pantry,4,True,2,"PercepToM, VP","SIMTOM, SoO",2,2
+228,2dff44a8fcbb987d6852a6cc2a88494b,Where does Isla really think the cabbage is?,blue_bathtub,1,False,3,"PercepToM, SIMTOM","SoO, VP",2,2
+818,8e4fcdbd2ac139d4c6c839e69179ad9f,Where is the cherry really?,blue_container,0,True,3,"PercepToM, SIMTOM","SoO, VP",2,2
+858,8e4fcdbd2ac139d4c6c839e69179ad9f,Where does Ava think William thinks the cherry is?,green_basket,2,True,3,PercepToM,"SIMTOM, SoO, VP",1,3
+250,eb8d26bb20a9bcd929a08adae9c64793,Where does Lily think William thinks the melon is?,green_bathtub,2,False,3,SIMTOM,"PercepToM, SoO, VP",1,3
+265,45e570c59c45caebb81271cd1f0a8b7a,Where does Noah think Lily thinks Hannah thinks the turnip is?,red_basket,3,False,3,"PercepToM, SoO","SIMTOM, VP",2,2
+114,68f847fc8f1f9e91bc85aa8cd24d77ee,Where is the corn really?,green_bucket,0,False,2,"PercepToM, SIMTOM","SoO, VP",2,2
+783,3297b7b5eff8366483fc0b4b7ec587e4,Where does Emma think Ava thinks William thinks Nathan thinks the cherry is?,blue_suitcase,4,True,2,"PercepToM, VP","SIMTOM, SoO",2,2
+158,2990e141f37d036cb71825a1cb866863,Where does Nathan think Jackson thinks the tomato is?,blue_crate,2,False,2,"PercepToM, SIMTOM, SoO",VP,3,1
+855,4ae5d7e0a1a973786935c4e4fa65aeb8,Where does Noah think Aiden thinks the cherry is?,green_envelope,2,True,3,"PercepToM, VP","SIMTOM, SoO",2,2
+224,b00134512d3612b4a5fd032af5ec6e41,Where does Hannah really think the peas is?,blue_bathtub,1,False,3,PercepToM,"SIMTOM, SoO, VP",1,3
+879,ae725e3e5bfdcf794254184a07f28446,Where does Carter think Mila thinks Owen thinks the turnip is?,green_pantry,3,True,3,PercepToM,"SIMTOM, SoO, VP",1,3
+724,ef944a43d67f76800190c513ff32bec2,Where does Benjamin really think the watermelon is?,green_drawer,1,True,2,"PercepToM, SIMTOM, SoO",VP,3,1
+294,c16bc0b28f68d586c01852a6a3b1c7b9,Where does Elizabeth think Mila thinks Aiden thinks Jacob thinks the sweet_potato is?,green_bottle,4,False,3,"PercepToM, VP","SIMTOM, SoO",2,2
+7,52a0b7a2aa730b1104dc5d1bac5953a2,Where is the corn really?,blue_suitcase,0,False,1,"PercepToM, SIMTOM, SoO",VP,3,1
+764,ef944a43d67f76800190c513ff32bec2,Where does Isabella think Emma thinks Benjamin thinks the watermelon is?,green_drawer,3,True,2,"PercepToM, SoO","SIMTOM, VP",2,2
+20,12a920a8de0b1f6e0ba7b9c960eaf1a4,Where does Avery really think the lettuce is?,green_bathtub,1,False,1,"PercepToM, SoO, VP",SIMTOM,3,1
+56,77646fd8321337b3d50f4813e729b39a,Where does Emma think Liam thinks the lettuce is?,blue_crate,2,False,1,VP,"PercepToM, SIMTOM, SoO",1,3
+284,b00134512d3612b4a5fd032af5ec6e41,Where does Abigail think Jackson thinks Amelia thinks Hannah thinks the peas is?,green_basket,4,False,3,"SIMTOM, VP","PercepToM, SoO",2,2
+43,515c6bd00274e770e12acab52e034942,Where does Mila think Noah thinks the spinach is?,green_bucket,2,False,1,"PercepToM, SIMTOM, SoO",VP,3,1
+898,8e4fcdbd2ac139d4c6c839e69179ad9f,Where does Amelia think Logan thinks Ava thinks William thinks the cherry is?,blue_container,4,True,3,"PercepToM, VP","SIMTOM, SoO",2,2
+231,c406fc2c90f9b4525347737dda3e6f7f,Where does Jack really think the beans is?,blue_suitcase,1,False,3,"PercepToM, SoO, VP",SIMTOM,3,1
+680,bc9383d05608f8c3559fc93653fba17b,Where does Charlotte think Jack thinks Hannah thinks William thinks the carrot is?,red_basket,4,True,1,"PercepToM, VP","SIMTOM, SoO",2,2
+893,e2d4e3614489ba7a2a38e67ced123bf5,Where does Isabella think Avery thinks Nathan thinks Abigail thinks the carrot is?,red_envelope,4,True,3,SIMTOM,"PercepToM, SoO, VP",1,3
+810,f30ac6f8e22de44259c3fe82879b4716,Where is the spinach really?,green_pantry,0,True,3,"PercepToM, SIMTOM, SoO",VP,3,1
+718,46f4aebfba4e8a44deda41abbe4ddfb2,Where is the carrot really?,blue_drawer,0,True,2,"PercepToM, SIMTOM, SoO",VP,3,1
+299,f3d05672d2171f78440a2ebea7c7c99c,Where does Elizabeth think Liam thinks Jackson thinks Evelyn thinks the spinach is?,green_drawer,4,False,3,VP,"PercepToM, SIMTOM, SoO",1,3
+740,9ca677c000f105919ece50fe8633d41b,Where does Amelia think Owen thinks the persimmon is?,blue_pantry,2,True,2,"PercepToM, SIMTOM","SoO, VP",2,2
+710,e8eea838c94ad54eb16c4428ff65b8c1,Where is the grapes really?,blue_pantry,0,True,2,"PercepToM, SIMTOM, SoO",VP,3,1
+789,0115b0df4589c151f6c35a7c68a66126,Where does Benjamin think Charlotte thinks Evelyn thinks Ava thinks the persimmon is?,blue_crate,4,True,2,"PercepToM, VP","SIMTOM, SoO",2,2
+672,df1b9a222a51fe48c21a6c0f91f42343,Where does Liam think Elizabeth thinks Owen thinks the onion is?,red_crate,3,True,1,SoO,"PercepToM, SIMTOM, VP",1,3
+885,1c24ce887401bac9f72efd6806715c33,Where does Hannah think Jacob thinks Isabella thinks Owen thinks the orange is?,green_box,4,True,3,SoO,"PercepToM, SIMTOM, VP",1,3
+864,a83c427e773b5aa0201f876b1f8cfff6,Where does Avery think Jackson thinks Sophia thinks the sweet_potato is?,green_bottle,3,True,3,PercepToM,"SIMTOM, SoO, VP",1,3
+89,f8874d81bc8d5c8e917a3abc8f4c0672,Where does Jacob think Evelyn thinks Nathan thinks William thinks the plum is?,red_pantry,4,False,1,"PercepToM, SIMTOM, VP",SoO,3,1
+266,b2055a86bdd2f3d3b17bfe79e78fc3ec,Where does Chloe think Logan thinks Evelyn thinks the watermelon is?,green_cupboard,3,False,3,"PercepToM, SIMTOM, VP",SoO,3,1
+219,f3d05672d2171f78440a2ebea7c7c99c,Where is the spinach really?,blue_treasure_chest,0,False,3,SIMTOM,"PercepToM, SoO, VP",1,3
+24,d7c94ead1caf8c69689e94821b094210,Where does Logan really think the potato is?,green_envelope,1,False,1,"PercepToM, SIMTOM","SoO, VP",2,2
+25,120ef76b28bf0b09dda5e76870e59a7e,Where does Lily really think the apple is?,red_box,1,False,1,"PercepToM, SIMTOM, UNKNOWN","SoO, VP",3,2
+34,bc5aaa9968743da70a82448bd3bac4ea,Where does Avery really think the watermelon is?,blue_container,1,False,1,"PercepToM, SoO, UNKNOWN, VP",SIMTOM,4,1
+711,6a96ddbf1f478a149e08cb880a7493db,Where is the spinach really?,green_envelope,0,True,2,"PercepToM, SIMTOM, UNKNOWN, VP",SoO,4,1
+96,77646fd8321337b3d50f4813e729b39a,Where does Avery think Mila thinks Emma thinks Liam thinks the lettuce is?,blue_crate,4,False,1,"PercepToM, SIMTOM, VP","SoO, UNKNOWN",3,2
+713,0ee66448a4a1400acdbde2c00e6eae0b,Where is the pear really?,blue_pantry,0,True,2,"PercepToM, SIMTOM, UNKNOWN, VP",SoO,4,1
+653,f902e2aea4b02d1b0a9a15c622b946a5,Where does Amelia think Mila thinks the tangerine is?,red_box,2,True,1,"PercepToM, SIMTOM, UNKNOWN, VP",SoO,4,1
+145,c4766185426d128102af0819d7644e68,Where does Avery think Owen thinks the melon is?,green_basket,2,False,2,"SIMTOM, UNKNOWN","PercepToM, SoO, VP",2,3
+67,52a0b7a2aa730b1104dc5d1bac5953a2,Where does Ella think Chloe thinks Sophia thinks the corn is?,green_crate,3,False,1,PercepToM,"SIMTOM, SoO, UNKNOWN, VP",1,4
+614,b792da75225761d8425b6e82e923542f,Where is the tangerine really?,red_basket,0,True,1,"PercepToM, SIMTOM, SoO, VP",UNKNOWN,4,1
+248,2dff44a8fcbb987d6852a6cc2a88494b,Where does Elizabeth think Isla thinks the cabbage is?,blue_bathtub,2,False,3,"PercepToM, SoO","SIMTOM, UNKNOWN, VP",2,3
+69,f8874d81bc8d5c8e917a3abc8f4c0672,Where does Evelyn think Nathan thinks William thinks the plum is?,red_pantry,3,False,1,"SIMTOM, VP","PercepToM, SoO, UNKNOWN",2,3
+763,3297b7b5eff8366483fc0b4b7ec587e4,Where does Ava think William thinks Nathan thinks the cherry is?,blue_suitcase,3,True,2,"PercepToM, SIMTOM, SoO, VP",UNKNOWN,4,1
+755,590ff79ff5c1a91467a2f1b4a0cef591,Where does Charlotte think Benjamin thinks the cucumber is?,red_container,2,True,2,"PercepToM, SIMTOM","SoO, UNKNOWN, VP",2,3
+844,a83c427e773b5aa0201f876b1f8cfff6,Where does Jackson think Sophia thinks the sweet_potato is?,red_box,2,True,3,"PercepToM, UNKNOWN","SIMTOM, SoO, VP",2,3
+270,eb8d26bb20a9bcd929a08adae9c64793,Where does Emma think Lily thinks William thinks the melon is?,green_bathtub,3,False,3,SoO,"PercepToM, SIMTOM, UNKNOWN, VP",1,4
+136,18762e3e6300b36ee932a584e27bb364,Where does Owen really think the lime is?,blue_drawer,1,False,2,"PercepToM, SIMTOM, SoO, VP",UNKNOWN,4,1
+13,772e2c7f25ce7d4a7b9147955e96de57,Where is the lime really?,green_envelope,0,False,1,"PercepToM, SIMTOM, SoO, UNKNOWN",VP,4,1
+88,0ceb5f9ad91513f3840d8ee18ade8091,Where does Owen think Elizabeth thinks Ella thinks Abigail thinks the banana is?,green_envelope,4,False,1,"PercepToM, SoO, VP","SIMTOM, UNKNOWN",3,2
+180,bc20f8789564dc59ea6ab633e58c2751,Where does Jacob think Charlotte thinks Ava thinks Evelyn thinks the cucumber is?,green_treasure_chest,4,False,2,"PercepToM, SoO","SIMTOM, UNKNOWN, VP",2,3
+765,c6cec7661a4b4e87e1259f112ce7d4e3,Where does Nathan think Isabella thinks Chloe thinks the peach is?,red_basket,3,True,2,"PercepToM, SIMTOM, SoO, VP",UNKNOWN,4,1
+892,3729e5ca39202e9bab61d208bdf1f4a1,Where does Emily think Jack thinks Abigail thinks Mila thinks the onion is?,green_crate,4,True,3,"PercepToM, VP","SIMTOM, SoO, UNKNOWN",2,3
+626,40aa312070bc04d38c08f788d33553dd,Where does Emma really think the tomato is?,green_drawer,1,True,1,"SIMTOM, SoO, UNKNOWN","PercepToM, VP",3,2
+668,ec875944337e0c263b8172d076da8f1a,Where does Aiden think Owen thinks Abigail thinks the spinach is?,blue_suitcase,3,True,1,"PercepToM, VP","SIMTOM, SoO, UNKNOWN",2,3
+620,bc9383d05608f8c3559fc93653fba17b,Where does William really think the carrot is?,green_envelope,1,True,1,"PercepToM, SoO","SIMTOM, UNKNOWN, VP",2,3
+200,4e408ebe1f7be60778e7766ef9420179,Where is the lettuce really?,blue_container,0,False,3,"PercepToM, SIMTOM, SoO, UNKNOWN",VP,4,1
+745,c6cec7661a4b4e87e1259f112ce7d4e3,Where does Isabella think Chloe thinks the peach is?,red_basket,2,True,2,SIMTOM,"PercepToM, SoO, UNKNOWN, VP",1,4
+815,4ae5d7e0a1a973786935c4e4fa65aeb8,Where is the cherry really?,blue_cupboard,0,True,3,"PercepToM, VP","SIMTOM, SoO, UNKNOWN",2,3
+268,2dff44a8fcbb987d6852a6cc2a88494b,Where does Abigail think Elizabeth thinks Isla thinks the cabbage is?,blue_bathtub,3,False,3,"PercepToM, SoO, UNKNOWN","SIMTOM, VP",3,2
+708,c775c6a9bb28bcfde093ead176290600,Where is the apple really?,green_bottle,0,True,2,"PercepToM, SIMTOM, UNKNOWN","SoO, VP",3,2
+664,f543cd117be5205b7978bcf7b97714b4,Where does Elizabeth think Sophia thinks Logan thinks the asparagus is?,blue_drawer,3,True,1,"PercepToM, SIMTOM, VP","SoO, UNKNOWN",3,2
+825,1c24ce887401bac9f72efd6806715c33,Where does Owen really think the orange is?,red_container,1,True,3,"SIMTOM, UNKNOWN, VP","PercepToM, SoO",3,2
+63,515c6bd00274e770e12acab52e034942,Where does Emily think Mila thinks Noah thinks the spinach is?,green_bucket,3,False,1,"PercepToM, SIMTOM, UNKNOWN","SoO, VP",3,2
+671,ca03aa129b89cee3984ba8c056d8aa2d,Where does Owen think Logan thinks Ava thinks the tangerine is?,red_bottle,3,True,1,"PercepToM, SIMTOM, UNKNOWN, VP",SoO,4,1
+658,e41a052c4722e31ec46cf1fe53afecbe,Where does Lily think Logan thinks the green_pepper is?,red_drawer,2,True,1,VP,"PercepToM, SIMTOM, SoO, UNKNOWN",1,4
+223,e986e137ee6b3b749f19f3e5bfb46b16,Where does Emma really think the green_pepper is?,blue_container,1,False,3,"PercepToM, SIMTOM, SoO, UNKNOWN",VP,4,1
+49,f8874d81bc8d5c8e917a3abc8f4c0672,Where does Nathan think William thinks the plum is?,red_pantry,2,False,1,"PercepToM, SIMTOM, UNKNOWN, VP",SoO,4,1
+237,a743ef0bf2e3d6983313eeac67782c70,Where does Elizabeth really think the lime is?,green_pantry,1,False,3,PercepToM,"SIMTOM, SoO, UNKNOWN, VP",1,4
+873,e2d4e3614489ba7a2a38e67ced123bf5,Where does Avery think Nathan thinks Abigail thinks the carrot is?,red_envelope,3,True,3,"PercepToM, SIMTOM","SoO, UNKNOWN, VP",2,3
+635,8c6bff074e259ad8a45b7423079f3d0a,Where does Jack really think the tomato is?,green_box,1,True,1,"PercepToM, SIMTOM","SoO, UNKNOWN, VP",2,3
+292,80f134c2b3a15a9e2e4e3f863215a570,Where does Jackson think Emma thinks Emily thinks William thinks the corn is?,green_bathtub,4,False,3,"SIMTOM, SoO, VP","PercepToM, UNKNOWN",3,2
+272,80f134c2b3a15a9e2e4e3f863215a570,Where does Emma think Emily thinks William thinks the corn is?,green_bathtub,3,False,3,"PercepToM, VP","SIMTOM, SoO, UNKNOWN",2,3
+83,515c6bd00274e770e12acab52e034942,Where does Evelyn think Emily thinks Mila thinks Noah thinks the spinach is?,green_bucket,4,False,1,"PercepToM, SIMTOM, SoO, UNKNOWN",VP,4,1
+876,6adb793fb115b4182d9f12ec0b00b477,Where does Sophia think Benjamin thinks William thinks the turnip is?,green_crate,3,True,3,"PercepToM, SoO","SIMTOM, UNKNOWN, VP",2,3
+609,671f4fbfb36efe386409a3b8dc1373bb,Where is the potato really?,green_cupboard,0,True,1,SIMTOM,"PercepToM, SoO, UNKNOWN, VP",1,4
+206,b2055a86bdd2f3d3b17bfe79e78fc3ec,Where is the watermelon really?,red_bottle,0,False,3,SIMTOM,"PercepToM, SoO, UNKNOWN, VP",1,4
+721,ad06a04770d4d93147fa4cb285ac9da3,Where does Owen really think the onion is?,blue_crate,1,True,2,VP,"PercepToM, SIMTOM, SoO, UNKNOWN",1,4
+138,2990e141f37d036cb71825a1cb866863,Where does Jackson really think the tomato is?,blue_crate,1,False,2,"PercepToM, SIMTOM, SoO, UNKNOWN",VP,4,1
+628,ec875944337e0c263b8172d076da8f1a,Where does Abigail really think the spinach is?,red_container,1,True,1,SoO,"PercepToM, SIMTOM, UNKNOWN, VP",1,4
+608,ec875944337e0c263b8172d076da8f1a,Where is the spinach really?,blue_suitcase,0,True,1,"PercepToM, SIMTOM, UNKNOWN, VP",SoO,4,1
+803,bd2c8c7515581d512b16e12d1753d890,Where is the corn really?,green_bottle,0,True,3,"PercepToM, SIMTOM, UNKNOWN, VP",SoO,4,1
+648,ec875944337e0c263b8172d076da8f1a,Where does Owen think Abigail thinks the spinach is?,blue_suitcase,2,True,1,"SIMTOM, UNKNOWN","PercepToM, SoO, VP",2,3
+246,b2055a86bdd2f3d3b17bfe79e78fc3ec,Where does Logan think Evelyn thinks the watermelon is?,green_cupboard,2,False,3,"PercepToM, UNKNOWN, VP","SIMTOM, SoO",3,2
+183,31cffc432e0ed04daa891254866387d3,Where does Jacob think Evelyn thinks Chloe thinks Isabella thinks the potato is?,blue_drawer,4,False,2,"PercepToM, SoO, VP","SIMTOM, UNKNOWN",3,2
+788,c775c6a9bb28bcfde093ead176290600,Where does Amelia think Ella thinks Evelyn thinks Jack thinks the apple is?,green_pantry,4,True,2,"SIMTOM, UNKNOWN","PercepToM, SoO, VP",2,3
+684,f543cd117be5205b7978bcf7b97714b4,Where does Hannah think Elizabeth thinks Sophia thinks Logan thinks the asparagus is?,blue_drawer,4,True,1,"PercepToM, SIMTOM, VP","SoO, UNKNOWN",3,2
+656,1793f2e09bb56a134df76fef1df448bd,Where does Evelyn think Alexander thinks the green_pepper is?,blue_suitcase,2,True,1,PercepToM,"SIMTOM, SoO, UNKNOWN, VP",1,4
+691,ca03aa129b89cee3984ba8c056d8aa2d,Where does Elizabeth think Owen thinks Logan thinks Ava thinks the tangerine is?,red_bottle,4,True,1,SIMTOM,"PercepToM, SoO, UNKNOWN, VP",1,4
+278,df5e1b5077c69a350b9b358fd263a5b4,Where does Isabella think William thinks Noah thinks the pear is?,blue_crate,3,False,3,"SoO, VP","PercepToM, SIMTOM, UNKNOWN",2,3
+149,01970fd2132c0b0f886eb0a69e0411f8,Where does Aiden think Hannah thinks the orange is?,red_pantry,2,False,2,SIMTOM,"PercepToM, SoO, UNKNOWN, VP",1,4
+769,0115b0df4589c151f6c35a7c68a66126,Where does Charlotte think Evelyn thinks Ava thinks the persimmon is?,blue_crate,3,True,2,VP,"PercepToM, SIMTOM, SoO, UNKNOWN",1,4
+717,dbe06c021b0859b6530bf23fdeb53ceb,Where is the sweet_potato really?,red_container,0,True,2,"PercepToM, SIMTOM, SoO","UNKNOWN, VP",3,2
+55,ece59eb513338eefe9ad371b56d8a2d8,Where does Evelyn think William thinks the carrot is?,blue_container,2,False,1,PercepToM,"SIMTOM, SoO, UNKNOWN, VP",1,4
+298,df5e1b5077c69a350b9b358fd263a5b4,Where does Aiden think Isabella thinks William thinks Noah thinks the pear is?,blue_crate,4,False,3,"PercepToM, SoO, UNKNOWN, VP",SIMTOM,4,1
+288,2dff44a8fcbb987d6852a6cc2a88494b,Where does Aiden think Abigail thinks Elizabeth thinks Isla thinks the cabbage is?,blue_bathtub,4,False,3,"SIMTOM, UNKNOWN","PercepToM, SoO, VP",2,3
+286,b2055a86bdd2f3d3b17bfe79e78fc3ec,Where does Charlotte think Chloe thinks Logan thinks Evelyn thinks the watermelon is?,green_cupboard,4,False,3,"PercepToM, SoO, VP","SIMTOM, UNKNOWN",3,2
+247,28165b096b6113d9259c2c6a34c7d504,Where does Nathan think Aiden thinks the lemon is?,green_basket,2,False,3,SIMTOM,"PercepToM, SoO, UNKNOWN, VP",1,4
+878,8e4fcdbd2ac139d4c6c839e69179ad9f,Where does Logan think Ava thinks William thinks the cherry is?,blue_container,3,True,3,VP,"PercepToM, SIMTOM, SoO, UNKNOWN",1,4
+726,ee6b8062d11d813cfa59fa4726a7ba6c,Where does Aiden really think the asparagus is?,green_treasure_chest,1,True,2,"PercepToM, SIMTOM, SoO, UNKNOWN",VP,4,1
+613,f902e2aea4b02d1b0a9a15c622b946a5,Where is the tangerine really?,green_treasure_chest,0,True,1,"PercepToM, SIMTOM, SoO, UNKNOWN",VP,4,1
+59,4105d15b308adf6d36e09b40e6a1db09,Where does Jacob think Ava thinks the watermelon is?,green_bottle,2,False,1,"PercepToM, SIMTOM","SoO, UNKNOWN, VP",2,3
+871,6023073f445c10ee01a12e568182a890,Where does Isabella think Hannah thinks Avery thinks the spinach is?,green_pantry,3,True,3,"SoO, VP","PercepToM, SIMTOM, UNKNOWN",2,3
+2,270a77dc2b84fbd0efe2321c2b7a399f,Where is the eggplant really?,green_envelope,0,False,1,"PercepToM, SIMTOM, UNKNOWN, VP",SoO,4,1
+600,bc9383d05608f8c3559fc93653fba17b,Where is the carrot really?,red_basket,0,True,1,"PercepToM, SIMTOM, VP","SoO, UNKNOWN",3,2
+151,c007399d631c250725da53f8fc21e7bb,Where does Alexander think Charlotte thinks the pear is?,red_bucket,2,False,2,"PercepToM, SIMTOM, SoO, VP",UNKNOWN,4,1
+847,703f7ca842e1d366fd9e5fef4f8e76e9,Where does Amelia think Chloe thinks the carrot is?,red_bucket,2,True,3,PercepToM,"SIMTOM, SoO, UNKNOWN, VP",1,4
+36,77646fd8321337b3d50f4813e729b39a,Where does Liam really think the lettuce is?,blue_crate,1,False,1,"PercepToM, SIMTOM, UNKNOWN, VP",SoO,4,1
+812,3729e5ca39202e9bab61d208bdf1f4a1,Where is the onion really?,green_crate,0,True,3,"SIMTOM, VP","PercepToM, SoO, UNKNOWN",2,3
+76,77646fd8321337b3d50f4813e729b39a,Where does Mila think Emma thinks Liam thinks the lettuce is?,blue_crate,3,False,1,"PercepToM, VP","SIMTOM, SoO, UNKNOWN",2,3
+654,b792da75225761d8425b6e82e923542f,Where does Ava think Amelia thinks the tangerine is?,red_basket,2,True,1,"SIMTOM, VP","PercepToM, SoO, UNKNOWN",2,3
+51,635432239c4354cf306395a83d237979,Where does Mila think William thinks the melon is?,green_box,2,False,1,"PercepToM, SoO","SIMTOM, UNKNOWN, VP",2,3
+820,f0bc5bfc808b0b518bf46d9bfa760ebe,Where does Jack really think the peas is?,blue_suitcase,1,True,3,PercepToM,"SIMTOM, SoO, UNKNOWN, VP",1,4
+611,ca03aa129b89cee3984ba8c056d8aa2d,Where is the tangerine really?,red_basket,0,True,1,"SIMTOM, VP","PercepToM, SoO, UNKNOWN",2,3
+104,f147c438e996714e5ad1a7799a735d3a,Where is the cabbage really?,green_envelope,0,False,2,"PercepToM, SIMTOM, UNKNOWN","SoO, VP",3,2
+735,590ff79ff5c1a91467a2f1b4a0cef591,Where does Benjamin really think the cucumber is?,red_container,1,True,2,"PercepToM, SIMTOM","SoO, UNKNOWN, VP",2,3
+624,f543cd117be5205b7978bcf7b97714b4,Where does Logan really think the asparagus is?,blue_drawer,1,True,1,"SIMTOM, SoO, UNKNOWN, VP",PercepToM,4,1
+74,bc5aaa9968743da70a82448bd3bac4ea,Where does Ella think Owen thinks Avery thinks the watermelon is?,blue_container,3,False,1,PercepToM,"SIMTOM, SoO, UNKNOWN, VP",1,4
+669,671f4fbfb36efe386409a3b8dc1373bb,Where does Alexander think Jacob thinks Carter thinks the potato is?,blue_bathtub,3,True,1,"PercepToM, SIMTOM, SoO, UNKNOWN",VP,4,1

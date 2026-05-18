@@ -1,0 +1,11 @@
+sample_id,story_id,question,answer,question_order,deception,story_length
+27,52a0b7a2aa730b1104dc5d1bac5953a2,Where does Sophia really think the corn is?,blue_suitcase,1,False,1
+38,aaa1fe417175f5daa021ceaf8f18fd23,Where does Emily really think the asparagus is?,green_bottle,1,False,1
+638,e41a052c4722e31ec46cf1fe53afecbe,Where does Logan really think the green_pepper is?,blue_crate,1,True,1
+722,fdb57baca1fb3f4ec10df0a14e55ddc8,Where does Emma really think the peas is?,red_pantry,1,True,2
+207,28165b096b6113d9259c2c6a34c7d504,Where is the lemon really?,green_drawer,0,False,3
+719,0156d95d17505a708c4cb919b1b4ab75,Where is the melon really?,blue_treasure_chest,0,True,2
+291,c406fc2c90f9b4525347737dda3e6f7f,Where does Benjamin think Liam thinks Owen thinks Jack thinks the beans is?,blue_suitcase,4,False,3
+607,ac32ac41ce5455399116ad7bb8e2f712,Where is the lettuce really?,red_bucket,0,True,1
+58,aaa1fe417175f5daa021ceaf8f18fd23,Where does Hannah think Emily thinks the asparagus is?,green_bottle,2,False,1
+18,aaa1fe417175f5daa021ceaf8f18fd23,Where is the asparagus really?,green_bottle,0,False,1
