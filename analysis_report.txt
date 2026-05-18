@@ -12,7 +12,7 @@ PERCEPTOM_Qwen3-1.7B | 300   | 201     | 67.00%   | 53/60   | 42/60   | 36/60   
 SIMTOM_Qwen3-0.6B    | 300   | 122     | 40.67%   | 27/60   | 24/60   | 20/60   | 21/60   | 30/60   | 64/161         | 58/139         
 SIMTOM_Qwen3-1.7B    | 300   | 159     | 53.00%   | 54/60   | 36/60   | 28/60   | 20/60   | 21/60   | 81/161         | 78/139         
 SOO_Qwen3-0.6B       | 300   | 101     | 33.67%   | 23/60   | 26/60   | 16/60   | 15/60   | 21/60   | 48/161         | 53/139         
-SOO_Qwen3-1.7B       | 300   | 107     | 35.67%   | 37/60   | 30/60   | 16/60   | 12/60   | 12/60   | 51/161         | 56/139         
+SOO_Qwen3-1.7B       | 300   | 122     | 40.67%   | 43/60   | 30/60   | 19/60   | 15/60   | 15/60   | 56/161         | 66/139         
 VP_Qwen3-0.6B        | 300   | 109     | 36.33%   | 27/60   | 25/60   | 19/60   | 13/60   | 25/60   | 56/161         | 53/139         
 VP_Qwen3-1.7B        | 300   | 119     | 39.67%   | 24/60   | 20/60   | 20/60   | 26/60   | 29/60   | 65/161         | 54/139         
 
@@ -23,7 +23,7 @@ method    | total | correct | accuracy
 --------------------------------------
 PercepToM | 600   | 323     | 53.83%  
 SIMTOM    | 600   | 281     | 46.83%  
-SoO       | 600   | 208     | 34.67%  
+SoO       | 600   | 223     | 37.17%  
 VP        | 600   | 228     | 38.00%  
 
 --------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ question_order | method    | total | correct | accuracy
 -------------------------------------------------------
 0              | PercepToM | 120   | 88      | 73.33%  
 0              | SIMTOM    | 120   | 81      | 67.50%  
-0              | SoO       | 120   | 60      | 50.00%  
+0              | SoO       | 120   | 66      | 55.00%  
 0              | VP        | 120   | 51      | 42.50%  
 1              | PercepToM | 120   | 65      | 54.17%  
 1              | SIMTOM    | 120   | 60      | 50.00%  
@@ -41,15 +41,15 @@ question_order | method    | total | correct | accuracy
 1              | VP        | 120   | 45      | 37.50%  
 2              | PercepToM | 120   | 59      | 49.17%  
 2              | SIMTOM    | 120   | 48      | 40.00%  
-2              | SoO       | 120   | 32      | 26.67%  
+2              | SoO       | 120   | 35      | 29.17%  
 2              | VP        | 120   | 39      | 32.50%  
 3              | PercepToM | 120   | 52      | 43.33%  
 3              | SIMTOM    | 120   | 41      | 34.17%  
-3              | SoO       | 120   | 27      | 22.50%  
+3              | SoO       | 120   | 30      | 25.00%  
 3              | VP        | 120   | 39      | 32.50%  
 4              | PercepToM | 120   | 59      | 49.17%  
 4              | SIMTOM    | 120   | 51      | 42.50%  
-4              | SoO       | 120   | 33      | 27.50%  
+4              | SoO       | 120   | 36      | 30.00%  
 4              | VP        | 120   | 54      | 45.00%  
 
 --------------------------------------------------------------------------------
@@ -59,29 +59,31 @@ deception      | method    | total | correct | accuracy
 -------------------------------------------------------
 no_deception   | PercepToM | 278   | 171     | 61.51%  
 no_deception   | SIMTOM    | 278   | 136     | 48.92%  
-no_deception   | SoO       | 278   | 109     | 39.21%  
+no_deception   | SoO       | 278   | 119     | 42.81%  
 no_deception   | VP        | 278   | 107     | 38.49%  
 with_deception | PercepToM | 322   | 152     | 47.20%  
 with_deception | SIMTOM    | 322   | 145     | 45.03%  
-with_deception | SoO       | 322   | 99      | 30.75%  
+with_deception | SoO       | 322   | 104     | 32.30%  
 with_deception | VP        | 322   | 121     | 37.58%  
 
 --------------------------------------------------------------------------------
 5. 'IMPOSSIBLE' QUESTIONS (No Method Succeeded)
 --------------------------------------------------------------------------------
-Total impossible questions: 24
+Total impossible questions: 21
 
 Breakdown by question order:
-  Order 1: 8 questions
-  Order 2: 5 questions
+  Order 1: 7 questions
+  Order 2: 4 questions
   Order 3: 7 questions
-  Order 4: 4 questions
+  Order 4: 3 questions
 
 Breakdown by deception:
-  With deception: 16 questions
-  No deception: 8 questions
+  With deception: 15 questions
+  No deception: 6 questions
 
 Sample impossible questions:
+  - Sample 794: Where does Nathan think Ava thinks Noah thinks Charlotte thinks the potato is?...
+    Answer: blue_cupboard | Order: 4 | Deception: True
   - Sample 699: Where does Hannah think Benjamin thinks Liam thinks Avery thinks the peach is?...
     Answer: red_basket | Order: 4 | Deception: True
   - Sample 737: Where does Liam really think the sweet_potato is?...
@@ -90,18 +92,15 @@ Sample impossible questions:
     Answer: green_box | Order: 3 | Deception: False
   - Sample 53: Where does Avery think Abigail thinks the lime is?...
     Answer: blue_suitcase | Order: 2 | Deception: False
-  - Sample 829: Where does Mila really think the persimmon is?...
-    Answer: green_bucket | Order: 1 | Deception: True
 
 --------------------------------------------------------------------------------
 6. 'EASY' QUESTIONS (All Methods Succeeded)
 --------------------------------------------------------------------------------
-Total easy questions: 10
+Total easy questions: 8
 
 Breakdown by question order:
   Order 0: 4 questions
-  Order 1: 4 questions
-  Order 2: 1 questions
+  Order 1: 3 questions
   Order 4: 1 questions
 
 --------------------------------------------------------------------------------
@@ -111,22 +110,25 @@ This shows how many questions each method got RIGHT where another got WRONG.
 
 method    | wins_vs_SIMTOM | wins_vs_SoO | wins_vs_VP
 -----------------------------------------------------
-PercepToM | 79             | 108         | 112       
-SIMTOM    | 37             | 74          | 90        
-SoO       | 14             | 22          | 59        
-VP        | 30             | 50          | 71        
+PercepToM | 79             | 100         | 112       
+SIMTOM    | 37             | 65          | 90        
+SoO       | 21             | 28          | 72        
+VP        | 30             | 50          | 69        
 
 --------------------------------------------------------------------------------
 8. PARTIAL SUCCESS QUESTIONS (Some Methods Right, Others Wrong)
 --------------------------------------------------------------------------------
-Total questions with partial success: 224
+Total questions with partial success: 230
 
 Success pattern distribution:
-  1 correct, 3 incorrect methods: 76 questions
-  2 correct, 2 incorrect methods: 74 questions
-  3 correct, 1 incorrect methods: 74 questions
+  1 correct, 3 incorrect methods: 81 questions
+  2 correct, 2 incorrect methods: 63 questions
+  3 correct, 1 incorrect methods: 86 questions
 
 Sample partial success questions:
+  - Sample 701: Order 0
+    Correct: PercepToM, SIMTOM, VP
+    Incorrect: SoO
   - Sample 171: Order 3
     Correct: SIMTOM
     Incorrect: PercepToM, SoO, VP
@@ -137,9 +139,6 @@ Sample partial success questions:
     Correct: PercepToM, VP
     Incorrect: SIMTOM, SoO
   - Sample 739: Order 1
-    Correct: SIMTOM, SoO
-    Incorrect: PercepToM, VP
-  - Sample 178: Order 3
     Correct: SIMTOM
     Incorrect: PercepToM, SoO, VP
 
@@ -147,43 +146,43 @@ Sample partial success questions:
 9. ERROR PATTERN ANALYSIS
 --------------------------------------------------------------------------------
 Errors by Question Order (higher order = more complex ToM):
-  Order 0: 200/480 errors (41.7%)
+  Order 0: 194/480 errors (40.4%)
   Order 1: 254/480 errors (52.9%)
-  Order 2: 302/480 errors (62.9%)
-  Order 3: 321/480 errors (66.9%)
-  Order 4: 283/480 errors (59.0%)
+  Order 2: 299/480 errors (62.3%)
+  Order 3: 318/480 errors (66.2%)
+  Order 4: 280/480 errors (58.3%)
 
 Errors by Deception:
-  No deception: 589/1112 errors (53.0%)
-  With deception: 771/1288 errors (59.9%)
+  No deception: 579/1112 errors (52.1%)
+  With deception: 766/1288 errors (59.5%)
 
 Errors by Story Length:
-  Length 1: 462/904 errors (51.1%)
-  Length 2: 405/712 errors (56.9%)
-  Length 3: 493/784 errors (62.9%)
+  Length 1: 464/904 errors (51.3%)
+  Length 2: 397/712 errors (55.8%)
+  Length 3: 484/784 errors (61.7%)
 
 --------------------------------------------------------------------------------
 10. MODEL AGREEMENT ANALYSIS
 --------------------------------------------------------------------------------
 Samples evaluated by multiple methods: 300
-  All correct: 10 (3.3%)
-  All wrong: 0 (0.0%)
-  Mixed/Disagreement: 290 (96.7%)
+  All correct: 8 (2.7%)
+  All wrong: 1 (0.3%)
+  Mixed/Disagreement: 291 (97.0%)
 
 ================================================================================
 11. RECOMMENDATIONS FOR NEW METHOD DESIGN
 ================================================================================
 
-* TARGET THE IMPOSSIBLE: 24 questions stumped ALL methods.
+* TARGET THE IMPOSSIBLE: 21 questions stumped ALL methods.
   Focus new method on addressing these particularly challenging cases.
 
-* LEVERAGE COMPLEMENTARITY: 224 questions had mixed results.
+* LEVERAGE COMPLEMENTARITY: 230 questions had mixed results.
   A hybrid approach combining methods might succeed where individual methods fail.
 
 * COMPLEX ToM CHALLENGE: Question order 4 has highest error rate.
-  Error rate at order 4: 283/480
+  Error rate at order 4: 280/480
 
-* DECEPTION HANDLING: Error rate 59.9% with deception vs 53.0% without.
+* DECEPTION HANDLING: Error rate 59.5% with deception vs 52.1% without.
   New method should improve handling of deceptive scenarios.
 
 * POTENTIAL STRATEGIES:
