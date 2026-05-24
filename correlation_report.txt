@@ -1,0 +1,186 @@
+====================================================================================================
+THEORY OF MIND EXPERIMENT RESULTS - CORRELATION ANALYSIS
+====================================================================================================
+
+This report analyzes correlations between methods, entry fields, and their interactions.
+
+----------------------------------------------------------------------------------------------------
+1. METHOD-METHOD AGREEMENT (Cohen's Kappa)
+----------------------------------------------------------------------------------------------------
+Measures how often methods succeed/fail together. Higher = more similar patterns.
+
+Method Pair         | Cohen's Kappa | Agreement | Interpretation  
+------------------------------------------------------------------
+PercepToM vs SIMTOM | 0.211         | 61.3%     | Fair agreement  
+PercepToM vs SoO    | 0.241         | 59.7%     | Fair agreement  
+PercepToM vs VP     | 0.115         | 52.7%     | Slight agreement
+SIMTOM vs SoO       | 0.387         | 69.0%     | Fair agreement  
+SIMTOM vs VP        | 0.078         | 53.3%     | Slight agreement
+SoO vs VP           | 0.022         | 53.0%     | Slight agreement
+
+Interpretation: Negative/low kappa suggests methods are complementary.
+
+----------------------------------------------------------------------------------------------------
+2. METHOD CLUSTERS (Based on Agreement Patterns)
+----------------------------------------------------------------------------------------------------
+  Cluster_1: PercepToM
+  Cluster_2: SIMTOM
+  Cluster_3: SoO
+  Cluster_4: VP
+
+Methods in same cluster tend to succeed/fail together.
+
+----------------------------------------------------------------------------------------------------
+3. FEATURE CORRELATIONS
+----------------------------------------------------------------------------------------------------
+Correlations between entry fields (question_order, story_length, deception)
+and with accuracy (correct).
+
+Feature A      | Feature B    | Correlation        | Strength   | Relationship
+------------------------------------------------------------------------------
+question_order | story_length | 0.059 (Pearson r)  | Negligible | Positive    
+question_order | deception    | 0.058 (Cramer's V) | Negligible | Positive    
+story_length   | deception    | 0.074 (Cramer's V) | Negligible | Positive    
+question_order | correct      | -0.140 (Pearson r) | Small      | Negative    
+story_length   | correct      | -0.087 (Pearson r) | Negligible | Negative    
+deception      | correct      | 0.074 (Cramer's V) | Negligible | Positive    
+
+----------------------------------------------------------------------------------------------------
+4. FEATURE INTERACTIONS (Combined Effects on Accuracy)
+----------------------------------------------------------------------------------------------------
+How combinations of features affect accuracy. Only showing combinations with 5+ samples.
+
+question_order | deception    | story_length  | accuracy | sample_count
+-----------------------------------------------------------------------
+0              | no_deception | short (<=100) | 60.19%   | 216         
+0              | deception    | short (<=100) | 59.09%   | 264         
+1              | no_deception | short (<=100) | 54.17%   | 240         
+4              | no_deception | short (<=100) | 49.55%   | 224         
+2              | no_deception | short (<=100) | 40.52%   | 232         
+1              | deception    | short (<=100) | 40.00%   | 240         
+2              | deception    | short (<=100) | 35.08%   | 248         
+4              | deception    | short (<=100) | 34.77%   | 256         
+3              | no_deception | short (<=100) | 34.00%   | 200         
+3              | deception    | short (<=100) | 33.57%   | 280         
+
+----------------------------------------------------------------------------------------------------
+5. METHOD X FEATURE CORRELATIONS
+----------------------------------------------------------------------------------------------------
+How each method's performance correlates with entry features.
+Significance: *** p<0.001, ** p<0.01, * p<0.05
+
+Method    | Feature        | Correlation | P-value | Interpretation                                        
+-----------------------------------------------------------------------------------------------------------
+PercepToM | question_order | -0.168      | 0.324   | Weak negative (higher question_order = slightly worse)
+PercepToM | story_length   | -0.095      | 0.461   | No correlation                                        
+PercepToM | deception      | -0.143      | 0.361   | Weak negative (higher deception = slightly worse)     
+SIMTOM    | question_order | -0.187      | 0.301   | Weak negative (higher question_order = slightly worse)
+SIMTOM    | story_length   | -0.096      | 0.460   | No correlation                                        
+SIMTOM    | deception      | -0.039      | 0.678   | No correlation                                        
+SoO       | question_order | -0.210      | 0.276   | Weak negative (higher question_order = slightly worse)
+SoO       | story_length   | -0.049      | 0.626   | No correlation                                        
+SoO       | deception      | -0.108      | 0.429   | Weak negative (higher deception = slightly worse)     
+VP        | question_order | 0.000       | 1.000   | No correlation                                        
+VP        | story_length   | -0.113      | 0.418   | Weak negative (higher story_length = slightly worse)  
+VP        | deception      | -0.009      | 0.897   | No correlation                                        
+
+----------------------------------------------------------------------------------------------------
+6. METHOD RANKINGS BY FEATURE VALUE
+----------------------------------------------------------------------------------------------------
+Performance ranking of methods for different feature values.
+
+Feature_Value  | Method    | Accuracy       | Rank
+--------------------------------------------------
+order_0        | PercepToM | 73.33% (n=120) | 1   
+order_0        | SIMTOM    | 67.50% (n=120) | 2   
+order_0        | SoO       | 55.00% (n=120) | 3   
+order_0        | VP        | 42.50% (n=120) | 4   
+order_1        | PercepToM | 54.17% (n=120) | 1   
+order_1        | SIMTOM    | 50.00% (n=120) | 2   
+order_1        | SoO       | 46.67% (n=120) | 3   
+order_1        | VP        | 37.50% (n=120) | 4   
+order_2        | PercepToM | 49.17% (n=120) | 1   
+order_2        | SIMTOM    | 40.00% (n=120) | 2   
+order_2        | VP        | 32.50% (n=120) | 3   
+order_2        | SoO       | 29.17% (n=120) | 4   
+order_3        | PercepToM | 43.33% (n=120) | 1   
+order_3        | SIMTOM    | 34.17% (n=120) | 2   
+order_3        | VP        | 32.50% (n=120) | 3   
+order_3        | SoO       | 25.00% (n=120) | 4   
+order_4        | PercepToM | 49.17% (n=120) | 1   
+order_4        | VP        | 45.00% (n=120) | 2   
+order_4        | SIMTOM    | 42.50% (n=120) | 3   
+order_4        | SoO       | 30.00% (n=120) | 4   
+no_deception   | PercepToM | 61.51% (n=278) | 1   
+no_deception   | SIMTOM    | 48.92% (n=278) | 2   
+no_deception   | SoO       | 42.81% (n=278) | 3   
+no_deception   | VP        | 38.49% (n=278) | 4   
+with_deception | PercepToM | 47.20% (n=322) | 1   
+with_deception | SIMTOM    | 45.03% (n=322) | 2   
+with_deception | VP        | 37.58% (n=322) | 3   
+with_deception | SoO       | 32.30% (n=322) | 4   
+
+----------------------------------------------------------------------------------------------------
+7. CONDITIONAL SUCCESS PROBABILITIES
+----------------------------------------------------------------------------------------------------
+P(Method B succeeds | Method A succeeded)
+High values indicate methods succeed together (redundant).
+Low values given high individual success indicate complementarity.
+
+Given Method A Succeeded | P(B=PercepToM) | P(B=SIMTOM) | P(B=SoO) | P(B=VP)
+----------------------------------------------------------------------------
+PercepToM                | 100.00%        | 60.70%      | 50.25%   | 44.28% 
+SIMTOM                   | 76.73%         | 100.00%     | 59.12%   | 43.40% 
+SoO                      | 82.79%         | 77.05%      | 100.00%  | 40.98% 
+VP                       | 74.79%         | 57.98%      | 42.02%   | 100.00%
+
+----------------------------------------------------------------------------------------------------
+8. SYNERGISTIC METHOD PAIRS
+----------------------------------------------------------------------------------------------------
+Pairs ranked by complementarity score (combined - max(individual)).
+Higher scores indicate better potential for ensemble methods.
+
+Method Pair        | Individual A | Individual B | Combined (Union) | Overlap (Both Right) | Complementarity Score
+------------------------------------------------------------------------------------------------------------------
+SoO + VP           | 40.67%       | 39.67%       | 63.67%           | 16.67%               | 0.230                
+SIMTOM + VP        | 53.00%       | 39.67%       | 69.67%           | 23.00%               | 0.167                
+PercepToM + SIMTOM | 67.00%       | 53.00%       | 79.33%           | 40.67%               | 0.123                
+PercepToM + VP     | 67.00%       | 39.67%       | 77.00%           | 29.67%               | 0.100                
+SIMTOM + SoO       | 53.00%       | 40.67%       | 62.33%           | 31.33%               | 0.093                
+PercepToM + SoO    | 67.00%       | 40.67%       | 74.00%           | 33.67%               | 0.070                
+
+----------------------------------------------------------------------------------------------------
+9. SEQUENTIAL PATTERNS (Order Effects)
+----------------------------------------------------------------------------------------------------
+Analysis of whether correct/incorrect answers cluster in sequences.
+
+Method    | Consecutive Agreement | Runs Test Z | Pattern
+---------------------------------------------------------
+PercepToM | 54.09%                | -1.91       | Random 
+SIMTOM    | 56.76%                | -3.27       | Random 
+SoO       | 58.10%                | -2.56       | Random 
+VP        | 59.10%                | -3.27       | Random 
+
+====================================================================================================
+10. KEY CORRELATION INSIGHTS
+====================================================================================================
+
+* STRONGEST PREDICTOR: question_order has small correlation with accuracy
+  (-0.140 (Pearson r), Negative relationship)
+
+* BEST ENSEMBLE PAIR: SoO + VP
+  Combined accuracy: 63.67% vs individual max 40.67%
+  Complementarity score: 0.230
+
+* EASIEST CONDITIONS: Order=0, no_deception, length=short (<=100) (60.19%)
+* HARDEST CONDITIONS: Order=3, deception, length=short (<=100) (33.57%)
+
+* RECOMMENDATIONS:
+  - Consider ensemble methods for pairs with high complementarity scores
+  - Methods from different clusters may provide diverse perspectives
+  - Target feature combinations with lowest accuracy for method improvement
+  - Feature correlations suggest which question characteristics are linked
+
+====================================================================================================
+END OF CORRELATION ANALYSIS
+====================================================================================================
