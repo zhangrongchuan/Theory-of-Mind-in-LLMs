@@ -1,0 +1,11 @@
+question_order,deception,story_length,accuracy,sample_count
+0,no_deception,short (<=100),62.50%,216
+0,deception,short (<=100),59.09%,264
+1,no_deception,short (<=100),56.25%,240
+4,no_deception,short (<=100),48.66%,224
+2,no_deception,short (<=100),41.81%,232
+1,deception,short (<=100),39.58%,240
+2,deception,short (<=100),35.89%,248
+4,deception,short (<=100),34.38%,256
+3,deception,short (<=100),33.21%,280
+3,no_deception,short (<=100),33.00%,200

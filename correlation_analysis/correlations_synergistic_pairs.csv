@@ -1,0 +1,7 @@
+Method Pair,Individual A,Individual B,Combined (Union),Overlap (Both Right),Complementarity Score
+SoO + VP,40.67%,39.67%,63.67%,16.67%,0.230
+SIMTOM + VP,53.00%,39.67%,69.67%,23.00%,0.167
+PercepToM + SIMTOM,67.00%,53.00%,79.33%,40.67%,0.123
+PercepToM + VP,67.00%,39.67%,77.00%,29.67%,0.100
+SIMTOM + SoO,53.00%,40.67%,62.33%,31.33%,0.093
+PercepToM + SoO,67.00%,40.67%,74.00%,33.67%,0.070

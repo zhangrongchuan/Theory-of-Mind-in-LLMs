@@ -1,0 +1,13 @@
+Method,Feature,Correlation,P-value,Interpretation
+PercepToM,question_order,-0.168,0.324,Weak negative (higher question_order = slightly worse)
+PercepToM,story_length,-0.095,0.461,No correlation
+PercepToM,deception,-0.143,0.361,Weak negative (higher deception = slightly worse)
+SIMTOM,question_order,-0.187,0.301,Weak negative (higher question_order = slightly worse)
+SIMTOM,story_length,-0.096,0.460,No correlation
+SIMTOM,deception,-0.039,0.678,No correlation
+SoO,question_order,-0.264,0.230,Weak negative (higher question_order = slightly worse)
+SoO,story_length,-0.075,0.519,No correlation
+SoO,deception,-0.144,0.360,Weak negative (higher deception = slightly worse)
+VP,question_order,0.000,1.000,No correlation
+VP,story_length,-0.113,0.418,Weak negative (higher story_length = slightly worse)
+VP,deception,-0.009,0.897,No correlation

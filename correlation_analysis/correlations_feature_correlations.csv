@@ -1,0 +1,7 @@
+Feature A,Feature B,Correlation,Strength,Relationship
+question_order,story_length,0.059 (Pearson r),Negligible,Positive
+question_order,deception,0.058 (Cramer's V),Negligible,Positive
+story_length,deception,0.074 (Cramer's V),Negligible,Positive
+question_order,correct,-0.154 (Pearson r),Small,Negative
+story_length,correct,-0.094 (Pearson r),Negligible,Negative
+deception,correct,0.083 (Cramer's V),Negligible,Positive

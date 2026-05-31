@@ -1,0 +1,7 @@
+Method Pair,Cohen's Kappa,Agreement,Interpretation
+PercepToM vs SIMTOM,0.211,61.3%,Fair agreement
+PercepToM vs SoO,0.241,59.7%,Fair agreement
+PercepToM vs VP,0.115,52.7%,Slight agreement
+SIMTOM vs SoO,0.387,69.0%,Fair agreement
+SIMTOM vs VP,0.078,53.3%,Slight agreement
+SoO vs VP,0.022,53.0%,Slight agreement

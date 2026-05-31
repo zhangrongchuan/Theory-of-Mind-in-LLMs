@@ -41,9 +41,9 @@ Feature A      | Feature B    | Correlation        | Strength   | Relationship
 question_order | story_length | 0.059 (Pearson r)  | Negligible | Positive    
 question_order | deception    | 0.058 (Cramer's V) | Negligible | Positive    
 story_length   | deception    | 0.074 (Cramer's V) | Negligible | Positive    
-question_order | correct      | -0.140 (Pearson r) | Small      | Negative    
-story_length   | correct      | -0.087 (Pearson r) | Negligible | Negative    
-deception      | correct      | 0.074 (Cramer's V) | Negligible | Positive    
+question_order | correct      | -0.154 (Pearson r) | Small      | Negative    
+story_length   | correct      | -0.094 (Pearson r) | Negligible | Negative    
+deception      | correct      | 0.083 (Cramer's V) | Negligible | Positive    
 
 ----------------------------------------------------------------------------------------------------
 4. FEATURE INTERACTIONS (Combined Effects on Accuracy)
@@ -52,16 +52,16 @@ How combinations of features affect accuracy. Only showing combinations with 5+ 
 
 question_order | deception    | story_length  | accuracy | sample_count
 -----------------------------------------------------------------------
-0              | no_deception | short (<=100) | 60.19%   | 216         
+0              | no_deception | short (<=100) | 62.50%   | 216         
 0              | deception    | short (<=100) | 59.09%   | 264         
-1              | no_deception | short (<=100) | 54.17%   | 240         
-4              | no_deception | short (<=100) | 49.55%   | 224         
-2              | no_deception | short (<=100) | 40.52%   | 232         
-1              | deception    | short (<=100) | 40.00%   | 240         
-2              | deception    | short (<=100) | 35.08%   | 248         
-4              | deception    | short (<=100) | 34.77%   | 256         
-3              | no_deception | short (<=100) | 34.00%   | 200         
-3              | deception    | short (<=100) | 33.57%   | 280         
+1              | no_deception | short (<=100) | 56.25%   | 240         
+4              | no_deception | short (<=100) | 48.66%   | 224         
+2              | no_deception | short (<=100) | 41.81%   | 232         
+1              | deception    | short (<=100) | 39.58%   | 240         
+2              | deception    | short (<=100) | 35.89%   | 248         
+4              | deception    | short (<=100) | 34.38%   | 256         
+3              | deception    | short (<=100) | 33.21%   | 280         
+3              | no_deception | short (<=100) | 33.00%   | 200         
 
 ----------------------------------------------------------------------------------------------------
 5. METHOD X FEATURE CORRELATIONS
@@ -77,9 +77,9 @@ PercepToM | deception      | -0.143      | 0.361   | Weak negative (higher decep
 SIMTOM    | question_order | -0.187      | 0.301   | Weak negative (higher question_order = slightly worse)
 SIMTOM    | story_length   | -0.096      | 0.460   | No correlation                                        
 SIMTOM    | deception      | -0.039      | 0.678   | No correlation                                        
-SoO       | question_order | -0.210      | 0.276   | Weak negative (higher question_order = slightly worse)
-SoO       | story_length   | -0.049      | 0.626   | No correlation                                        
-SoO       | deception      | -0.108      | 0.429   | Weak negative (higher deception = slightly worse)     
+SoO       | question_order | -0.264      | 0.230   | Weak negative (higher question_order = slightly worse)
+SoO       | story_length   | -0.075      | 0.519   | No correlation                                        
+SoO       | deception      | -0.144      | 0.360   | Weak negative (higher deception = slightly worse)     
 VP        | question_order | 0.000       | 1.000   | No correlation                                        
 VP        | story_length   | -0.113      | 0.418   | Weak negative (higher story_length = slightly worse)  
 VP        | deception      | -0.009      | 0.897   | No correlation                                        
@@ -93,32 +93,32 @@ Feature_Value  | Method    | Accuracy       | Rank
 --------------------------------------------------
 order_0        | PercepToM | 73.33% (n=120) | 1   
 order_0        | SIMTOM    | 67.50% (n=120) | 2   
-order_0        | SoO       | 55.00% (n=120) | 3   
+order_0        | SoO       | 59.17% (n=120) | 3   
 order_0        | VP        | 42.50% (n=120) | 4   
 order_1        | PercepToM | 54.17% (n=120) | 1   
 order_1        | SIMTOM    | 50.00% (n=120) | 2   
-order_1        | SoO       | 46.67% (n=120) | 3   
+order_1        | SoO       | 50.00% (n=120) | 3   
 order_1        | VP        | 37.50% (n=120) | 4   
 order_2        | PercepToM | 49.17% (n=120) | 1   
 order_2        | SIMTOM    | 40.00% (n=120) | 2   
-order_2        | VP        | 32.50% (n=120) | 3   
-order_2        | SoO       | 29.17% (n=120) | 4   
+order_2        | SoO       | 33.33% (n=120) | 3   
+order_2        | VP        | 32.50% (n=120) | 4   
 order_3        | PercepToM | 43.33% (n=120) | 1   
 order_3        | SIMTOM    | 34.17% (n=120) | 2   
 order_3        | VP        | 32.50% (n=120) | 3   
-order_3        | SoO       | 25.00% (n=120) | 4   
+order_3        | SoO       | 22.50% (n=120) | 4   
 order_4        | PercepToM | 49.17% (n=120) | 1   
 order_4        | VP        | 45.00% (n=120) | 2   
 order_4        | SIMTOM    | 42.50% (n=120) | 3   
-order_4        | SoO       | 30.00% (n=120) | 4   
+order_4        | SoO       | 27.50% (n=120) | 4   
 no_deception   | PercepToM | 61.51% (n=278) | 1   
 no_deception   | SIMTOM    | 48.92% (n=278) | 2   
-no_deception   | SoO       | 42.81% (n=278) | 3   
+no_deception   | SoO       | 46.04% (n=278) | 3   
 no_deception   | VP        | 38.49% (n=278) | 4   
 with_deception | PercepToM | 47.20% (n=322) | 1   
 with_deception | SIMTOM    | 45.03% (n=322) | 2   
 with_deception | VP        | 37.58% (n=322) | 3   
-with_deception | SoO       | 32.30% (n=322) | 4   
+with_deception | SoO       | 31.99% (n=322) | 4   
 
 ----------------------------------------------------------------------------------------------------
 7. CONDITIONAL SUCCESS PROBABILITIES
@@ -154,26 +154,26 @@ PercepToM + SoO    | 67.00%       | 40.67%       | 74.00%           | 33.67%    
 ----------------------------------------------------------------------------------------------------
 Analysis of whether correct/incorrect answers cluster in sequences.
 
-Method    | Consecutive Agreement | Runs Test Z | Pattern
----------------------------------------------------------
-PercepToM | 54.09%                | -1.91       | Random 
-SIMTOM    | 56.76%                | -3.27       | Random 
-SoO       | 58.10%                | -2.56       | Random 
-VP        | 59.10%                | -3.27       | Random 
+Method    | Consecutive Agreement | Runs Test Z | Pattern            
+---------------------------------------------------------------------
+PercepToM | 54.09%                | -1.91       | Random             
+SIMTOM    | 56.76%                | -3.27       | Random             
+SoO       | 62.77%                | -5.27       | Clustered (streaky)
+VP        | 59.10%                | -3.27       | Random             
 
 ====================================================================================================
 10. KEY CORRELATION INSIGHTS
 ====================================================================================================
 
 * STRONGEST PREDICTOR: question_order has small correlation with accuracy
-  (-0.140 (Pearson r), Negative relationship)
+  (-0.154 (Pearson r), Negative relationship)
 
 * BEST ENSEMBLE PAIR: SoO + VP
   Combined accuracy: 63.67% vs individual max 40.67%
   Complementarity score: 0.230
 
-* EASIEST CONDITIONS: Order=0, no_deception, length=short (<=100) (60.19%)
-* HARDEST CONDITIONS: Order=3, deception, length=short (<=100) (33.57%)
+* EASIEST CONDITIONS: Order=0, no_deception, length=short (<=100) (62.50%)
+* HARDEST CONDITIONS: Order=3, no_deception, length=short (<=100) (33.00%)
 
 * RECOMMENDATIONS:
   - Consider ensemble methods for pairs with high complementarity scores
