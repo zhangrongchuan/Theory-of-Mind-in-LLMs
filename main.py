@@ -9,6 +9,7 @@ from utils import load_json, normalize_sample, judge_prediction, normalize_text
 from decompose_ToM import DecomposeToM
 from perceptom import PercepToM
 from soo import SoO  # <-- Imported the new SoO class
+from incrementaltom import IncrementalToM
 
 # =========================
 # run single test sample
@@ -56,6 +57,19 @@ def run_one_sample(sample: Dict[str, Any], method: str) -> Dict[str, Any]:
             prompt = f"SoO Pipeline initiated for Question: {sample['question']}"
         except Exception as e:
             print(f"CRASH DETECTED in SoO: {e}")
+            output_text = ""
+            prompt = "Error during execution"
+    
+    # ---------------------------------------------------------
+    # BRANCH: IncrementalToM
+    # ---------------------------------------------------------
+    elif method_upper == "INCREMENTALTOM":
+        try:
+            tom_solver = IncrementalToM(llm_callable=call_model_ollama, chunk_size=chunk_size)
+            output_text = tom_solver.run(sample, chunk_size=chunk_size)
+            prompt = f"IncrementalToM Pipeline (chunk_size={chunk_size}) initiated for Question: {sample['question']}"
+        except Exception as e:
+            print(f"CRASH DETECTED in IncrementalToM: {e}")
             output_text = ""
             prompt = "Error during execution"
 
@@ -188,11 +202,11 @@ if __name__ == "__main__":
         help="Category of the Hi-ToM dataset to use (CoTP or VR)"
     )
     parser.add_argument(
-        "--method", 
-        type=str, 
-        choices=["PercepToM", "SoO", "DTOM"], 
-        required=True, 
-        help="Method of the paper to benchmark (PercepToM, SoO, or DTOM)"
+        "--method",
+        type=str,
+        choices=["PercepToM", "SoO", "DTOM", "S3AP", "SIMTOM", "SIMTOMYOU", "DWM", "IncrementalToM"],
+        required=True,
+        help="Method of the paper to benchmark (PercepToM, SoO, DTOM, S3AP, SIMTOM, SIMTOMYOU, DWM, or IncrementalToM)"
     )
     parser.add_argument(
         "--max_samples", 
