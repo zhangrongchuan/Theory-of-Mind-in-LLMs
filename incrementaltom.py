@@ -64,25 +64,25 @@ class IncrementalToM:
         context_part = ""
         if previous_answer:
             context_part = f"""
-Current Belief State (based on previous parts of the story):
-{previous_answer}
+        Current Belief State (based on previous parts of the story):
+        {previous_answer}
 
-Important: Consider this belief state when answering, as it represents what has been understood so far."""
+        Important: Consider this belief state when answering, as it represents what has been understood so far."""
 
         prompt = f"""Story so far:
-{story_so_far}
-{context_part}
+        {story_so_far}
+        {context_part}
 
-Question: {question}
+        Question: {question}
 
-Choices:
-{choices_text}
+        Choices:
+        {choices_text}
 
-Task: Based on the story so far{f' and the current belief state' if previous_answer else ''}, answer the question.
-Think step by step, then give your intermediate answer in the format:
-Intermediate Answer: <option letter>
+        Task: Based on the story so far{f' and the current belief state' if previous_answer else ''}, answer the question.
+        Think step by step, then give your intermediate answer in the format:
+        Intermediate Answer: <option letter>
 
-Explain your reasoning briefly, then provide the answer."""
+        Explain your reasoning briefly, then provide the answer."""
 
         return self.llm_callable(prompt)
 
@@ -145,17 +145,17 @@ Explain your reasoning briefly, then provide the answer."""
             intermediate_context += "\n"
 
         prompt = f"""Full Story:
-{full_story}
+        {full_story}
 
-{intermediate_context}Question: {question}
+        {intermediate_context}Question: {question}
 
-Choices:
-{choices_text}
+        Choices:
+        {choices_text}
 
-Task: Answer the question considering the full story and any intermediate understandings noted above.
-{f"Focus particularly on what '{character}' knows and believes based on their experiences in the story." if character else ""}
-Think step by step, tracking what each character knows at each point in the story, then give your final answer in the format:
-Answer: <option letter>"""
+        Task: Answer the question considering the full story and any intermediate understandings noted above.
+        {f"Focus particularly on what '{character}' knows and believes based on their experiences in the story." if character else ""}
+        Think step by step, tracking what each character knows at each point in the story, then give your final answer in the format:
+        Answer: <option letter>"""
 
         return self.llm_callable(prompt)
 
@@ -190,16 +190,16 @@ Answer: <option letter>"""
         if len(sentences) <= n:
             # Story is short enough to process in one go - use standard approach
             prompt = f"""Story:
-{story}
+            {story}
 
-Question:
-{question}
+            Question:
+            {question}
 
-Choices:
-{choices_text}
+            Choices:
+            {choices_text}
 
-Think step by step, then give your final answer in the format:
-Answer: <option letter>"""
+            Think step by step, then give your final answer in the format:
+            Answer: <option letter>"""
             return self.llm_callable(prompt)
 
         # Split into chunks
@@ -261,27 +261,27 @@ class IncrementalToM_Variant(IncrementalToM):
         belief_part = ""
         if previous_belief:
             belief_part = f"""
-Current Belief State:
-{previous_belief}
-"""
+            Current Belief State:
+            {previous_belief}
+            """
 
         char_focus = f"about {character}" if character else ""
 
         prompt = f"""Story so far:
-{story_so_far}
-{belief_part}
+        {story_so_far}
+        {belief_part}
 
-Question: {question}
+        Question: {question}
 
-Choices:
-{choices_text}
+        Choices:
+        {choices_text}
 
-Task: Based on the story so far, answer the question{f' focusing on {character}' if character else ''}.
-Also provide a brief "Belief State" summary {char_focus} capturing what is currently known.
+        Task: Based on the story so far, answer the question{f' focusing on {character}' if character else ''}.
+        Also provide a brief "Belief State" summary {char_focus} capturing what is currently known.
 
-Format your response as:
-Intermediate Answer: <option letter>
-Belief State: <brief summary of current understanding>"""
+        Format your response as:
+        Intermediate Answer: <option letter>
+        Belief State: <brief summary of current understanding>"""
 
         return self.llm_callable(prompt)
 
@@ -313,16 +313,16 @@ Belief State: <brief summary of current understanding>"""
 
         if len(sentences) <= n:
             prompt = f"""Story:
-{story}
+            {story}
 
-Question:
-{question}
+            Question:
+            {question}
 
-Choices:
-{choices_text}
+            Choices:
+            {choices_text}
 
-Think step by step, then give your final answer in the format:
-Answer: <option letter>"""
+            Think step by step, then give your final answer in the format:
+            Answer: <option letter>"""
             return self.llm_callable(prompt)
 
         chunks = self.chunk_sentences(sentences, n)
