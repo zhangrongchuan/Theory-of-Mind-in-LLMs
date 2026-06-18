@@ -3,20 +3,30 @@ from typing import Any, Callable, Dict, Optional
 from utils import format_choices_for_prompt
 
 
-class SharedEpistemicCore:
+METHOD_NAME = "SHAREDEVIDENCETOM"
+
+
+class SharedEvidenceToM:
     """
-    Answers deep nested-belief questions from events that are mutually
-    attributable across every agent in the queried belief chain.
+    Backward-compatible implementation of the old SharedEpistemicCore prompt.
+
+    The public method name is SHAREDEVIDENCETOM, but the model-facing prompts
+    intentionally remain byte-for-byte compatible with the old shared core
+    method so prior results stay comparable across all question orders.
     """
 
     def __init__(self, llm_callable: Callable[[str], str]):
         self.llm_callable = llm_callable
-        self.last_core_prompt: Optional[str] = None
-        self.last_core: Optional[str] = None
+        self.last_evidence_prompt: Optional[str] = None
+        self.last_evidence: Optional[str] = None
         self.last_qa_prompt: Optional[str] = None
         self.last_answer: Optional[str] = None
 
-    def build_core_prompt(self, sample: Dict[str, Any]) -> str:
+        # Backward-compatible names for older runners and analysis scripts.
+        self.last_core_prompt: Optional[str] = None
+        self.last_core: Optional[str] = None
+
+    def build_evidence_prompt(self, sample: Dict[str, Any]) -> str:
         story = sample.get("story", sample.get("context", ""))
         return f"""/no_think
          Extract the SHARED EPISTEMIC CORE needed for this deeply nested belief question.
@@ -53,10 +63,13 @@ class SharedEpistemicCore:
          SHARED TARGET-OBJECT EVENTS:
          ..."""
 
-    def build_qa_prompt(self, core: str, sample: Dict[str, Any]) -> str:
+    def build_core_prompt(self, sample: Dict[str, Any]) -> str:
+        return self.build_evidence_prompt(sample)
+
+    def build_qa_prompt(self, evidence: str, sample: Dict[str, Any]) -> str:
         choices_text = format_choices_for_prompt(sample["choices_raw"])
         return f"""Shared epistemic core:
-         {core}
+         {evidence}
 
          Question:
          {sample["question"]}
@@ -73,8 +86,10 @@ class SharedEpistemicCore:
          Answer: <option letter>"""
 
     def run(self, sample: Dict[str, Any]) -> str:
-        self.last_core_prompt = self.build_core_prompt(sample)
-        self.last_core = self.llm_callable(self.last_core_prompt).strip()
-        self.last_qa_prompt = self.build_qa_prompt(self.last_core, sample)
+        self.last_evidence_prompt = self.build_evidence_prompt(sample)
+        self.last_core_prompt = self.last_evidence_prompt
+        self.last_evidence = self.llm_callable(self.last_evidence_prompt).strip()
+        self.last_core = self.last_evidence
+        self.last_qa_prompt = self.build_qa_prompt(self.last_evidence, sample)
         self.last_answer = self.llm_callable(self.last_qa_prompt)
         return self.last_answer

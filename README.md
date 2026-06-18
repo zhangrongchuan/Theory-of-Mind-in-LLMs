@@ -5,7 +5,9 @@ This project evaluates Theory of Mind (ToM) reasoning on the HiToM dataset using
 ## Project Goal
 
 - Run ToM evaluation on HiToM samples.
-- Support multiple prompting methods (eg: `VP`, `COTP`, `S3AP`, `SIMTOM`, `DWM`, `PercepToM`, `SoO`, and `DTOM`).
+- Support multiple prompting methods (eg: `VP`, `COTP`, `S3AP`, `SIMTOM`,
+  `DWM`, `INCREMENTALTOM`, `SHAREDEVIDENCETOM`, `assemableTom`, `PercepToM`,
+  `SoO`, and `DTOM`).
 - Save per-sample predictions and compute final accuracy and accuracy by `question_order`.
 
 
@@ -30,7 +32,18 @@ deepseek_api=YOUR_API_KEY
 python main.py --category [CATEGORY] --method [METHOD] [--max_samples [VALUE]]
 ```
 
-If you want to switch method or output path, update arguments inside `main.py` (the `run_dataset(...)` call).
+Outputs are written directly under `res/` as JSONL, one row per completed
+sample. The filename format is:
+
+```text
+<dataset>_<category>_<method>_<model>.jsonl
+```
+
+For example:
+
+```text
+res/hitom_cotp_assemabletom_Qwen_Qwen3_1_7B.jsonl
+```
 
 ## Experimental Results
 
@@ -97,6 +110,37 @@ python main.py --category CoTP --method DWM --max_samples 10
 ```
 
 `DWM` uses 3 story splits by default.
+
+## SHAREDEVIDENCETOM
+
+`SHAREDEVIDENCETOM` replaces the older shared epistemic core name. It extracts
+target-object evidence for every question order, including objective order-0
+questions and shallow order-1/2 belief questions.
+
+Run example:
+
+```bash
+python main.py --category CoTP --method SHAREDEVIDENCETOM --max_samples 10
+```
+
+## INCREMENTALTOM
+
+`INCREMENTALTOM` runs the incremental chunk-based ToM method. Use
+`--chunk_size` to control the sentence chunk size.
+
+```bash
+python main.py --category CoTP --method INCREMENTALTOM --chunk_size 3
+```
+
+## assemableTom
+
+`assemableTom` is the routed combination method. Orders `0`, `1`, and `2` run
+`INCREMENTALTOM`; orders `3` and `4` run `SHAREDEVIDENCETOM`. It runs directly
+through `main.py`; no separate run or retry scripts are needed.
+
+```bash
+python main.py --category CoTP --method assemableTom --chunk_size 3
+```
 
 ## Notes
 

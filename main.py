@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from prompt import build_prompt
-from model import call_model_deepseek, call_model_ollama, call_model_ollama_SoO, call_model_qwen8b, call_model_huggingface
+from model import call_model_deepseek, call_model_qwen8b, call_model_huggingface
 from utils import load_json, normalize_sample, judge_prediction, normalize_text
 
 from method.decompose_ToM import DecomposeToM
@@ -13,6 +13,20 @@ from method.soo import SoO
 from method.s3ap import S3AP
 from method.simtom import SimToM
 from method.dwm import DiscreteWorldModel
+from method.incrementaltom import IncrementalToM
+from method.shared_evidence_tom import SharedEvidenceToM
+
+
+def canonical_method_name(method: str) -> str:
+    return re.sub(r"[^A-Z0-9]", "", method.upper().replace("³", "3"))
+
+
+def infer_question_order(question: str) -> int:
+    return len(re.findall(r"\bthinks?\b", question, flags=re.IGNORECASE))
+
+
+def slug(text: str) -> str:
+    return re.sub(r"[^A-Za-z0-9]+", "_", text).strip("_").lower()
 
 
 def build_result(
@@ -46,7 +60,7 @@ def build_error_result(
     fallback_prompt: Optional[str] = None,
 ) -> Dict[str, Any]:
     if fallback_prompt is None:
-        if method.upper().replace("³", "3") in ["VP", "COTP"]:
+        if canonical_method_name(method) in ["VP", "COTP"]:
             fallback_prompt = build_prompt(sample, method=method)
         else:
             fallback_prompt = f"{method} execution crashed before prompt generation."
@@ -73,6 +87,73 @@ def model_name_slug(model_name: str) -> str:
     return re.sub(r"[^A-Za-z0-9]+", "_", model_name).strip("_")
 
 
+def build_output_path(input_path: str, category: str, method: str, model_name: str) -> str:
+    dataset_slug = slug(Path(input_path).stem)
+    category_slug = slug(category)
+    method_slug = slug(method)
+    model_slug = model_name_slug(model_name)
+    return str(Path("res") / f"{dataset_slug}_{category_slug}_{method_slug}_{model_slug}.jsonl")
+
+
+def run_sharedevidencetom_solver(
+    sample: Dict[str, Any],
+    qwen_model: str,
+    qwen_max_new_tokens: int,
+) -> tuple[str, str, Dict[str, Any]]:
+    solver = SharedEvidenceToM(
+        llm_callable=lambda prompt: call_model_huggingface(
+            prompt,
+            model_name=qwen_model,
+            max_new_tokens=qwen_max_new_tokens,
+        )
+    )
+    output_text = solver.run(sample)
+    prompt = solver.last_qa_prompt or (
+        f"SHAREDEVIDENCETOM Pipeline initiated for Question: "
+        f"{sample['question']}"
+    )
+    extra_fields = {
+        "shared_evidence": solver.last_evidence,
+        "shared_evidence_prompt": solver.last_evidence_prompt,
+        "core": solver.last_core,
+        "core_prompt": solver.last_core_prompt,
+        "qa_prompt": solver.last_qa_prompt,
+        "model_backend": "huggingface",
+        "model_name": qwen_model,
+    }
+    return output_text, prompt, extra_fields
+
+
+def run_incrementaltom_solver(
+    sample: Dict[str, Any],
+    qwen_model: str,
+    qwen_max_new_tokens: int,
+    chunk_size: int,
+) -> tuple[str, str, Dict[str, Any]]:
+    solver = IncrementalToM(
+        llm_callable=lambda prompt: call_model_huggingface(
+            prompt,
+            model_name=qwen_model,
+            max_new_tokens=qwen_max_new_tokens,
+        ),
+        chunk_size=chunk_size,
+    )
+    output_text = solver.run(sample, chunk_size=chunk_size)
+    prompt = solver.last_final_prompt or (
+        f"INCREMENTALTOM Pipeline (chunk_size={chunk_size}) "
+        f"initiated for Question: {sample['question']}"
+    )
+    extra_fields = {
+        "incrementaltom_chunk_size": solver.chunk_size,
+        "incrementaltom_intermediate_prompts": solver.last_intermediate_prompts,
+        "incrementaltom_intermediate_answers": solver.last_intermediate_answers,
+        "incrementaltom_final_prompt": solver.last_final_prompt,
+        "model_backend": "huggingface",
+        "model_name": qwen_model,
+    }
+    return output_text, prompt, extra_fields
+
+
 # =========================
 # run single test sample
 # =========================
@@ -81,8 +162,9 @@ def run_one_sample(
     method: str,
     qwen_model: str = "Qwen/Qwen3-1.7B",
     qwen_max_new_tokens: int = 1024,
+    chunk_size: int = 3,
 ) -> Dict[str, Any]:
-    method_upper = method.upper().replace("³", "3")
+    method_upper = canonical_method_name(method)
     extra_fields: Dict[str, Any] = {}
     
     # ---------------------------------------------------------
@@ -97,6 +179,13 @@ def run_one_sample(
                 ))
             output_text = tom_solver.run(sample)
             prompt = f"PercepToM Pipeline initiated for Question: {sample['question']}"
+            extra_fields["perceptom_final_answer"] = output_text
+            extra_fields["perceptom_final_correct"] = judge_prediction(
+                output_text,
+                sample,
+            )["correct"]
+            extra_fields["model_backend"] = "huggingface"
+            extra_fields["model_name"] = qwen_model
         except Exception as e:
             print(f"CRASH DETECTED in PercepToM: {e}")
             output_text = ""
@@ -175,6 +264,65 @@ def run_one_sample(
             prompt = "Error during execution"
 
     # ---------------------------------------------------------
+    # BRANCH: SHAREDEVIDENCETOM
+    # ---------------------------------------------------------
+    elif method_upper == "SHAREDEVIDENCETOM":
+        try:
+            output_text, prompt, extra_fields = run_sharedevidencetom_solver(
+                sample=sample,
+                qwen_model=qwen_model,
+                qwen_max_new_tokens=qwen_max_new_tokens,
+            )
+        except Exception as e:
+            print(f"CRASH DETECTED in SHAREDEVIDENCETOM: {e}")
+            output_text = ""
+            prompt = "Error during execution"
+
+    # ---------------------------------------------------------
+    # BRANCH: INCREMENTALTOM
+    # ---------------------------------------------------------
+    elif method_upper == "INCREMENTALTOM":
+        try:
+            output_text, prompt, extra_fields = run_incrementaltom_solver(
+                sample=sample,
+                qwen_model=qwen_model,
+                qwen_max_new_tokens=qwen_max_new_tokens,
+                chunk_size=chunk_size,
+            )
+        except Exception as e:
+            print(f"CRASH DETECTED in INCREMENTALTOM: {e}")
+            output_text = ""
+            prompt = "Error during execution"
+
+    # ---------------------------------------------------------
+    # BRANCH: assemableTom
+    # ---------------------------------------------------------
+    elif method_upper == "ASSEMABLETOM":
+        try:
+            question_order = infer_question_order(sample["question"])
+            if question_order <= 2:
+                output_text, prompt, extra_fields = run_incrementaltom_solver(
+                    sample=sample,
+                    qwen_model=qwen_model,
+                    qwen_max_new_tokens=qwen_max_new_tokens,
+                    chunk_size=chunk_size,
+                )
+                extra_fields["assemabletom_route"] = "INCREMENTALTOM"
+                extra_fields["assemabletom_inferred_order"] = question_order
+            else:
+                output_text, prompt, extra_fields = run_sharedevidencetom_solver(
+                    sample=sample,
+                    qwen_model=qwen_model,
+                    qwen_max_new_tokens=qwen_max_new_tokens,
+                )
+                extra_fields["assemabletom_route"] = "SHAREDEVIDENCETOM"
+                extra_fields["assemabletom_inferred_order"] = question_order
+        except Exception as e:
+            print(f"CRASH DETECTED in assemableTom: {e}")
+            output_text = ""
+            prompt = "Error during execution"
+
+    # ---------------------------------------------------------
     # BRANCH: DWM / Discrete World Models
     # ---------------------------------------------------------
     elif method_upper == "DWM":
@@ -231,6 +379,7 @@ def run_dataset(
     max_samples: Optional[int] = None,
     qwen_model: str = "Qwen/Qwen3-1.7B",
     qwen_max_new_tokens: int = 1024,
+    chunk_size: int = 3,
 ) -> None:
     raw_data = load_json(input_path)
 
@@ -262,7 +411,6 @@ def run_dataset(
 
     output_file = Path(output_path)
     output_file.parent.mkdir(parents=True, exist_ok=True)
-    tmp_output_file = output_file.with_name(output_file.name + ".tmp")
 
     total = len(samples)
     if total == 0:
@@ -271,7 +419,7 @@ def run_dataset(
     correct = 0
     order_stats: Dict[Any, Dict[str, int]] = {}
 
-    with open(tmp_output_file, "w", encoding="utf-8", newline="\n") as f:
+    with open(output_file, "w", encoding="utf-8", newline="\n") as f:
         def write_result(i: int, result: Dict[str, Any]) -> None:
             nonlocal correct
             correct += int(result["correct"])
@@ -281,6 +429,7 @@ def run_dataset(
             order_stats[order]["total"] += 1
 
             f.write(json.dumps(result, ensure_ascii=False, separators=(",", ":")) + "\n")
+            f.flush()
 
             print(
                 f"[{i}/{total}] sample_id={result['sample_id']} "
@@ -295,13 +444,12 @@ def run_dataset(
                     method=method,
                     qwen_model=qwen_model,
                     qwen_max_new_tokens=qwen_max_new_tokens,
+                    chunk_size=chunk_size,
                 )
             except Exception as e:
                 result = build_error_result(sample, method=method, error=e)
 
             write_result(i, result)
-
-    tmp_output_file.replace(output_file)
 
     print(f"\nfinished。result saved to path: {output_path}")
     print(f"Final Accuracy: {correct}/{total} = {correct / total:.4f}")
@@ -363,7 +511,19 @@ if __name__ == "__main__":
     parser.add_argument(
         "--method", 
         type=str, 
-        choices=["VP", "COTP", "PercepToM", "SoO", "DTOM", "S3AP", "SIMTOM", "DWM"], 
+        choices=[
+            "VP",
+            "COTP",
+            "PercepToM",
+            "SoO",
+            "DTOM",
+            "S3AP",
+            "SIMTOM",
+            "DWM",
+            "INCREMENTALTOM",
+            "SHAREDEVIDENCETOM",
+            "assemableTom",
+        ],
         required=True, 
         help="Method of the paper to benchmark"
     )
@@ -385,19 +545,30 @@ if __name__ == "__main__":
         default=1024,
         help="max_new_tokens for local HuggingFace Qwen generation (default: 1024)"
     )
+    parser.add_argument(
+        "--chunk_size",
+        type=int,
+        default=3,
+        help="Sentence chunk size for IncrementalToM (default: 3)"
+    )
     
     args = parser.parse_args()
 
     input_path = "data/hitom.json" 
-    output_stem = f"hitom_{args.category.lower()}_results_{args.method.lower()}"
-    if args.method.upper().replace("³", "3") == "VP":
-        output_stem = f"{output_stem}_{model_name_slug(args.qwen_model)}"
-    output_path = f"res/{output_stem}.jsonl"
+    output_path = build_output_path(
+        input_path=input_path,
+        category=args.category,
+        method=args.method,
+        model_name=args.qwen_model,
+    )
 
     print(f"Starting benchmark...")
     print(f"Dataset: {args.category} | Method: {args.method}")
-    if args.method.upper().replace("³", "3") in {"VP", "SIMTOM"}:
+    method_key = canonical_method_name(args.method)
+    if method_key in {"VP", "SIMTOM", "INCREMENTALTOM", "SHAREDEVIDENCETOM", "ASSEMABLETOM"}:
         print(f"Qwen model: {args.qwen_model}")
+    if method_key in {"INCREMENTALTOM", "ASSEMABLETOM"}:
+        print(f"Chunk size: {args.chunk_size}")
     print(f"Input: {input_path} | Output: {output_path}")
 
     run_dataset(
@@ -408,5 +579,6 @@ if __name__ == "__main__":
         max_samples=args.max_samples,
         qwen_model=args.qwen_model,
         qwen_max_new_tokens=args.qwen_max_new_tokens,
+        chunk_size=args.chunk_size,
     )
 

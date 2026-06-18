@@ -40,7 +40,7 @@ def build_prompt(sample: Dict[str, Any], method: str) -> str:
 def build_vp_prompt(sample: Dict[str, Any]) -> str:
     choices_text = format_choices_for_prompt(sample["choices_raw"])
     return f"""
-            Story:
+            Story: 
             {sample['story']}
 
             Question:
@@ -49,10 +49,9 @@ def build_vp_prompt(sample: Dict[str, Any]) -> str:
             Choices:
             {choices_text}
 
-            Please return exactly one uppercase option letter from A to O. 
-            Do not provide any explanation. 
-            Do not repeat the question. 
-            Do not output anything except the single letter."""
+            The question does not specify a character perspective. Answer based on the
+            story. Think briefly if needed, then give your final answer in the format:
+            Answer: <option letter>."""
 
 
 def build_cotp_prompt(sample: Dict[str, Any]) -> str:
