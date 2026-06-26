@@ -139,7 +139,7 @@ class IncrementalToM:
         # Build context from intermediate answers
         intermediate_context = ""
         if intermediate_answers:
-            intermediate_context = "Previous Understanding Checkpoints:\n"
+            intermediate_context = "Previous Understanding Checkpoint:\n"
             for chunk_idx, answer in intermediate_answers:
                 intermediate_context += f"  After chunk {chunk_idx}: {answer}\n"
             intermediate_context += "\n"
