@@ -1,0 +1,24 @@
+# Requirements for running Theory of Mind Benchmark in Google Colab
+# Install with: pip install -r requirements-colab.txt
+
+# Core ML libraries
+torch>=2.0.0
+transformers>=4.40.0
+accelerate>=0.25.0
+
+# Quantization for fitting larger models on T4 GPU
+bitsandbytes>=0.41.0
+
+# API clients (optional - for API-based methods)
+openai>=1.0.0
+huggingface-hub>=0.20.0
+
+# Utilities
+numpy>=1.24.0
+tqdm>=4.65.0
+
+# Note: Google Colab already includes these:
+# - jupyter
+# - ipython
+# - pandas
+# - matplotlib
