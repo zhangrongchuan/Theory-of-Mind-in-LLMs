@@ -133,15 +133,53 @@ def build_error_result(
 
 
 def model_name_slug(model_name: str) -> str:
-    return re.sub(r"[^A-Za-z0-9]+", "_", model_name).strip("_")
+    short_name = model_name.rstrip("/").rsplit("/", 1)[-1]
+    return slug(short_name)
 
 
-def build_output_path(input_path: str, category: str, method: str, model_name: str) -> str:
-    dataset_slug = slug(Path(input_path).stem)
-    category_slug = slug(category)
+def make_unique_output_path(output_path: str) -> str:
+    """Append _2, _3, and so on when an output file already exists."""
+    path = Path(output_path)
+    if not path.exists():
+        return str(path)
+
+    index = 2
+    while True:
+        candidate = path.with_name(f"{path.stem}_{index}{path.suffix}")
+        if not candidate.exists():
+            return str(candidate)
+        index += 1
+
+
+def build_output_path(dataset_type: str, method: str, model_name: str) -> str:
+    dataset_slug = slug(dataset_type)
     method_slug = slug(method)
     model_slug = model_name_slug(model_name)
-    return str(Path("res") / f"{dataset_slug}_{category_slug}_{method_slug}_{model_slug}.jsonl")
+    base_path = Path("res") / f"{dataset_slug}_{method_slug}_{model_slug}.jsonl"
+    return make_unique_output_path(str(base_path))
+
+
+def find_latest_output_path(dataset_type: str, method: str, model_name: str) -> str:
+    """Find the most recently numbered result path for resume or upgrade."""
+    dataset_slug = slug(dataset_type)
+    method_slug = slug(method)
+    model_slug = model_name_slug(model_name)
+    base_path = Path("res") / f"{dataset_slug}_{method_slug}_{model_slug}.jsonl"
+
+    matches = []
+    if base_path.exists():
+        matches.append((1, base_path))
+
+    pattern = re.compile(rf"^{re.escape(base_path.stem)}_(\d+){re.escape(base_path.suffix)}$")
+    if base_path.parent.exists():
+        for candidate in base_path.parent.glob(f"{base_path.stem}_*{base_path.suffix}"):
+            match = pattern.fullmatch(candidate.name)
+            if match and int(match.group(1)) >= 2:
+                matches.append((int(match.group(1)), candidate))
+
+    if not matches:
+        return str(base_path)
+    return str(max(matches, key=lambda item: item[0])[1])
 
 
 def run_sharedevidencetom_solver(
@@ -1072,12 +1110,24 @@ if __name__ == "__main__":
         if args.dataset == "bigtom"
         else "data/hitom.json"
     )
-    output_path = args.output_path or build_output_path(
-        input_path=input_path,
-        category=args.category or "all",
-        method=args.method,
-        model_name=args.qwen_model,
-    )
+    if args.output_path:
+        output_path = (
+            args.output_path
+            if args.resume or args.upgrade
+            else make_unique_output_path(args.output_path)
+        )
+    elif args.resume or args.upgrade:
+        output_path = find_latest_output_path(
+            dataset_type=args.dataset,
+            method=args.method,
+            model_name=args.qwen_model,
+        )
+    else:
+        output_path = build_output_path(
+            dataset_type=args.dataset,
+            method=args.method,
+            model_name=args.qwen_model,
+        )
 
     print(f"Starting benchmark...")
     print(f"Dataset: {args.dataset} | Category: {args.category or 'all'} | Method: {args.method}")

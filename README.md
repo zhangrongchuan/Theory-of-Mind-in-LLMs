@@ -59,6 +59,13 @@ Common arguments:
 | `--resume` | Resume from the end of an existing JSONL result file |
 | `--upgrade` | Rerun only examples with `correct=0` |
 
+By default, result files are saved as
+`res/<dataset>_<method>_<model>.jsonl`, for example
+`res/bigtom_vp_qwen3_1_7b.jsonl`. If that file already exists, a new run uses
+`_2`, `_3`, and so on instead of overwriting it. Without an explicit
+`--output_path`, `--resume` and `--upgrade` automatically use the existing file
+with the highest suffix.
+
 Available method arguments:
 
 | Method | `--method` value | Brief description |
