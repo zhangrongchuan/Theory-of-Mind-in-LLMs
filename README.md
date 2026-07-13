@@ -1,155 +1,85 @@
-# Theory of Mind on HiToM
+# Theory of Mind on HiToM and BigToM
 
-This project evaluates Theory of Mind (ToM) reasoning on the HiToM dataset using prompt-based methods and DeepSeek models.
+本项目用于在 HiToM 和 BigToM 数据集上评测大语言模型的 Theory of
+Mind（ToM）推理能力。HiToM 保留原有 method 实现；BigToM 通过独立适配器
+转换为二选一 A/B 任务，并保持已有 final 实验的 prompt 和推理配置可复现。
 
-## Project Goal
+支持的主要方法包括 `VP`、`SoO`、`SIMTOM`、`PercepToM`、`DWM`、
+`DTOM`、`S3AP`、`INCREMENTALTOM`、`SHAREDEVIDENCETOM` 和
+`assemableTom`。
 
-- Run ToM evaluation on HiToM samples.
-- Support multiple prompting methods (eg: `VP`, `COTP`, `S3AP`, `SIMTOM`,
-  `DWM`, `INCREMENTALTOM`, `SHAREDEVIDENCETOM`, `assemableTom`, `PercepToM`,
-  `SoO`, and `DTOM`).
-- Save per-sample predictions and compute final accuracy and accuracy by `question_order`.
+## 1. 环境安装
 
-
-## Setup
-
-1. Create and activate a Python environment.
-2. Install dependencies:
+建议创建独立 Python 环境，然后安装依赖：
 
 ```bash
-pip install openai python-dotenv
+pip install -r requirements-colab.txt
 ```
 
-3. Create `.env` and set your DeepSeek API key:
+## 2. 数据集与通用命令
 
-```env
-deepseek_api=YOUR_API_KEY
-```
-
-## Run
+HiToM 默认读取 `data/hitom.json`：
 
 ```bash
-python main.py --category [CATEGORY] --method [METHOD] [--max_samples [VALUE]]
+python main.py --dataset hitom --category CoTP --method VP --max_samples 10
 ```
 
-Outputs are written directly under `res/` as JSONL, one row per completed
-sample. The filename format is:
-
-```text
-<dataset>_<category>_<method>_<model>.jsonl
-```
-
-For example:
-
-```text
-res/hitom_cotp_assemabletom_Qwen_Qwen3_1_7B.jsonl
-```
-
-## Experimental Results
-
-Dataset: HiToM
-
-### Overall Comparison (One Row Per Run)
-
-Use this table for quick model/method comparison. Add one new row for each completed run.
-
-| Model | Method | Prompt Version | Final Accuracy | Correct/Total | Result File |
-| --- | --- | --- | --- | --- | --- |
-| deepseek-chat (DeepSeek-V3.2) | VP | v1 | 0.6242 | 749/1200 | experiment_results/deepseek_hitom_vp_full.jsonl |
-| deepseek-chat (DeepSeek-V3.2) | COTP | v1 | 0.6800 | 816/1200 | experiment_results/deepseek_hitom_cotp_full.jsonl | 
-
-### question_order Comparison (Wide Format)
-
-Use this table for cross-model and cross-method comparison by order. Add one new row per completed run.
-
-| Model | Method | Prompt Version | Order 0 | Order 1 | Order 2 | Order 3 | Order 4 |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| deepseek-chat (DeepSeek-V3.2) | VP | v1 | 0.9417 (226/240) | 0.5917 (142/240) | 0.5417 (130/240) | 0.5417 (130/240) | 0.5042 (121/240) |
-| deepseek-chat (DeepSeek-V3.2) | COTP | v1 | 0.9750 (234/240) | 0.7292 (175/240) | 0.6875 (165/240) | 0.5417 (130/240) | 0.4667 (112/240) |
-
-## S3AP / Social World Models
-
-`S3AP` implements the static third-person method from *Social World Models*
-(arXiv:2509.00559). For each sample, it first parses the story into a
-query-independent S3AP social world representation, then answers the multiple
-choice question using the original story plus that representation as extra
-information.
-
-Run example:
+BigToM 默认读取 `data/bigtom_balanced_subset.json`：
 
 ```bash
-python main.py --category CoTP --method S3AP --max_samples 10
+python main.py --dataset bigtom --method VP --max_samples 10
 ```
 
-## SIMTOM
-
-`SIMTOM` implements the two-stage perspective-taking method from *Think Twice:
-Perspective-Taking Improves Large Language Models' Theory-of-Mind Capabilities*
-(arXiv:2311.10227). It first filters the story to events known by the target
-character, then answers the original multiple-choice question using that
-filtered perspective.
-
-Run example:
+推荐显式指定本地模型：
 
 ```bash
-python main.py --category CoTP --method SIMTOM --max_samples 10
+python main.py --dataset bigtom --method VP --model_name Qwen/Qwen3-1.7B
 ```
 
-## DWM
+`--model_name` 和 `--qwen_model` 完全等价。BigToM 使用参考实验一致的
+`model_hf.py` 推理配置，默认 `max_new_tokens=2048`；HiToM 保留原后端，
+默认 `max_new_tokens=1024`。
 
-`DWM` implements the Discrete World Models prompting technique from *A Notion
-of Complexity for Theory of Mind via Discrete World Models*
-(arXiv:2406.11911). It splits a story into sequential chunks, asks the model to
-write compact state descriptions after each chunk, then answers the original
-question using those explicit world-state descriptions.
+常用参数：
 
-Run example:
+| 参数 | 说明 |
+| --- | --- |
+| `--dataset hitom\|bigtom` | 选择数据集 |
+| `--category CoTP` | HiToM 的 `prompting_type` 过滤条件；BigToM 通常不需要 |
+| `--method METHOD` | 选择运行方法，具体参数值见下表 |
+| `--model_name MODEL` | HuggingFace 模型，例如 `Qwen/Qwen3-0.6B` |
+| `--max_samples N` | 只运行前 N 条；不设置则运行全部 |
+| `--qwen_max_new_tokens N` | 覆盖默认最大生成长度 |
+| `--chunk_size N` | IncrementalToM/assemableTom 的句子分块大小 |
+| `--input_path PATH` | 覆盖默认数据文件 |
+| `--output_path PATH` | 覆盖默认结果文件 |
+| `--resume` | 从已有 JSONL 结果末尾继续 |
+| `--upgrade` | 仅重新运行 `correct=0` 的样本 |
+
+可选的 method 参数：
+
+| 方法 | `--method` 参数值 | 简单说明 |
+| --- | --- | --- |
+| VP | `VP` | 直接读取故事和选项并回答，作为基础 baseline |
+| SoO | `SoO` | 将模型置于目标人物的处境中进行推理 |
+| SimToM | `SIMTOM` | 先筛选目标人物知道的事件，再从该视角回答 |
+| PercepToM | `PercepToM` | 按“感知 → 信念 → 回答”三个阶段推理 |
+| DWM | `DWM` | 构建分段的环境与人物信念状态描述 |
+| Decompose-ToM | `DTOM` | 递归识别主体、重写问题并建立人物 world model |
+| S3AP | `S3AP` | 先生成结构化 social-world representation |
+| IncrementalToM | `INCREMENTALTOM` | 按句子块维护中间理解 checkpoint，可通过 `--chunk_size` 调整 |
+| SharedEvidenceToM | `SHAREDEVIDENCETOM` | 提取相关人物共同知道的 shared epistemic evidence |
+| AssembleToM | `assemableTom` | order 0–2 路由到 IncrementalToM，order 3–4 路由到 SharedEvidenceToM |
+
+统一运行格式：
 
 ```bash
-python main.py --category CoTP --method DWM --max_samples 10
+# HiToM
+python main.py --dataset hitom --category CoTP --method METHOD --model_name Qwen/Qwen3-1.7B --max_samples 10
+
+# BigToM
+python main.py --dataset bigtom --method METHOD --model_name Qwen/Qwen3-1.7B --max_samples 10
 ```
 
-`DWM` uses 3 story splits by default.
-
-## SHAREDEVIDENCETOM
-
-`SHAREDEVIDENCETOM` replaces the older shared epistemic core name. It extracts
-target-object evidence for every question order, including objective order-0
-questions and shallow order-1/2 belief questions.
-
-Run example:
-
-```bash
-python main.py --category CoTP --method SHAREDEVIDENCETOM --max_samples 10
-```
-
-## INCREMENTALTOM
-
-`INCREMENTALTOM` runs the incremental chunk-based ToM method. Use
-`--chunk_size` to control the sentence chunk size.
-
-```bash
-python main.py --category CoTP --method INCREMENTALTOM --chunk_size 3
-```
-
-## assemableTom
-
-`assemableTom` is the routed combination method. Orders `0`, `1`, and `2` run
-`INCREMENTALTOM`; orders `3` and `4` run `SHAREDEVIDENCETOM`. It runs directly
-through `main.py`; no separate run or retry scripts are needed.
-
-```bash
-python main.py --category CoTP --method assemableTom --chunk_size 3
-```
-
-## Notes
-
-- `VP` prompt requests a single option letter output (`A`-`O`).
-- Output parsing in `utils.py` supports strict single-letter, `Answer: X`, and fallback letter extraction.
-- `S3AP` writes the generated representation and parser prompt into each JSONL
-  row as `s3ap_representation` and `s3ap_parser_prompt`.
-- `SIMTOM` writes the filtered perspective and perspective-taking prompt into
-  each JSONL row as `simtom_perspective` and `simtom_perspective_prompt`.
-- `DWM` writes story chunks, state prompts, and generated state descriptions
-  into each JSONL row as `dwm_chunks`, `dwm_state_prompts`, and
-  `dwm_state_descriptions`.
+补充说明：复现已有 BigToM `INCREMENTALTOM`/`assemableTom` final 结果时使用
+`--chunk_size 9`；一般 HiToM 增量运行使用 `--chunk_size 3`。

@@ -3,18 +3,39 @@ import argparse
 import re
 from pathlib import Path
 from typing import Dict, List, Any, Optional
-from prompt import build_prompt
+from prompt import build_cotp_prompt_bigtom, build_prompt, build_vp_prompt_bigtom
 from model import call_model_deepseek, call_model_qwen8b, call_model_huggingface
-from utils import load_json, normalize_sample, judge_prediction, normalize_text
+from model_hf import (
+    call_model_hf as call_model_bigtom_hf,
+    call_model_hf_SoO as call_model_bigtom_hf_soo,
+)
+from utils import (
+    extract_bigtom_answer_label,
+    judge_prediction,
+    judge_prediction_bigtom,
+    load_json,
+    normalize_dataset_samples,
+    normalize_text,
+)
 
 from method.decompose_ToM import DecomposeToM
 from method.perceptom import PercepToM
 from method.soo import SoO
 from method.s3ap import S3AP
 from method.simtom import SimToM
+from method.simtom_you import SimToMYou
 from method.dwm import DiscreteWorldModel
 from method.incrementaltom import IncrementalToM
 from method.shared_evidence_tom import SharedEvidenceToM
+from method.decompose_tom_bigtom import DecomposeToMBigToM
+from method.dwm_bigtom import DiscreteWorldModelBigToM
+from method.incrementaltom_bigtom import IncrementalToMBigToM
+from method.perceptom_bigtom import PercepToMBigToM
+from method.s3ap_bigtom import S3APBigToM
+from method.shared_evidence_tom_bigtom import SharedEvidenceToMBigToM
+from method.simtom_bigtom import SimToMBigToM
+from method.simtom_you_bigtom import SimToMYouBigToM
+from method.soo_bigtom import SoOBigToM
 
 
 def canonical_method_name(method: str) -> str:
@@ -34,11 +55,16 @@ def build_result(
     method: str,
     prompt: str,
     output_text: str,
+    dataset_type: str = "hitom",
+    belief_state_tracking: Optional[list] = None,
     extra_fields: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
-    judged = judge_prediction(output_text, sample)
+    if dataset_type.lower() == "bigtom":
+        judged = judge_prediction_bigtom(output_text, sample)
+    else:
+        judged = judge_prediction(output_text, sample)
 
-    return {
+    result = {
         "sample_id": sample["sample_id"],
         "story_id": sample["story_id"],
         "method": method,
@@ -51,27 +77,41 @@ def build_result(
         **judged,
         **(extra_fields or {}),
     }
+    if belief_state_tracking is not None:
+        result["belief_state_tracking"] = belief_state_tracking
+    for field in ("bigtom_category", "bigtom_condition"):
+        if field in sample:
+            result[field] = sample[field]
+    return result
 
 
 def build_error_result(
     sample: Dict[str, Any],
     method: str,
     error: Exception,
+    dataset_type: str = "hitom",
     fallback_prompt: Optional[str] = None,
 ) -> Dict[str, Any]:
     if fallback_prompt is None:
         if canonical_method_name(method) in ["VP", "COTP"]:
-            fallback_prompt = build_prompt(sample, method=method)
+            if dataset_type.lower() == "bigtom":
+                fallback_prompt = (
+                    build_vp_prompt_bigtom(sample)
+                    if canonical_method_name(method) == "VP"
+                    else build_cotp_prompt_bigtom(sample)
+                )
+            else:
+                fallback_prompt = build_prompt(sample, method=method)
         else:
             fallback_prompt = f"{method} execution crashed before prompt generation."
 
-    return {
+    result = {
         "sample_id": sample["sample_id"],
         "story_id": sample["story_id"],
         "method": method,
         "question_order": sample["question_order"],
-        "deception": sample["deception"],
-        "story_length": sample["story_length"],
+        "deception": sample.get("deception"),
+        "story_length": sample.get("story_length"),
         "question": sample["question"],
         "answer": sample["answer"],
         "prompt": fallback_prompt,
@@ -81,6 +121,15 @@ def build_error_result(
         "correct": 0,
         "error": str(error),
     }
+    if dataset_type.lower() == "bigtom":
+        result.update({
+            "true_answer": sample.get("true_answer", sample["answer"]),
+            "wrong_answer": sample.get("wrong_answer", ""),
+            "bigtom_category": sample.get("bigtom_category"),
+            "bigtom_condition": sample.get("bigtom_condition"),
+            "judge_reasoning": "Execution error",
+        })
+    return result
 
 
 def model_name_slug(model_name: str) -> str:
@@ -154,10 +203,63 @@ def run_incrementaltom_solver(
     return output_text, prompt, extra_fields
 
 
+def run_sharedevidencetom_bigtom_solver(
+    sample: Dict[str, Any],
+    qwen_model: str,
+    qwen_max_new_tokens: int,
+) -> tuple[str, str, Dict[str, Any]]:
+    solver = SharedEvidenceToMBigToM(
+        llm_callable=lambda prompt: call_model_bigtom_hf(
+            prompt,
+            model_name=qwen_model,
+            max_new_tokens=qwen_max_new_tokens,
+        )
+    )
+    output_text = solver.run(sample)
+    prompt = solver.last_qa_prompt or (
+        f"SHAREDEVIDENCETOM-BigToM Pipeline initiated for Question: "
+        f"{sample['question']}"
+    )
+    return output_text, prompt, {
+        "shared_evidence": solver.last_evidence,
+        "shared_evidence_prompt": solver.last_evidence_prompt,
+        "core": solver.last_core,
+        "core_prompt": solver.last_core_prompt,
+        "qa_prompt": solver.last_qa_prompt,
+        "model_backend": "huggingface",
+        "model_name": qwen_model,
+    }
+
+
+def run_incrementaltom_bigtom_solver(
+    sample: Dict[str, Any],
+    qwen_model: str,
+    qwen_max_new_tokens: int,
+    chunk_size: int,
+) -> tuple[str, str, list, Dict[str, Any]]:
+    solver = IncrementalToMBigToM(
+        llm_callable=lambda prompt: call_model_bigtom_hf(
+            prompt,
+            model_name=qwen_model,
+            max_new_tokens=qwen_max_new_tokens,
+        ),
+        chunk_size=chunk_size,
+    )
+    result = solver.run(sample, chunk_size=chunk_size)
+    prompt = (
+        f"IncrementalToM-BigToM Pipeline (chunk_size={chunk_size}) "
+        f"initiated for Question: {sample['question']}"
+    )
+    return result["response"], prompt, result.get("belief_state_tracking", []), {
+        "model_backend": "huggingface",
+        "model_name": qwen_model,
+    }
+
+
 # =========================
 # run single test sample
 # =========================
-def run_one_sample(
+def run_one_sample_hitom(
     sample: Dict[str, Any],
     method: str,
     qwen_model: str = "Qwen/Qwen3-1.7B",
@@ -260,6 +362,31 @@ def run_one_sample(
             extra_fields["model_name"] = qwen_model
         except Exception as e:
             print(f"CRASH DETECTED in SIMTOM: {e}")
+            output_text = ""
+            prompt = "Error during execution"
+
+    # ---------------------------------------------------------
+    # BRANCH: SIMTOM-YOU
+    # ---------------------------------------------------------
+    elif method_upper == "SIMTOMYOU":
+        try:
+            tom_solver = SimToMYou(
+                llm_callable=lambda prompt: call_model_huggingface(
+                    prompt,
+                    model_name=qwen_model,
+                    max_new_tokens=qwen_max_new_tokens,
+                )
+            )
+            output_text = tom_solver.run(sample)
+            prompt = tom_solver.last_qa_prompt or (
+                f"SimToM-You Pipeline initiated for Question: {sample['question']}"
+            )
+            extra_fields["simtom_you_perspective"] = tom_solver.last_perspective
+            extra_fields["simtom_you_perspective_prompt"] = tom_solver.last_perspective_prompt
+            extra_fields["model_backend"] = "huggingface"
+            extra_fields["model_name"] = qwen_model
+        except Exception as e:
+            print(f"CRASH DETECTED in SIMTOMYOU: {e}")
             output_text = ""
             prompt = "Error during execution"
 
@@ -368,6 +495,180 @@ def run_one_sample(
     )
 
 
+def run_one_sample_bigtom(
+    sample: Dict[str, Any],
+    method: str,
+    qwen_model: str = "Qwen/Qwen3-1.7B",
+    qwen_max_new_tokens: int = 2048,
+    chunk_size: int = 3,
+) -> Dict[str, Any]:
+    """Run one normalized BigToM sample through its A/B method adapter."""
+    method_upper = canonical_method_name(method)
+    model_call = lambda prompt: call_model_bigtom_hf(
+        prompt,
+        model_name=qwen_model,
+        max_new_tokens=qwen_max_new_tokens,
+    )
+    extra_fields: Dict[str, Any] = {
+        "model_backend": "huggingface",
+        "model_name": qwen_model,
+    }
+    belief_state_tracking: Optional[list] = None
+    question = sample["question"]
+    story = sample["story"]
+    true_answer = sample["true_answer"]
+    wrong_answer = sample["wrong_answer"]
+
+    if method_upper == "PERCEPTOM":
+        solver = PercepToMBigToM(llm_callable=model_call)
+        output_text = solver.run(sample)
+        prompt = f"PercepToM-BigToM Pipeline initiated for Question: {question}"
+
+    elif method_upper == "DTOM":
+        solver = DecomposeToMBigToM(llm_callable=model_call)
+        output_text = solver.run(
+            story=story,
+            question=question,
+            true_answer=true_answer,
+            wrong_answer=wrong_answer,
+        )
+        prompt = (
+            f"Decompose-ToM-BigToM Pipeline initiated for:\n"
+            f"Story: {story}\nQuestion: {question}"
+        )
+
+    elif method_upper == "SOO":
+        solver = SoOBigToM(
+            llm_callable=lambda prompt: call_model_bigtom_hf_soo(
+                prompt,
+                model_name=qwen_model,
+                max_new_tokens=qwen_max_new_tokens,
+            )
+        )
+        output_text = solver.run(sample)
+        prompt = f"SoO-BigToM Pipeline initiated for Question: {question}"
+
+    elif method_upper == "S3AP":
+        solver = S3APBigToM(llm_callable=model_call)
+        output_text = solver.run(sample)
+        prompt = solver.last_qa_prompt or (
+            f"S3AP-BigToM Pipeline initiated for Question: {question}"
+        )
+
+    elif method_upper == "SIMTOM":
+        solver = SimToMBigToM(llm_callable=model_call)
+        output_text = solver.run(sample)
+        prompt = solver.last_qa_prompt or (
+            f"SIMTOM-BigToM Pipeline initiated for Question: {question}"
+        )
+
+    elif method_upper == "SIMTOMYOU":
+        solver = SimToMYouBigToM(llm_callable=model_call)
+        output_text = solver.run(sample)
+        prompt = solver.last_qa_prompt or (
+            f"SimToM-You-BigToM Pipeline initiated for Question: {question}"
+        )
+
+    elif method_upper == "DWM":
+        solver = DiscreteWorldModelBigToM(llm_callable=model_call)
+        output_text = solver.run(sample)
+        prompt = solver.last_qa_prompt or (
+            f"DWM-BigToM Pipeline initiated for Question: {question}"
+        )
+
+    elif method_upper == "INCREMENTALTOM":
+        output_text, prompt, belief_state_tracking, solver_fields = (
+            run_incrementaltom_bigtom_solver(
+                sample=sample,
+                qwen_model=qwen_model,
+                qwen_max_new_tokens=qwen_max_new_tokens,
+                chunk_size=chunk_size,
+            )
+        )
+        extra_fields.update(solver_fields)
+
+    elif method_upper == "SHAREDEVIDENCETOM":
+        output_text, prompt, solver_fields = run_sharedevidencetom_bigtom_solver(
+            sample=sample,
+            qwen_model=qwen_model,
+            qwen_max_new_tokens=qwen_max_new_tokens,
+        )
+        extra_fields.update(solver_fields)
+
+    elif method_upper == "ASSEMABLETOM":
+        question_order = int(sample["question_order"])
+        if question_order <= 2:
+            output_text, prompt, belief_state_tracking, solver_fields = (
+                run_incrementaltom_bigtom_solver(
+                    sample=sample,
+                    qwen_model=qwen_model,
+                    qwen_max_new_tokens=qwen_max_new_tokens,
+                    chunk_size=chunk_size,
+                )
+            )
+            route = "INCREMENTALTOM"
+        else:
+            output_text, prompt, solver_fields = run_sharedevidencetom_bigtom_solver(
+                sample=sample,
+                qwen_model=qwen_model,
+                qwen_max_new_tokens=qwen_max_new_tokens,
+            )
+            route = "SHAREDEVIDENCETOM"
+        extra_fields.update(solver_fields)
+        extra_fields["assemabletom_route"] = route
+        extra_fields["assemabletom_inferred_order"] = question_order
+
+    elif method_upper == "VP":
+        prompt = build_vp_prompt_bigtom(sample)
+        output_text = model_call(prompt)
+
+    elif method_upper == "COTP":
+        prompt = build_cotp_prompt_bigtom(sample)
+        output_text = model_call(prompt)
+
+    else:
+        raise ValueError(f"Unsupported BigToM method: {method}")
+
+    return build_result(
+        sample=sample,
+        method=method,
+        prompt=prompt,
+        output_text=output_text,
+        dataset_type="bigtom",
+        belief_state_tracking=belief_state_tracking,
+        extra_fields=extra_fields,
+    )
+
+
+def run_one_sample(
+    sample: Dict[str, Any],
+    method: str,
+    dataset_type: str = "hitom",
+    qwen_model: str = "Qwen/Qwen3-1.7B",
+    qwen_max_new_tokens: Optional[int] = None,
+    chunk_size: int = 3,
+) -> Dict[str, Any]:
+    if dataset_type.lower() == "bigtom":
+        max_new_tokens = qwen_max_new_tokens if qwen_max_new_tokens is not None else 2048
+        return run_one_sample_bigtom(
+            sample,
+            method=method,
+            qwen_model=qwen_model,
+            qwen_max_new_tokens=max_new_tokens,
+            chunk_size=chunk_size,
+        )
+    if dataset_type.lower() == "hitom":
+        max_new_tokens = qwen_max_new_tokens if qwen_max_new_tokens is not None else 1024
+        return run_one_sample_hitom(
+            sample,
+            method=method,
+            qwen_model=qwen_model,
+            qwen_max_new_tokens=max_new_tokens,
+            chunk_size=chunk_size,
+        )
+    raise ValueError(f"Unsupported dataset_type: {dataset_type}")
+
+
 # =========================
 # run whole dataset
 # =========================
@@ -376,14 +677,16 @@ def run_dataset(
     output_path: str,
     category: Optional[str] = None,
     method: str = "VP",
+    dataset_type: str = "hitom",
     max_samples: Optional[int] = None,
+    resume: bool = False,
     qwen_model: str = "Qwen/Qwen3-1.7B",
-    qwen_max_new_tokens: int = 1024,
+    qwen_max_new_tokens: Optional[int] = None,
     chunk_size: int = 3,
 ) -> None:
     raw_data = load_json(input_path)
 
-    if category is not None:
+    if category is not None and dataset_type.lower() == "hitom":
         category_key = category.lower()
         filtered_data = [
             x for x in raw_data
@@ -404,7 +707,17 @@ def run_dataset(
             )
         raw_data = filtered_data
 
-    samples = [normalize_sample(x) for x in raw_data]
+    samples = normalize_dataset_samples(raw_data, dataset_type)
+
+    if category is not None and dataset_type.lower() == "bigtom":
+        category_key = category.lower()
+        samples = [
+            sample for sample in samples
+            if sample.get("bigtom_category", "").lower() == category_key
+            or sample.get("prompting_type_raw", "").lower() == category_key
+        ]
+        if not samples:
+            raise ValueError(f"No BigToM samples found for category '{category}'.")
 
     if max_samples is not None:
         samples = samples[:max_samples]
@@ -418,8 +731,39 @@ def run_dataset(
 
     correct = 0
     order_stats: Dict[Any, Dict[str, int]] = {}
+    start_index = 0
+    open_mode = "w"
 
-    with open(output_file, "w", encoding="utf-8", newline="\n") as f:
+    if resume:
+        if not output_file.exists():
+            raise FileNotFoundError(
+                f"Cannot resume: result file '{output_path}' does not exist."
+            )
+        existing_results = load_jsonl(str(output_file))
+        if len(existing_results) > total:
+            raise ValueError("Result file contains more rows than the selected dataset.")
+        for index, existing in enumerate(existing_results):
+            if str(existing.get("sample_id")) != str(samples[index]["sample_id"]):
+                raise ValueError(
+                    "Cannot resume because the result prefix does not match the "
+                    f"dataset at row {index + 1}."
+                )
+            result_correct = int(existing.get("correct", 0))
+            correct += result_correct
+            order = existing["question_order"]
+            order_stats.setdefault(order, {"correct": 0, "total": 0})
+            order_stats[order]["correct"] += result_correct
+            order_stats[order]["total"] += 1
+        start_index = len(existing_results)
+        if start_index == total:
+            print("The benchmark is already complete.")
+            print(f"Final Accuracy: {correct}/{total} = {correct / total:.4f}")
+            print_accuracy_by_order_stats(order_stats)
+            return
+        open_mode = "a"
+        print(f"Resuming benchmark after {start_index} completed samples.")
+
+    with open(output_file, open_mode, encoding="utf-8", newline="\n") as f:
         def write_result(i: int, result: Dict[str, Any]) -> None:
             nonlocal correct
             correct += int(result["correct"])
@@ -437,23 +781,121 @@ def run_dataset(
                 f"running_acc={correct / i:.4f}"
             )
 
-        for i, sample in enumerate(samples, start=1):
+        for i, sample in enumerate(samples[start_index:], start=start_index + 1):
             try:
                 result = run_one_sample(
                     sample,
                     method=method,
+                    dataset_type=dataset_type,
                     qwen_model=qwen_model,
                     qwen_max_new_tokens=qwen_max_new_tokens,
                     chunk_size=chunk_size,
                 )
             except Exception as e:
-                result = build_error_result(sample, method=method, error=e)
+                result = build_error_result(
+                    sample,
+                    method=method,
+                    error=e,
+                    dataset_type=dataset_type,
+                )
 
             write_result(i, result)
 
-    print(f"\nfinished。result saved to path: {output_path}")
+    print(f"\nFinished. Result saved to path: {output_path}")
     print(f"Final Accuracy: {correct}/{total} = {correct / total:.4f}")
     print_accuracy_by_order_stats(order_stats)
+
+
+def run_upgrade(
+    input_path: str,
+    output_path: str,
+    method: str,
+    dataset_type: str = "hitom",
+    category: Optional[str] = None,
+    start_sample_id: Optional[str] = None,
+    qwen_model: str = "Qwen/Qwen3-1.7B",
+    qwen_max_new_tokens: Optional[int] = None,
+    chunk_size: int = 3,
+) -> None:
+    """Re-run only rows currently marked incorrect in an existing result file."""
+    output_file = Path(output_path)
+    if not output_file.exists():
+        raise FileNotFoundError(f"Nothing to upgrade: '{output_path}' does not exist.")
+
+    raw_data = load_json(input_path)
+    if category is not None and dataset_type.lower() == "hitom":
+        raw_data = [
+            row for row in raw_data
+            if str(row.get("prompting_type", "")).lower() == category.lower()
+        ]
+    samples = normalize_dataset_samples(raw_data, dataset_type)
+    if category is not None and dataset_type.lower() == "bigtom":
+        samples = [
+            sample for sample in samples
+            if sample.get("bigtom_category", "").lower() == category.lower()
+            or sample.get("prompting_type_raw", "").lower() == category.lower()
+        ]
+
+    sample_by_id = {str(sample["sample_id"]): sample for sample in samples}
+    existing_results = load_jsonl(str(output_file))
+    failed_indices = [
+        index for index, row in enumerate(existing_results)
+        if int(row.get("correct", 0)) == 0
+    ]
+
+    if start_sample_id is not None:
+        start_index = next(
+            (
+                index for index, row in enumerate(existing_results)
+                if str(row.get("sample_id")) == str(start_sample_id)
+            ),
+            None,
+        )
+        if start_index is None:
+            raise ValueError(f"start_sample_id '{start_sample_id}' was not found.")
+        failed_indices = [index for index in failed_indices if index >= start_index]
+
+    if not failed_indices:
+        print("No incorrect samples found to upgrade.")
+        return
+
+    for step, index in enumerate(failed_indices, start=1):
+        sample_id = str(existing_results[index].get("sample_id"))
+        if sample_id not in sample_by_id:
+            raise ValueError(f"sample_id '{sample_id}' was not found in the input dataset.")
+        sample = sample_by_id[sample_id]
+        try:
+            new_result = run_one_sample(
+                sample,
+                method=method,
+                dataset_type=dataset_type,
+                qwen_model=qwen_model,
+                qwen_max_new_tokens=qwen_max_new_tokens,
+                chunk_size=chunk_size,
+            )
+        except Exception as error:
+            new_result = build_error_result(
+                sample,
+                method=method,
+                error=error,
+                dataset_type=dataset_type,
+            )
+        existing_results[index] = new_result
+
+        temporary_file = output_file.with_suffix(output_file.suffix + ".tmp")
+        with open(temporary_file, "w", encoding="utf-8", newline="\n") as handle:
+            for row in existing_results:
+                handle.write(json.dumps(row, ensure_ascii=False, separators=(",", ":")) + "\n")
+        temporary_file.replace(output_file)
+        print(
+            f"[Upgrade {step}/{len(failed_indices)}] sample_id={sample_id} "
+            f"correct_after={new_result['correct']}"
+        )
+
+    correct = sum(int(row.get("correct", 0)) for row in existing_results)
+    total = len(existing_results)
+    print(f"Upgrade finished. Result saved to path: {output_path}")
+    print(f"Final Accuracy: {correct}/{total} = {correct / total:.4f}")
 
 
 # =========================
@@ -483,8 +925,18 @@ def print_accuracy_by_order_stats(stats: Dict[Any, Dict[str, int]]) -> None:
         print(f"order {order}: {c}/{t} = {c/t:.4f}")
 
 
-def report_accuracy_by_order(result_path: str) -> None:
+def report_accuracy_by_order(
+    result_path: str,
+    dataset_type: str = "hitom",
+) -> None:
     rows = load_jsonl(result_path)
+
+    if dataset_type.lower() == "bigtom":
+        for row in rows:
+            terminal_label = extract_bigtom_answer_label(row.get("pred_raw", ""))
+            if terminal_label is not None:
+                row["pred_final"] = terminal_label
+                row["correct"] = int(terminal_label == "A")
 
     stats = {}
     for r in rows:
@@ -495,6 +947,23 @@ def report_accuracy_by_order(result_path: str) -> None:
 
     print_accuracy_by_order_stats(stats)
 
+    if dataset_type.lower() == "bigtom":
+        for field, label in (
+            ("bigtom_category", "BigToM category"),
+            ("bigtom_condition", "BigToM condition"),
+        ):
+            grouped: Dict[str, Dict[str, int]] = {}
+            for row in rows:
+                key = str(row.get(field, "unknown"))
+                grouped.setdefault(key, {"correct": 0, "total": 0})
+                grouped[key]["correct"] += int(row["correct"])
+                grouped[key]["total"] += 1
+            print(f"\nAccuracy by {label}")
+            for key in sorted(grouped):
+                correct = grouped[key]["correct"]
+                total = grouped[key]["total"]
+                print(f"{key}: {correct}/{total} = {correct / total:.4f}")
+
 
 # =========================
 # main
@@ -502,11 +971,19 @@ def report_accuracy_by_order(result_path: str) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run ToM Benchmarks")
     parser.add_argument(
-        "--category", 
-        type=str, 
-        choices=["CoTP", "VP"], 
-        required=True, 
-        help="Category label for the Hi-ToM run (CoTP or VP)"
+        "--dataset",
+        choices=["hitom", "bigtom"],
+        default="hitom",
+        help="Dataset adapter to use (default: hitom).",
+    )
+    parser.add_argument(
+        "--category",
+        type=str,
+        default=None,
+        help=(
+            "Optional prompting_type filter for HiToM or question-category "
+            "filter for BigToM."
+        ),
     )
     parser.add_argument(
         "--method", 
@@ -519,22 +996,27 @@ if __name__ == "__main__":
             "DTOM",
             "S3AP",
             "SIMTOM",
+            "SIMTOMYOU",
             "DWM",
             "INCREMENTALTOM",
+            "IncrementalToM",
             "SHAREDEVIDENCETOM",
+            "SharedEvidenceToM",
             "assemableTom",
         ],
-        required=True, 
+        required=True,
         help="Method of the paper to benchmark"
     )
     parser.add_argument(
         "--max_samples", 
         type=int, 
-        default=1200, 
-        help="Maximum number of samples to process (default: 1200)"
+        default=None,
+        help="Maximum number of samples to process (default: all)."
     )
     parser.add_argument(
         "--qwen_model",
+        "--model_name",
+        dest="qwen_model",
         type=str,
         default="Qwen/Qwen3-1.7B",
         help="Local HuggingFace Qwen model for VP and SIMTOM (default: Qwen/Qwen3-1.7B)"
@@ -542,8 +1024,11 @@ if __name__ == "__main__":
     parser.add_argument(
         "--qwen_max_new_tokens",
         type=int,
-        default=1024,
-        help="max_new_tokens for local HuggingFace Qwen generation (default: 1024)"
+        default=None,
+        help=(
+            "max_new_tokens for local HuggingFace generation "
+            "(default: 1024 for HiToM, 2048 for BigToM)"
+        )
     )
     parser.add_argument(
         "--chunk_size",
@@ -551,19 +1036,51 @@ if __name__ == "__main__":
         default=3,
         help="Sentence chunk size for IncrementalToM (default: 3)"
     )
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Resume an interrupted standard run from an existing JSONL file.",
+    )
+    parser.add_argument(
+        "--upgrade",
+        action="store_true",
+        help="Re-run only incorrect rows in an existing JSONL result file.",
+    )
+    parser.add_argument(
+        "--start_sample_id",
+        type=str,
+        default=None,
+        help="Start the upgrade pass at this sample_id.",
+    )
+    parser.add_argument(
+        "--input_path",
+        type=str,
+        default=None,
+        help="Override the dataset's default input path.",
+    )
+    parser.add_argument(
+        "--output_path",
+        type=str,
+        default=None,
+        help="Override the generated result path.",
+    )
     
     args = parser.parse_args()
 
-    input_path = "data/hitom.json" 
-    output_path = build_output_path(
+    input_path = args.input_path or (
+        "data/bigtom_balanced_subset.json"
+        if args.dataset == "bigtom"
+        else "data/hitom.json"
+    )
+    output_path = args.output_path or build_output_path(
         input_path=input_path,
-        category=args.category,
+        category=args.category or "all",
         method=args.method,
         model_name=args.qwen_model,
     )
 
     print(f"Starting benchmark...")
-    print(f"Dataset: {args.category} | Method: {args.method}")
+    print(f"Dataset: {args.dataset} | Category: {args.category or 'all'} | Method: {args.method}")
     method_key = canonical_method_name(args.method)
     if method_key in {"VP", "SIMTOM", "INCREMENTALTOM", "SHAREDEVIDENCETOM", "ASSEMABLETOM"}:
         print(f"Qwen model: {args.qwen_model}")
@@ -571,14 +1088,31 @@ if __name__ == "__main__":
         print(f"Chunk size: {args.chunk_size}")
     print(f"Input: {input_path} | Output: {output_path}")
 
-    run_dataset(
-        input_path=input_path,
-        output_path=output_path,
-        category=args.category,
-        method=args.method,      
-        max_samples=args.max_samples,
-        qwen_model=args.qwen_model,
-        qwen_max_new_tokens=args.qwen_max_new_tokens,
-        chunk_size=args.chunk_size,
-    )
+    if args.upgrade:
+        run_upgrade(
+            input_path=input_path,
+            output_path=output_path,
+            category=args.category,
+            method=args.method,
+            dataset_type=args.dataset,
+            start_sample_id=args.start_sample_id,
+            qwen_model=args.qwen_model,
+            qwen_max_new_tokens=args.qwen_max_new_tokens,
+            chunk_size=args.chunk_size,
+        )
+    else:
+        run_dataset(
+            input_path=input_path,
+            output_path=output_path,
+            category=args.category,
+            method=args.method,
+            dataset_type=args.dataset,
+            max_samples=args.max_samples,
+            resume=args.resume,
+            qwen_model=args.qwen_model,
+            qwen_max_new_tokens=args.qwen_max_new_tokens,
+            chunk_size=args.chunk_size,
+        )
+
+    report_accuracy_by_order(output_path, dataset_type=args.dataset)
 

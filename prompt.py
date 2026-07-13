@@ -68,3 +68,45 @@ def build_cotp_prompt(sample: Dict[str, Any]) -> str:
 
             Think step by step, then give your final answer in the format:
             Answer: <option letter>"""
+
+
+# =========================
+# BigToM-specific prompt builders
+# =========================
+def build_vp_prompt_bigtom(sample: Dict[str, Any]) -> str:
+    true_answer = sample.get("true_answer", sample.get("answer", ""))
+    wrong_answer = sample.get("wrong_answer", "")
+    return f"""
+Story:
+{sample['story']}
+
+Question:
+{sample['question']}
+
+Possible Answers:
+A: {true_answer}
+B: {wrong_answer}
+
+Please respond with exactly one uppercase option letter: either "A" or "B".
+Do not provide any explanation.
+Do not output anything except the single letter."""
+
+
+def build_cotp_prompt_bigtom(sample: Dict[str, Any]) -> str:
+    true_answer = sample.get("true_answer", sample.get("answer", ""))
+    wrong_answer = sample.get("wrong_answer", "")
+    return f"""
+Story:
+{sample['story']}
+
+Question:
+{sample['question']}
+
+Possible Answers:
+A: {true_answer}
+B: {wrong_answer}
+
+Think step by step about the character's mental state, then give your final answer in the format:
+Answer: A
+or
+Answer: B"""
