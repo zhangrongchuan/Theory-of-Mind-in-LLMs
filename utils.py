@@ -8,9 +8,9 @@ from typing import Callable, Dict, List, Any, Optional
 # =========================
 def parse_choices(choice_text: Any) -> Dict[str, str]:
     """
-    输入:
+    Input:
         "A. blue_drawer, B. green_crate, C. red_bucket"
-    输出:
+    Output:
         {"A": "blue_drawer", "B": "green_crate", "C": "red_bucket"}
     """
     if isinstance(choice_text, list):
@@ -51,7 +51,7 @@ def load_json(path: str) -> List[Dict[str, Any]]:
         data = json.load(f)
 
     if not isinstance(data, list):
-        raise ValueError("输入文件必须是一个 JSON list。")
+        raise ValueError("The input file must contain a JSON list.")
 
     return data
 
@@ -101,7 +101,7 @@ def extract_option_letter(output_text: str) -> Optional[str]:
         return text.upper()
 
     # case 2: Answer: K (COTP prompt)
-    m = re.search(r"answer\s*[:：]\s*([A-O])\b", text, flags=re.IGNORECASE)
+    m = re.search(r"answer\s*[:\uFF1A]\s*([A-O])\b", text, flags=re.IGNORECASE)
     if m:
         return m.group(1).upper()
 

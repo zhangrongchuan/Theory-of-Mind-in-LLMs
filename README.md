@@ -1,77 +1,80 @@
 # Theory of Mind on HiToM and BigToM
 
-本项目用于在 HiToM 和 BigToM 数据集上评测大语言模型的 Theory of
-Mind（ToM）推理能力。HiToM 保留原有 method 实现；BigToM 通过独立适配器
-转换为二选一 A/B 任务，并保持已有 final 实验的 prompt 和推理配置可复现。
+This project evaluates the Theory of Mind (ToM) reasoning capabilities of large
+language models on the HiToM and BigToM datasets. HiToM retains the original
+method implementations, while BigToM uses dedicated adapters to convert its
+examples into binary A/B tasks and preserve the prompts and inference settings
+used in the existing final experiments for reproducibility.
 
-支持的主要方法包括 `VP`、`SoO`、`SIMTOM`、`PercepToM`、`DWM`、
-`DTOM`、`S3AP`、`INCREMENTALTOM`、`SHAREDEVIDENCETOM` 和
-`assemableTom`。
+The main supported methods are `VP`, `SoO`, `SIMTOM`, `PercepToM`, `DWM`,
+`DTOM`, `S3AP`, `INCREMENTALTOM`, `SHAREDEVIDENCETOM`, and `assemableTom`.
 
-## 1. 环境安装
+## 1. Installation
 
-建议创建独立 Python 环境，然后安装依赖：
+We recommend creating a dedicated Python environment and then installing the
+dependencies:
 
 ```bash
 pip install -r requirements-colab.txt
 ```
 
-## 2. 数据集与通用命令
+## 2. Datasets and General Commands
 
-HiToM 默认读取 `data/hitom.json`：
+By default, HiToM reads from `data/hitom.json`:
 
 ```bash
 python main.py --dataset hitom --category CoTP --method VP --max_samples 10
 ```
 
-BigToM 默认读取 `data/bigtom_balanced_subset.json`：
+By default, BigToM reads from `data/bigtom_balanced_subset.json`:
 
 ```bash
 python main.py --dataset bigtom --method VP --max_samples 10
 ```
 
-推荐显式指定本地模型：
+We recommend explicitly specifying the local model:
 
 ```bash
 python main.py --dataset bigtom --method VP --model_name Qwen/Qwen3-1.7B
 ```
 
-`--model_name` 和 `--qwen_model` 完全等价。BigToM 使用参考实验一致的
-`model_hf.py` 推理配置，默认 `max_new_tokens=2048`；HiToM 保留原后端，
-默认 `max_new_tokens=1024`。
+`--model_name` and `--qwen_model` are equivalent. BigToM uses the inference
+configuration in `model_hf.py` that matches the reference experiments, with
+`max_new_tokens=2048` by default. HiToM retains its original backend and uses
+`max_new_tokens=1024` by default.
 
-常用参数：
+Common arguments:
 
-| 参数 | 说明 |
+| Argument | Description |
 | --- | --- |
-| `--dataset hitom\|bigtom` | 选择数据集 |
-| `--category CoTP` | HiToM 的 `prompting_type` 过滤条件；BigToM 通常不需要 |
-| `--method METHOD` | 选择运行方法，具体参数值见下表 |
-| `--model_name MODEL` | HuggingFace 模型，例如 `Qwen/Qwen3-0.6B` |
-| `--max_samples N` | 只运行前 N 条；不设置则运行全部 |
-| `--qwen_max_new_tokens N` | 覆盖默认最大生成长度 |
-| `--chunk_size N` | IncrementalToM/assemableTom 的句子分块大小 |
-| `--input_path PATH` | 覆盖默认数据文件 |
-| `--output_path PATH` | 覆盖默认结果文件 |
-| `--resume` | 从已有 JSONL 结果末尾继续 |
-| `--upgrade` | 仅重新运行 `correct=0` 的样本 |
+| `--dataset hitom\|bigtom` | Select the dataset |
+| `--category CoTP` | Filter HiToM by `prompting_type`; generally not needed for BigToM |
+| `--method METHOD` | Select a method using one of the values listed below |
+| `--model_name MODEL` | Specify a Hugging Face model, such as `Qwen/Qwen3-0.6B` |
+| `--max_samples N` | Run only the first N examples; omit it to run the full dataset |
+| `--qwen_max_new_tokens N` | Override the default maximum generation length |
+| `--chunk_size N` | Set the sentence chunk size for IncrementalToM/assemableTom |
+| `--input_path PATH` | Override the default input data file |
+| `--output_path PATH` | Override the default output file |
+| `--resume` | Resume from the end of an existing JSONL result file |
+| `--upgrade` | Rerun only examples with `correct=0` |
 
-可选的 method 参数：
+Available method arguments:
 
-| 方法 | `--method` 参数值 | 简单说明 |
+| Method | `--method` value | Brief description |
 | --- | --- | --- |
-| VP | `VP` | 直接读取故事和选项并回答，作为基础 baseline |
-| SoO | `SoO` | 将模型置于目标人物的处境中进行推理 |
-| SimToM | `SIMTOM` | 先筛选目标人物知道的事件，再从该视角回答 |
-| PercepToM | `PercepToM` | 按“感知 → 信念 → 回答”三个阶段推理 |
-| DWM | `DWM` | 构建分段的环境与人物信念状态描述 |
-| Decompose-ToM | `DTOM` | 递归识别主体、重写问题并建立人物 world model |
-| S3AP | `S3AP` | 先生成结构化 social-world representation |
-| IncrementalToM | `INCREMENTALTOM` | 按句子块维护中间理解 checkpoint，可通过 `--chunk_size` 调整 |
-| SharedEvidenceToM | `SHAREDEVIDENCETOM` | 提取相关人物共同知道的 shared epistemic evidence |
-| AssembleToM | `assemableTom` | order 0–2 路由到 IncrementalToM，order 3–4 路由到 SharedEvidenceToM |
+| VP | `VP` | Reads the story and answer choices directly and serves as the basic baseline |
+| SoO | `SoO` | Reasons by placing the model in the target character's situation |
+| SimToM | `SIMTOM` | First filters for events known by the target character, then answers from that perspective |
+| PercepToM | `PercepToM` | Reasons in three stages: perception, belief, and answer |
+| DWM | `DWM` | Builds segmented descriptions of the environment and characters' belief states |
+| Decompose-ToM | `DTOM` | Recursively identifies agents, rewrites the question, and builds character world models |
+| S3AP | `S3AP` | First generates a structured social-world representation |
+| IncrementalToM | `INCREMENTALTOM` | Maintains intermediate understanding checkpoints across sentence chunks; configurable with `--chunk_size` |
+| SharedEvidenceToM | `SHAREDEVIDENCETOM` | Extracts shared epistemic evidence known by the relevant characters |
+| AssembleToM | `assemableTom` | Routes orders 0–2 to IncrementalToM and orders 3–4 to SharedEvidenceToM |
 
-统一运行格式：
+General command format:
 
 ```bash
 # HiToM
@@ -81,5 +84,6 @@ python main.py --dataset hitom --category CoTP --method METHOD --model_name Qwen
 python main.py --dataset bigtom --method METHOD --model_name Qwen/Qwen3-1.7B --max_samples 10
 ```
 
-补充说明：复现已有 BigToM `INCREMENTALTOM`/`assemableTom` final 结果时使用
-`--chunk_size 9`；一般 HiToM 增量运行使用 `--chunk_size 3`。
+To reproduce the existing final BigToM results for
+`INCREMENTALTOM`/`assemableTom`, use `--chunk_size 9`. For typical incremental
+HiToM runs, use `--chunk_size 3`.
