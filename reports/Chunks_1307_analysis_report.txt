@@ -1,0 +1,232 @@
+﻿================================================================================
+THEORY OF MIND EXPERIMENT RESULTS - COMPREHENSIVE ANALYSIS
+================================================================================
+
+--------------------------------------------------------------------------------
+1. BASIC STATISTICS BY EXPERIMENT
+--------------------------------------------------------------------------------
+experiment                        | total | correct | accuracy | order_0 | order_1 | order_2 | order_3 | order_4 | deception_true | deception_false
+---------------------------------------------------------------------------------------------------------------------------------------------------
+INCREMENTALTOM_chunk13_Qwen3-0.6B | 300   | 131     | 43.67%   | 42/60   | 31/60   | 16/60   | 17/60   | 25/60   | 62/161         | 69/139         
+INCREMENTALTOM_chunk15_Qwen3-0.6B | 300   | 121     | 40.33%   | 33/60   | 30/60   | 18/60   | 16/60   | 24/60   | 56/161         | 65/139         
+INCREMENTALTOM_chunk20_Qwen3-0.6B | 300   | 122     | 40.67%   | 30/60   | 33/60   | 20/60   | 18/60   | 21/60   | 59/161         | 63/139         
+INCREMENTALTOM_chunk4_Qwen3-0.6B  | 300   | 126     | 42.00%   | 36/60   | 32/60   | 21/60   | 13/60   | 24/60   | 64/161         | 62/139         
+INCREMENTALTOM_chunk6_Qwen3-0.6B  | 300   | 130     | 43.33%   | 33/60   | 29/60   | 26/60   | 18/60   | 24/60   | 69/161         | 61/139         
+INCREMENTALTOM_chunk9_Qwen3-0.6B  | 300   | 129     | 43.00%   | 38/60   | 29/60   | 28/60   | 15/60   | 19/60   | 56/161         | 73/139         
+
+--------------------------------------------------------------------------------
+2. METHOD COMPARISON (ALL MODELS AGGREGATED)
+--------------------------------------------------------------------------------
+method                 | total | correct | accuracy
+---------------------------------------------------
+INCREMENTALTOM_chunk13 | 300   | 131     | 43.67%  
+INCREMENTALTOM_chunk15 | 300   | 121     | 40.33%  
+INCREMENTALTOM_chunk20 | 300   | 122     | 40.67%  
+INCREMENTALTOM_chunk4  | 300   | 126     | 42.00%  
+INCREMENTALTOM_chunk6  | 300   | 130     | 43.33%  
+INCREMENTALTOM_chunk9  | 300   | 129     | 43.00%  
+
+--------------------------------------------------------------------------------
+2b. ACCURACY BY CHUNK SIZE
+--------------------------------------------------------------------------------
+base_method    | chunk_size | total | correct | accuracy
+--------------------------------------------------------
+IncrementalToM | 4          | 300   | 126     | 42.00%  
+IncrementalToM | 6          | 300   | 130     | 43.33%  
+IncrementalToM | 9          | 300   | 129     | 43.00%  
+IncrementalToM | 13         | 300   | 131     | 43.67%  
+IncrementalToM | 15         | 300   | 121     | 40.33%  
+IncrementalToM | 20         | 300   | 122     | 40.67%  
+
+--------------------------------------------------------------------------------
+3. ACCURACY BY QUESTION ORDER (ToM COMPLEXITY)
+--------------------------------------------------------------------------------
+question_order | method                 | total | correct | accuracy
+--------------------------------------------------------------------
+0              | INCREMENTALTOM_chunk13 | 60    | 42      | 70.00%  
+0              | INCREMENTALTOM_chunk15 | 60    | 33      | 55.00%  
+0              | INCREMENTALTOM_chunk20 | 60    | 30      | 50.00%  
+0              | INCREMENTALTOM_chunk4  | 60    | 36      | 60.00%  
+0              | INCREMENTALTOM_chunk6  | 60    | 33      | 55.00%  
+0              | INCREMENTALTOM_chunk9  | 60    | 38      | 63.33%  
+1              | INCREMENTALTOM_chunk13 | 60    | 31      | 51.67%  
+1              | INCREMENTALTOM_chunk15 | 60    | 30      | 50.00%  
+1              | INCREMENTALTOM_chunk20 | 60    | 33      | 55.00%  
+1              | INCREMENTALTOM_chunk4  | 60    | 32      | 53.33%  
+1              | INCREMENTALTOM_chunk6  | 60    | 29      | 48.33%  
+1              | INCREMENTALTOM_chunk9  | 60    | 29      | 48.33%  
+2              | INCREMENTALTOM_chunk13 | 60    | 16      | 26.67%  
+2              | INCREMENTALTOM_chunk15 | 60    | 18      | 30.00%  
+2              | INCREMENTALTOM_chunk20 | 60    | 20      | 33.33%  
+2              | INCREMENTALTOM_chunk4  | 60    | 21      | 35.00%  
+2              | INCREMENTALTOM_chunk6  | 60    | 26      | 43.33%  
+2              | INCREMENTALTOM_chunk9  | 60    | 28      | 46.67%  
+3              | INCREMENTALTOM_chunk13 | 60    | 17      | 28.33%  
+3              | INCREMENTALTOM_chunk15 | 60    | 16      | 26.67%  
+3              | INCREMENTALTOM_chunk20 | 60    | 18      | 30.00%  
+3              | INCREMENTALTOM_chunk4  | 60    | 13      | 21.67%  
+3              | INCREMENTALTOM_chunk6  | 60    | 18      | 30.00%  
+3              | INCREMENTALTOM_chunk9  | 60    | 15      | 25.00%  
+4              | INCREMENTALTOM_chunk13 | 60    | 25      | 41.67%  
+4              | INCREMENTALTOM_chunk15 | 60    | 24      | 40.00%  
+4              | INCREMENTALTOM_chunk20 | 60    | 21      | 35.00%  
+4              | INCREMENTALTOM_chunk4  | 60    | 24      | 40.00%  
+4              | INCREMENTALTOM_chunk6  | 60    | 24      | 40.00%  
+4              | INCREMENTALTOM_chunk9  | 60    | 19      | 31.67%  
+
+--------------------------------------------------------------------------------
+4. ACCURACY: DECEPTION VS NON-DECEPTION
+--------------------------------------------------------------------------------
+deception      | method                 | total | correct | accuracy
+--------------------------------------------------------------------
+no_deception   | INCREMENTALTOM_chunk13 | 139   | 69      | 49.64%  
+no_deception   | INCREMENTALTOM_chunk15 | 139   | 65      | 46.76%  
+no_deception   | INCREMENTALTOM_chunk20 | 139   | 63      | 45.32%  
+no_deception   | INCREMENTALTOM_chunk4  | 139   | 62      | 44.60%  
+no_deception   | INCREMENTALTOM_chunk6  | 139   | 61      | 43.88%  
+no_deception   | INCREMENTALTOM_chunk9  | 139   | 73      | 52.52%  
+with_deception | INCREMENTALTOM_chunk13 | 161   | 62      | 38.51%  
+with_deception | INCREMENTALTOM_chunk15 | 161   | 56      | 34.78%  
+with_deception | INCREMENTALTOM_chunk20 | 161   | 59      | 36.65%  
+with_deception | INCREMENTALTOM_chunk4  | 161   | 64      | 39.75%  
+with_deception | INCREMENTALTOM_chunk6  | 161   | 69      | 42.86%  
+with_deception | INCREMENTALTOM_chunk9  | 161   | 56      | 34.78%  
+
+--------------------------------------------------------------------------------
+5. 'IMPOSSIBLE' QUESTIONS (No Method Succeeded)
+--------------------------------------------------------------------------------
+Total impossible questions: 76
+
+Breakdown by question order:
+  Order 0: 8 questions
+  Order 1: 14 questions
+  Order 2: 14 questions
+  Order 3: 26 questions
+  Order 4: 14 questions
+
+Breakdown by deception:
+  No deception: 31 questions
+  With deception: 45 questions
+
+Sample impossible questions:
+  - Sample 171: Where does Ava think Alexander thinks Charlotte thinks the pear is?...
+    Answer: red_box | Order: 3 | Deception: False
+  - Sample 761: Where does Isabella think Emily thinks Owen thinks the onion is?...
+    Answer: red_crate | Order: 3 | Deception: True
+  - Sample 666: Where does Hannah think Liam thinks Emma thinks the tomato is?...
+    Answer: red_container | Order: 3 | Deception: True
+  - Sample 689: Where does Jackson think Alexander thinks Jacob thinks Carter thinks the potato ...
+    Answer: blue_bathtub | Order: 4 | Deception: True
+  - Sample 64: Where does Charlotte think Benjamin thinks Logan thinks the potato is?...
+    Answer: green_envelope | Order: 3 | Deception: False
+
+--------------------------------------------------------------------------------
+6. 'EASY' QUESTIONS (All Methods Succeeded)
+--------------------------------------------------------------------------------
+Total easy questions: 41
+
+Breakdown by question order:
+  Order 0: 14 questions
+  Order 1: 16 questions
+  Order 2: 2 questions
+  Order 3: 3 questions
+  Order 4: 6 questions
+
+--------------------------------------------------------------------------------
+7. METHOD COMPLEMENTARITY (When does each method win?)
+--------------------------------------------------------------------------------
+This shows how many questions each method got RIGHT where another got WRONG.
+(With chunk-size sweeps, 'method' here means method+chunk-size, so this
+ also reveals which chunk size wins where another chunk size fails.)
+
+method                 | wins_vs_INCREMENTALTOM_chunk15 | wins_vs_INCREMENTALTOM_chunk20 | wins_vs_INCREMENTALTOM_chunk4 | wins_vs_INCREMENTALTOM_chunk6 | wins_vs_INCREMENTALTOM_chunk9
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+INCREMENTALTOM_chunk13 | 33                             | 45                             | 45                            | 56                            | 31                           
+INCREMENTALTOM_chunk15 | 23                             | 25                             | 37                            | 49                            | 34                           
+INCREMENTALTOM_chunk20 | 36                             | 26                             | 39                            | 44                            | 37                           
+INCREMENTALTOM_chunk4  | 40                             | 42                             | 43                            | 46                            | 44                           
+INCREMENTALTOM_chunk6  | 55                             | 58                             | 52                            | 50                            | 53                           
+INCREMENTALTOM_chunk9  | 29                             | 42                             | 44                            | 47                            | 52                           
+
+--------------------------------------------------------------------------------
+8. PARTIAL SUCCESS QUESTIONS (Some Methods Right, Others Wrong)
+--------------------------------------------------------------------------------
+Total questions with partial success: 183
+
+Success pattern distribution:
+  1 correct, 5 incorrect methods: 49 questions
+  2 correct, 4 incorrect methods: 36 questions
+  3 correct, 3 incorrect methods: 30 questions
+  4 correct, 2 incorrect methods: 38 questions
+  5 correct, 1 incorrect methods: 30 questions
+
+Sample partial success questions:
+  - Sample 14: Order 0
+    Correct: INCREMENTALTOM_chunk13, INCREMENTALTOM_chunk15, INCREMENTALTOM_chunk20, INCREMENTALTOM_chunk4, INCREMENTALTOM_chunk9
+    Incorrect: INCREMENTALTOM_chunk6
+  - Sample 289: Order 4
+    Correct: INCREMENTALTOM_chunk13, INCREMENTALTOM_chunk4
+    Incorrect: INCREMENTALTOM_chunk15, INCREMENTALTOM_chunk20, INCREMENTALTOM_chunk6, INCREMENTALTOM_chunk9
+  - Sample 178: Order 3
+    Correct: INCREMENTALTOM_chunk13, INCREMENTALTOM_chunk15, INCREMENTALTOM_chunk20
+    Incorrect: INCREMENTALTOM_chunk4, INCREMENTALTOM_chunk6, INCREMENTALTOM_chunk9
+  - Sample 661: Order 3
+    Correct: INCREMENTALTOM_chunk20, INCREMENTALTOM_chunk6
+    Incorrect: INCREMENTALTOM_chunk13, INCREMENTALTOM_chunk15, INCREMENTALTOM_chunk4, INCREMENTALTOM_chunk9
+  - Sample 245: Order 2
+    Correct: INCREMENTALTOM_chunk15, INCREMENTALTOM_chunk20, INCREMENTALTOM_chunk4
+    Incorrect: INCREMENTALTOM_chunk13, INCREMENTALTOM_chunk6, INCREMENTALTOM_chunk9
+
+--------------------------------------------------------------------------------
+9. ERROR PATTERN ANALYSIS
+--------------------------------------------------------------------------------
+Errors by Question Order (higher order = more complex ToM):
+  Order 0: 148/360 errors (41.1%)
+  Order 1: 176/360 errors (48.9%)
+  Order 2: 231/360 errors (64.2%)
+  Order 3: 263/360 errors (73.1%)
+  Order 4: 223/360 errors (61.9%)
+
+Errors by Deception:
+  No deception: 441/834 errors (52.9%)
+  With deception: 600/966 errors (62.1%)
+
+Errors by Story Length:
+  Length 1: 360/678 errors (53.1%)
+  Length 2: 301/534 errors (56.4%)
+  Length 3: 380/588 errors (64.6%)
+
+--------------------------------------------------------------------------------
+10. MODEL AGREEMENT ANALYSIS
+--------------------------------------------------------------------------------
+Samples evaluated by multiple methods: 300
+  All correct: 41 (13.7%)
+  All wrong: 16 (5.3%)
+  Mixed/Disagreement: 243 (81.0%)
+
+================================================================================
+11. RECOMMENDATIONS FOR NEW METHOD DESIGN
+================================================================================
+
+* TARGET THE IMPOSSIBLE: 76 questions stumped ALL methods.
+  Focus new method on addressing these particularly challenging cases.
+
+* LEVERAGE COMPLEMENTARITY: 183 questions had mixed results.
+  A hybrid approach combining methods might succeed where individual methods fail.
+
+* COMPLEX ToM CHALLENGE: Question order 4 has highest error rate.
+  Error rate at order 4: 223/360
+
+* DECEPTION HANDLING: Error rate 62.1% with deception vs 52.9% without.
+  New method should improve handling of deceptive scenarios.
+
+* POTENTIAL STRATEGIES:
+  - Ensemble approach: Combine multiple methods' outputs
+  - Cascading: Start with simple method, escalate to complex if uncertain
+  - Meta-reasoning: Train model to select appropriate method per-question
+  - Deception detection: Explicitly identify and handle false statements
+  - Iterative verification: Check consistency of predictions
+
+================================================================================
+END OF ANALYSIS
+================================================================================

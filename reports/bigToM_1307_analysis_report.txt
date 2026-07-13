@@ -1,0 +1,194 @@
+﻿================================================================================
+THEORY OF MIND EXPERIMENT RESULTS - COMPREHENSIVE ANALYSIS
+================================================================================
+
+--------------------------------------------------------------------------------
+1. BASIC STATISTICS BY EXPERIMENT
+--------------------------------------------------------------------------------
+experiment                   | total | correct | accuracy | order_0 | order_1 | order_2 | order_3 | order_4 | deception_true | deception_false
+----------------------------------------------------------------------------------------------------------------------------------------------
+ASSEMABLETOM_Qwen3-0.6B      | 230   | 175     | 76.09%   | 88/110  | 87/120  | N/A     | N/A     | N/A     | 37/60          | 138/170        
+ASSEMABLETOM_Qwen3-1.7B      | 230   | 172     | 74.78%   | 86/110  | 86/120  | N/A     | N/A     | N/A     | 43/60          | 129/170        
+INCREMENTALTOM_Qwen3-0.6B    | 230   | 175     | 76.09%   | 88/110  | 87/120  | N/A     | N/A     | N/A     | 37/60          | 138/170        
+INCREMENTALTOM_Qwen3-1.7B    | 230   | 172     | 74.78%   | 86/110  | 86/120  | N/A     | N/A     | N/A     | 43/60          | 129/170        
+PERCEPTOM_Qwen3-0.6B         | 230   | 173     | 75.22%   | 82/110  | 91/120  | N/A     | N/A     | N/A     | 36/60          | 137/170        
+PERCEPTOM_Qwen3-1.7B         | 230   | 178     | 77.39%   | 89/110  | 89/120  | N/A     | N/A     | N/A     | 40/60          | 138/170        
+SHAREDEVIDENCETOM_Qwen3-0.6B | 230   | 179     | 77.83%   | 92/110  | 87/120  | N/A     | N/A     | N/A     | 53/60          | 126/170        
+SHAREDEVIDENCETOM_Qwen3-1.7B | 230   | 166     | 72.17%   | 83/110  | 83/120  | N/A     | N/A     | N/A     | 56/60          | 110/170        
+SIMTOM_Qwen3-0.6B            | 230   | 174     | 75.65%   | 84/110  | 90/120  | N/A     | N/A     | N/A     | 39/60          | 135/170        
+SIMTOM_Qwen3-1.7B            | 230   | 177     | 76.96%   | 91/110  | 86/120  | N/A     | N/A     | N/A     | 44/60          | 133/170        
+VP_Qwen3-0.6B                | 230   | 166     | 72.17%   | 81/110  | 85/120  | N/A     | N/A     | N/A     | 29/60          | 137/170        
+VP_Qwen3-1.7B                | 230   | 162     | 70.43%   | 85/110  | 77/120  | N/A     | N/A     | N/A     | 38/60          | 124/170        
+
+--------------------------------------------------------------------------------
+2. METHOD COMPARISON (ALL MODELS AGGREGATED)
+--------------------------------------------------------------------------------
+method            | total | correct | accuracy
+----------------------------------------------
+IncrementalToM    | 460   | 347     | 75.43%  
+PercepToM         | 460   | 351     | 76.30%  
+SIMTOM            | 460   | 351     | 76.30%  
+SharedEvidenceToM | 460   | 345     | 75.00%  
+VP                | 460   | 328     | 71.30%  
+assemableTom      | 460   | 347     | 75.43%  
+
+--------------------------------------------------------------------------------
+3. ACCURACY BY QUESTION ORDER (ToM COMPLEXITY)
+--------------------------------------------------------------------------------
+question_order | method            | total | correct | accuracy
+---------------------------------------------------------------
+0              | IncrementalToM    | 220   | 174     | 79.09%  
+0              | PercepToM         | 220   | 171     | 77.73%  
+0              | SIMTOM            | 220   | 175     | 79.55%  
+0              | SharedEvidenceToM | 220   | 175     | 79.55%  
+0              | VP                | 220   | 166     | 75.45%  
+0              | assemableTom      | 220   | 174     | 79.09%  
+1              | IncrementalToM    | 240   | 173     | 72.08%  
+1              | PercepToM         | 240   | 180     | 75.00%  
+1              | SIMTOM            | 240   | 176     | 73.33%  
+1              | SharedEvidenceToM | 240   | 170     | 70.83%  
+1              | VP                | 240   | 162     | 67.50%  
+1              | assemableTom      | 240   | 173     | 72.08%  
+
+--------------------------------------------------------------------------------
+4. ACCURACY: DECEPTION VS NON-DECEPTION
+--------------------------------------------------------------------------------
+deception      | method            | total | correct | accuracy
+---------------------------------------------------------------
+no_deception   | IncrementalToM    | 340   | 267     | 78.53%  
+no_deception   | PercepToM         | 340   | 275     | 80.88%  
+no_deception   | SIMTOM            | 340   | 268     | 78.82%  
+no_deception   | SharedEvidenceToM | 340   | 236     | 69.41%  
+no_deception   | VP                | 340   | 261     | 76.76%  
+no_deception   | assemableTom      | 340   | 267     | 78.53%  
+with_deception | IncrementalToM    | 120   | 80      | 66.67%  
+with_deception | PercepToM         | 120   | 76      | 63.33%  
+with_deception | SIMTOM            | 120   | 83      | 69.17%  
+with_deception | SharedEvidenceToM | 120   | 109     | 90.83%  
+with_deception | VP                | 120   | 67      | 55.83%  
+with_deception | assemableTom      | 120   | 80      | 66.67%  
+
+--------------------------------------------------------------------------------
+5. 'IMPOSSIBLE' QUESTIONS (No Method Succeeded)
+--------------------------------------------------------------------------------
+Total impossible questions: 12
+
+Breakdown by question order:
+  Order 0: 1 questions
+  Order 1: 11 questions
+
+Breakdown by deception:
+  No deception: 12 questions
+
+Sample impossible questions:
+  - Sample bigtom_0_forward_action_true_control_65: What will Ngozi do?...
+    Answer: Ngozi will apply the green glaze to the vase, thinking it is blue. | Order: 0 | Deception: False
+  - Sample bigtom_1_backward_belief_true_belief_132: Does Tariq believe the circuit breaker is off or on?...
+    Answer: Tariq believes the circuit breaker is on. | Order: 1 | Deception: False
+  - Sample bigtom_1_backward_belief_true_belief_137: Does Alfonso believe the book is in pristine condition or stained with coffee?...
+    Answer: Alfonso believes the book is stained with coffee. | Order: 1 | Deception: False
+  - Sample bigtom_1_forward_action_true_belief_169: What will Nadia do?...
+    Answer: Nadia will consider incorporating a new water feature into her design. | Order: 1 | Deception: False
+  - Sample bigtom_1_percept_to_belief_true_belief_220: Does Fatima believe she has high-quality paintbrushes or ruined paintbrushes in ...
+    Answer: Fatima believes the paintbrushes are ruined. | Order: 1 | Deception: False
+
+--------------------------------------------------------------------------------
+6. 'EASY' QUESTIONS (All Methods Succeeded)
+--------------------------------------------------------------------------------
+Total easy questions: 97
+
+Breakdown by question order:
+  Order 0: 47 questions
+  Order 1: 50 questions
+
+--------------------------------------------------------------------------------
+7. METHOD COMPLEMENTARITY (When does each method win?)
+--------------------------------------------------------------------------------
+This shows how many questions each method got RIGHT where another got WRONG.
+
+method            | wins_vs_PercepToM | wins_vs_SIMTOM | wins_vs_SharedEvidenceToM | wins_vs_VP | wins_vs_assemableTom
+----------------------------------------------------------------------------------------------------------------------
+IncrementalToM    | 8                 | 9              | 26                        | 24         | 0                   
+PercepToM         | 14                | 11             | 32                        | 28         | 14                  
+SIMTOM            | 14                | 10             | 30                        | 24         | 14                  
+SharedEvidenceToM | 20                | 20             | 19                        | 26         | 20                  
+VP                | 14                | 12             | 9                         | 22         | 14                  
+assemableTom      | 0                 | 8              | 9                         | 26         | 24                  
+
+--------------------------------------------------------------------------------
+8. PARTIAL SUCCESS QUESTIONS (Some Methods Right, Others Wrong)
+--------------------------------------------------------------------------------
+Total questions with partial success: 80
+
+Success pattern distribution:
+  1 correct, 5 incorrect methods: 16 questions
+  2 correct, 4 incorrect methods: 9 questions
+  3 correct, 3 incorrect methods: 11 questions
+  4 correct, 2 incorrect methods: 10 questions
+  5 correct, 1 incorrect methods: 34 questions
+
+Sample partial success questions:
+  - Sample bigtom_0_backward_belief_false_belief_1: Order 0
+    Correct: assemableTom, IncrementalToM, PercepToM, SharedEvidenceToM, SIMTOM
+    Incorrect: VP
+  - Sample bigtom_0_backward_belief_false_belief_2: Order 0
+    Correct: assemableTom, IncrementalToM, PercepToM, SIMTOM, VP
+    Incorrect: SharedEvidenceToM
+  - Sample bigtom_0_backward_belief_false_belief_3: Order 0
+    Correct: SharedEvidenceToM, VP
+    Incorrect: assemableTom, IncrementalToM, PercepToM, SIMTOM
+  - Sample bigtom_0_backward_belief_false_belief_4: Order 0
+    Correct: SharedEvidenceToM
+    Incorrect: assemableTom, IncrementalToM, PercepToM, SIMTOM, VP
+  - Sample bigtom_0_backward_belief_false_belief_6: Order 0
+    Correct: assemableTom, IncrementalToM, PercepToM, SharedEvidenceToM, SIMTOM
+    Incorrect: VP
+
+--------------------------------------------------------------------------------
+9. ERROR PATTERN ANALYSIS
+--------------------------------------------------------------------------------
+Errors by Question Order (higher order = more complex ToM):
+  Order 0: 285/1320 errors (21.6%)
+  Order 1: 406/1440 errors (28.2%)
+
+Errors by Deception:
+  No deception: 466/2040 errors (22.8%)
+  With deception: 225/720 errors (31.2%)
+
+Errors by Story Length:
+  Length None: 691/2760 errors (25.0%)
+
+--------------------------------------------------------------------------------
+10. MODEL AGREEMENT ANALYSIS
+--------------------------------------------------------------------------------
+Samples evaluated by multiple methods: 230
+  All correct: 0 (0.0%)
+  All wrong: 109 (47.4%)
+  Mixed/Disagreement: 121 (52.6%)
+
+================================================================================
+11. RECOMMENDATIONS FOR NEW METHOD DESIGN
+================================================================================
+
+* TARGET THE IMPOSSIBLE: 12 questions stumped ALL methods.
+  Focus new method on addressing these particularly challenging cases.
+
+* LEVERAGE COMPLEMENTARITY: 80 questions had mixed results.
+  A hybrid approach combining methods might succeed where individual methods fail.
+
+* COMPLEX ToM CHALLENGE: Question order 1 has highest error rate.
+  Error rate at order 1: 406/1440
+
+* DECEPTION HANDLING: Error rate 31.2% with deception vs 22.8% without.
+  New method should improve handling of deceptive scenarios.
+
+* POTENTIAL STRATEGIES:
+  - Ensemble approach: Combine multiple methods' outputs
+  - Cascading: Start with simple method, escalate to complex if uncertain
+  - Meta-reasoning: Train model to select appropriate method per-question
+  - Deception detection: Explicitly identify and handle false statements
+  - Iterative verification: Check consistency of predictions
+
+================================================================================
+END OF ANALYSIS
+================================================================================
