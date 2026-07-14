@@ -1,0 +1,234 @@
+﻿================================================================================
+THEORY OF MIND EXPERIMENT RESULTS - COMPREHENSIVE ANALYSIS
+================================================================================
+
+--------------------------------------------------------------------------------
+1. BASIC STATISTICS BY EXPERIMENT
+--------------------------------------------------------------------------------
+experiment                   | total | correct | accuracy | order_0 | order_1 | order_2 | order_3 | order_4 | deception_true | deception_false
+----------------------------------------------------------------------------------------------------------------------------------------------
+ASSEMBLETOM_Qwen3-0.6B       | 300   | 131     | 43.67%   | 38/60   | 31/60   | 19/60   | 22/60   | 21/60   | 69/161         | 62/139         
+ASSEMBLETOM_Qwen3-1.7B       | 300   | 180     | 60.00%   | 48/60   | 30/60   | 19/60   | 40/60   | 43/60   | 84/161         | 96/139         
+DWM_Qwen3-0.6B               | 300   | 134     | 44.67%   | 25/60   | 26/60   | 25/60   | 25/60   | 33/60   | 63/161         | 71/139         
+DWM_Qwen3-1.7B               | 300   | 135     | 45.00%   | 37/60   | 28/60   | 25/60   | 23/60   | 22/60   | 66/161         | 69/139         
+INCREMENTALTOM_Qwen3-0.6B    | 300   | 119     | 39.67%   | 38/60   | 31/60   | 19/60   | 12/60   | 19/60   | 54/161         | 65/139         
+INCREMENTALTOM_Qwen3-1.7B    | 300   | 127     | 42.33%   | 48/60   | 30/60   | 19/60   | 15/60   | 15/60   | 61/161         | 66/139         
+PERCEPTOM_Qwen3-0.6B         | 300   | 83      | 27.67%   | 13/60   | 20/60   | 17/60   | 16/60   | 17/60   | 41/161         | 42/139         
+PERCEPTOM_Qwen3-1.7B         | 300   | 153     | 51.00%   | 50/60   | 31/60   | 22/60   | 26/60   | 24/60   | 72/161         | 81/139         
+S3AP_Qwen3-0.6B              | 300   | 116     | 38.67%   | 31/60   | 24/60   | 20/60   | 17/60   | 24/60   | 60/161         | 56/139         
+S3AP_Qwen3-1.7B              | 300   | 154     | 51.33%   | 49/60   | 32/60   | 32/60   | 20/60   | 21/60   | 78/161         | 76/139         
+SHAREDEVIDENCETOM_Qwen3-0.6B | 300   | 103     | 34.33%   | 15/60   | 23/60   | 22/60   | 22/60   | 21/60   | 57/161         | 46/139         
+SHAREDEVIDENCETOM_Qwen3-1.7B | 300   | 161     | 53.67%   | 30/60   | 21/60   | 27/60   | 40/60   | 43/60   | 76/161         | 85/139         
+SIMTOM_Qwen3-0.6B            | 300   | 99      | 33.00%   | 19/60   | 11/60   | 15/60   | 29/60   | 25/60   | 48/161         | 51/139         
+SIMTOM_Qwen3-1.7B            | 300   | 159     | 53.00%   | 54/60   | 36/60   | 28/60   | 20/60   | 21/60   | 81/161         | 78/139         
+SOO_Qwen3-0.6B               | 300   | 109     | 36.33%   | 28/60   | 30/60   | 21/60   | 12/60   | 18/60   | 47/161         | 62/139         
+SOO_Qwen3-1.7B               | 300   | 107     | 35.67%   | 37/60   | 30/60   | 16/60   | 12/60   | 12/60   | 51/161         | 56/139         
+VP_Qwen3-0.6B                | 300   | 89      | 29.67%   | 19/60   | 19/60   | 12/60   | 20/60   | 19/60   | 40/161         | 49/139         
+VP_Qwen3-1.7B                | 300   | 119     | 39.67%   | 24/60   | 20/60   | 20/60   | 26/60   | 29/60   | 65/161         | 54/139         
+
+--------------------------------------------------------------------------------
+2. METHOD COMPARISON (ALL MODELS AGGREGATED)
+--------------------------------------------------------------------------------
+method            | total | correct | accuracy
+----------------------------------------------
+DWM               | 600   | 269     | 44.83%  
+INCREMENTALTOM    | 600   | 246     | 41.00%  
+PercepToM         | 600   | 236     | 39.33%  
+S3AP              | 600   | 270     | 45.00%  
+SHAREDEVIDENCETOM | 600   | 264     | 44.00%  
+SIMTOM            | 600   | 258     | 43.00%  
+SoO               | 600   | 216     | 36.00%  
+VP                | 600   | 208     | 34.67%  
+AssembleToM       | 600   | 311     | 51.83%  
+
+--------------------------------------------------------------------------------
+3. ACCURACY BY QUESTION ORDER (ToM COMPLEXITY)
+--------------------------------------------------------------------------------
+question_order | method            | total | correct | accuracy
+---------------------------------------------------------------
+0              | DWM               | 120   | 62      | 51.67%  
+0              | INCREMENTALTOM    | 120   | 86      | 71.67%  
+0              | PercepToM         | 120   | 63      | 52.50%  
+0              | S3AP              | 120   | 80      | 66.67%  
+0              | SHAREDEVIDENCETOM | 120   | 45      | 37.50%  
+0              | SIMTOM            | 120   | 73      | 60.83%  
+0              | SoO               | 120   | 65      | 54.17%  
+0              | VP                | 120   | 43      | 35.83%  
+0              | AssembleToM       | 120   | 86      | 71.67%  
+1              | DWM               | 120   | 54      | 45.00%  
+1              | INCREMENTALTOM    | 120   | 61      | 50.83%  
+1              | PercepToM         | 120   | 51      | 42.50%  
+1              | S3AP              | 120   | 56      | 46.67%  
+1              | SHAREDEVIDENCETOM | 120   | 44      | 36.67%  
+1              | SIMTOM            | 120   | 47      | 39.17%  
+1              | SoO               | 120   | 60      | 50.00%  
+1              | VP                | 120   | 39      | 32.50%  
+1              | AssembleToM       | 120   | 61      | 50.83%  
+2              | DWM               | 120   | 50      | 41.67%  
+2              | INCREMENTALTOM    | 120   | 38      | 31.67%  
+2              | PercepToM         | 120   | 39      | 32.50%  
+2              | S3AP              | 120   | 52      | 43.33%  
+2              | SHAREDEVIDENCETOM | 120   | 49      | 40.83%  
+2              | SIMTOM            | 120   | 43      | 35.83%  
+2              | SoO               | 120   | 37      | 30.83%  
+2              | VP                | 120   | 32      | 26.67%  
+2              | AssembleToM       | 120   | 38      | 31.67%  
+3              | DWM               | 120   | 48      | 40.00%  
+3              | INCREMENTALTOM    | 120   | 27      | 22.50%  
+3              | PercepToM         | 120   | 42      | 35.00%  
+3              | S3AP              | 120   | 37      | 30.83%  
+3              | SHAREDEVIDENCETOM | 120   | 62      | 51.67%  
+3              | SIMTOM            | 120   | 49      | 40.83%  
+3              | SoO               | 120   | 24      | 20.00%  
+3              | VP                | 120   | 46      | 38.33%  
+3              | AssembleToM       | 120   | 62      | 51.67%  
+4              | DWM               | 120   | 55      | 45.83%  
+4              | INCREMENTALTOM    | 120   | 34      | 28.33%  
+4              | PercepToM         | 120   | 41      | 34.17%  
+4              | S3AP              | 120   | 45      | 37.50%  
+4              | SHAREDEVIDENCETOM | 120   | 64      | 53.33%  
+4              | SIMTOM            | 120   | 46      | 38.33%  
+4              | SoO               | 120   | 30      | 25.00%  
+4              | VP                | 120   | 48      | 40.00%  
+4              | AssembleToM       | 120   | 64      | 53.33%  
+
+--------------------------------------------------------------------------------
+4. ACCURACY: DECEPTION VS NON-DECEPTION
+--------------------------------------------------------------------------------
+deception      | method            | total | correct | accuracy
+---------------------------------------------------------------
+no_deception   | DWM               | 278   | 140     | 50.36%  
+no_deception   | INCREMENTALTOM    | 278   | 131     | 47.12%  
+no_deception   | PercepToM         | 278   | 123     | 44.24%  
+no_deception   | S3AP              | 278   | 132     | 47.48%  
+no_deception   | SHAREDEVIDENCETOM | 278   | 131     | 47.12%  
+no_deception   | SIMTOM            | 278   | 129     | 46.40%  
+no_deception   | SoO               | 278   | 118     | 42.45%  
+no_deception   | VP                | 278   | 103     | 37.05%  
+no_deception   | AssembleToM       | 278   | 158     | 56.83%  
+with_deception | DWM               | 322   | 129     | 40.06%  
+with_deception | INCREMENTALTOM    | 322   | 115     | 35.71%  
+with_deception | PercepToM         | 322   | 113     | 35.09%  
+with_deception | S3AP              | 322   | 138     | 42.86%  
+with_deception | SHAREDEVIDENCETOM | 322   | 133     | 41.30%  
+with_deception | SIMTOM            | 322   | 129     | 40.06%  
+with_deception | SoO               | 322   | 98      | 30.43%  
+with_deception | VP                | 322   | 105     | 32.61%  
+with_deception | AssembleToM       | 322   | 153     | 47.52%  
+
+--------------------------------------------------------------------------------
+5. 'IMPOSSIBLE' QUESTIONS (No Method Succeeded)
+--------------------------------------------------------------------------------
+Total impossible questions: 12
+
+Breakdown by question order:
+  Order 1: 6 questions
+  Order 2: 4 questions
+  Order 3: 2 questions
+
+Breakdown by deception:
+  No deception: 3 questions
+  With deception: 9 questions
+
+Sample impossible questions:
+  - Sample 53: Where does Avery think Abigail thinks the lime is?...
+    Answer: blue_suitcase | Order: 2 | Deception: False
+  - Sample 829: Where does Mila really think the persimmon is?...
+    Answer: green_bucket | Order: 1 | Deception: True
+  - Sample 767: Where does Amelia think Charlotte thinks Isla thinks the lettuce is?...
+    Answer: blue_cupboard | Order: 3 | Deception: True
+  - Sample 222: Where does Isla really think the peas is?...
+    Answer: blue_cupboard | Order: 1 | Deception: False
+  - Sample 832: Where does Mila really think the onion is?...
+    Answer: red_bucket | Order: 1 | Deception: True
+
+--------------------------------------------------------------------------------
+6. 'EASY' QUESTIONS (All Methods Succeeded)
+--------------------------------------------------------------------------------
+Total easy questions: 2
+
+Breakdown by question order:
+  Order 0: 1 questions
+  Order 1: 1 questions
+
+--------------------------------------------------------------------------------
+7. METHOD COMPLEMENTARITY (When does each method win?)
+--------------------------------------------------------------------------------
+This shows how many questions each method got RIGHT where another got WRONG.
+(With chunk-size sweeps, 'method' here means method+chunk-size, so this
+ also reveals which chunk size wins where another chunk size fails.)
+
+method            | wins_vs_INCREMENTALTOM | wins_vs_PercepToM | wins_vs_S3AP | wins_vs_SHAREDEVIDENCETOM | wins_vs_SIMTOM | wins_vs_SoO | wins_vs_VP | wins_vs_AssembleToM
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DWM               | 63                     | 42                | 35           | 49                        | 34             | 62          | 73         | 36                  
+INCREMENTALTOM    | 55                     | 38                | 39           | 59                        | 35             | 52          | 75         | 12                  
+PercepToM         | 60                     | 64                | 47           | 67                        | 42             | 79          | 83         | 41                  
+S3AP              | 54                     | 66                | 48           | 66                        | 46             | 68          | 85         | 46                  
+SHAREDEVIDENCETOM | 75                     | 93                | 75           | 73                        | 70             | 102         | 84         | 28                  
+SIMTOM            | 58                     | 67                | 48           | 51                        | 68             | 74          | 90         | 47                  
+SoO               | 34                     | 32                | 33           | 21                        | 48             | 22          | 59         | 32                  
+VP                | 57                     | 67                | 49           | 50                        | 42             | 50          | 71         | 29                  
+AssembleToM       | 81                     | 65                | 68           | 72                        | 47             | 68          | 105        | 90                  
+
+--------------------------------------------------------------------------------
+8. PARTIAL SUCCESS QUESTIONS (Some Methods Right, Others Wrong)
+--------------------------------------------------------------------------------
+Total questions with partial success: 264
+
+Success pattern distribution:
+  1 correct, 8 incorrect methods: 27 questions
+  2 correct, 7 incorrect methods: 35 questions
+  3 correct, 6 incorrect methods: 29 questions
+  4 correct, 5 incorrect methods: 40 questions
+  5 correct, 4 incorrect methods: 39 questions
+  6 correct, 3 incorrect methods: 34 questions
+  7 correct, 2 incorrect methods: 36 questions
+  8 correct, 1 incorrect methods: 24 questions
+
+Sample partial success questions:
+  - Sample 701: Order 0
+    Correct: DWM, PercepToM, S3AP, SIMTOM, SoO, VP
+    Incorrect: AssembleToM, INCREMENTALTOM, SHAREDEVIDENCETOM
+  - Sample 171: Order 3
+    Correct: AssembleToM, SHAREDEVIDENCETOM, SIMTOM
+    Incorrect: DWM, INCREMENTALTOM, PercepToM, S3AP, SoO, VP
+  - Sample 100: Order 0
+    Correct: AssembleToM, INCREMENTALTOM, PercepToM, S3AP, SHAREDEVIDENCETOM, SIMTOM, SoO
+    Incorrect: DWM, VP
+  - Sample 289: Order 4
+    Correct: AssembleToM, DWM, S3AP, SHAREDEVIDENCETOM, VP
+    Incorrect: INCREMENTALTOM, PercepToM, SIMTOM, SoO
+  - Sample 739: Order 1
+    Correct: DWM, S3AP, SHAREDEVIDENCETOM, SIMTOM, SoO
+    Incorrect: AssembleToM, INCREMENTALTOM, PercepToM, VP
+
+--------------------------------------------------------------------------------
+9. ERROR PATTERN ANALYSIS
+--------------------------------------------------------------------------------
+Errors by Question Order (higher order = more complex ToM):
+  Order 0: 477/1080 errors (44.2%)
+  Order 1: 607/1080 errors (56.2%)
+  Order 2: 702/1080 errors (65.0%)
+  Order 3: 683/1080 errors (63.2%)
+  Order 4: 653/1080 errors (60.5%)
+
+Errors by Deception:
+  No deception: 1337/2502 errors (53.4%)
+  With deception: 1785/2898 errors (61.6%)
+
+Errors by Story Length:
+  Length 1: 1072/2034 errors (52.7%)
+  Length 2: 964/1602 errors (60.2%)
+  Length 3: 1086/1764 errors (61.6%)
+
+--------------------------------------------------------------------------------
+10. MODEL AGREEMENT ANALYSIS
+--------------------------------------------------------------------------------
+Samples evaluated by multiple methods: 300
+  All correct: 2 (0.7%)
+  All wrong: 0 (0.0%)
+  Mixed/Disagreement: 298 (99.3%)
+
+================================================================================
+END OF ANALYSIS
+================================================================================
