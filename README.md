@@ -1,60 +1,96 @@
-# Theory of Mind on HiToM
+# Theory of Mind on HiToM and BigToM
 
-This project evaluates Theory of Mind (ToM) reasoning on the HiToM dataset using prompt-based methods and DeepSeek models.
+This project evaluates the Theory of Mind (ToM) reasoning capabilities of large
+language models on the HiToM and BigToM datasets. HiToM retains the original
+method implementations, while BigToM uses dedicated adapters to convert its
+examples into binary A/B tasks and preserve the prompts and inference settings
+used in the existing final experiments for reproducibility.
 
-## Project Goal
+The main supported methods are `VP`, `SoO`, `SIMTOM`, `PercepToM`, `DWM`,
+`DTOM`, `S3AP`, `INCREMENTALTOM`, `SHAREDEVIDENCETOM`, and `AssembleToM`.
 
-- Run ToM evaluation on HiToM samples.
-- Support multiple prompting methods ( eg: `VP` and `COTP`).
-- Save per-sample predictions and compute final accuracy and accuracy by `question_order`.
+## 1. Installation
 
-
-## Setup
-
-1. Create and activate a Python environment.
-2. Install dependencies:
-
-```bash
-pip install openai python-dotenv
-```
-
-3. Create `.env` and set your DeepSeek API key:
-
-```env
-deepseek_api=YOUR_API_KEY
-```
-
-## Run
+We recommend creating a dedicated Python environment and then installing the
+dependencies:
 
 ```bash
-python main.py
+pip install -r requirements-colab.txt
 ```
 
-If you want to switch method or output path, update arguments inside `main.py` (the `run_dataset(...)` call).
+## 2. Datasets and General Commands
 
-## Experimental Results
+By default, HiToM reads from `data/hitom.json`:
 
-Dataset: HiToM
+```bash
+python main.py --dataset hitom --category CoTP --method VP --max_samples 10
+```
 
-### Overall Comparison (One Row Per Run)
+By default, BigToM reads from `data/bigtom_balanced_subset.json`:
 
-Use this table for quick model/method comparison. Add one new row for each completed run.
+```bash
+python main.py --dataset bigtom --method VP --max_samples 10
+```
 
-| Model | Method | Prompt Version | Final Accuracy | Correct/Total | Result File |
-| --- | --- | --- | --- | --- | --- |
-| deepseek-chat (DeepSeek-V3.2) | VP | v1 | 0.6242 | 749/1200 | experiment_results/deepseek_hitom_vp_full.jsonl |
-| deepseek-chat (DeepSeek-V3.2) | COTP | v1 | 0.6800 | 816/1200 | experiment_results/deepseek_hitom_cotp_full.jsonl | 
+We recommend explicitly specifying the local model:
 
-### question_order Comparison (Wide Format)
+```bash
+python main.py --dataset bigtom --method VP --model_name Qwen/Qwen3-1.7B
+```
 
-Use this table for cross-model and cross-method comparison by order. Add one new row per completed run.
+`--model_name` and `--qwen_model` are equivalent. BigToM uses the inference
+configuration in `model_hf.py` that matches the reference experiments, with
+`max_new_tokens=2048` by default. HiToM retains its original backend and uses
+`max_new_tokens=1024` by default.
 
-| Model | Method | Prompt Version | Order 0 | Order 1 | Order 2 | Order 3 | Order 4 |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| deepseek-chat (DeepSeek-V3.2) | VP | v1 | 0.9417 (226/240) | 0.5917 (142/240) | 0.5417 (130/240) | 0.5417 (130/240) | 0.5042 (121/240) |
-| deepseek-chat (DeepSeek-V3.2) | COTP | v1 | 0.9750 (234/240) | 0.7292 (175/240) | 0.6875 (165/240) | 0.5417 (130/240) | 0.4667 (112/240) |
+Common arguments:
 
-## Notes
+| Argument | Description |
+| --- | --- |
+| `--dataset hitom\|bigtom` | Select the dataset |
+| `--category CoTP` | Filter HiToM by `prompting_type`; generally not needed for BigToM |
+| `--method METHOD` | Select a method using one of the values listed below |
+| `--model_name MODEL` | Specify a Hugging Face model, such as `Qwen/Qwen3-0.6B` |
+| `--max_samples N` | Run only the first N examples; omit it to run the full dataset |
+| `--qwen_max_new_tokens N` | Override the default maximum generation length |
+| `--chunk_size N` | Set the sentence chunk size for IncrementalToM/AssembleToM |
+| `--input_path PATH` | Override the default input data file |
+| `--output_path PATH` | Override the default output file |
+| `--resume` | Resume from the end of an existing JSONL result file |
+| `--upgrade` | Rerun only examples with `correct=0` |
 
-- `VP` prompt requests a single option letter output (`A`-`O`).
-- Output parsing in `utils.py` supports strict single-letter, `Answer: X`, and fallback letter extraction.
+By default, result files are saved as
+`res/<dataset>_<method>_<model>.jsonl`, for example
+`res/bigtom_vp_qwen3_1_7b.jsonl`. If that file already exists, a new run uses
+`_2`, `_3`, and so on instead of overwriting it. Without an explicit
+`--output_path`, `--resume` and `--upgrade` automatically use the existing file
+with the highest suffix.
+
+Available method arguments:
+
+| Method | `--method` value | Brief description |
+| --- | --- | --- |
+| VP | `VP` | Reads the story and answer choices directly and serves as the basic baseline |
+| SoO | `SoO` | Reasons by placing the model in the target character's situation |
+| SimToM | `SIMTOM` | First filters for events known by the target character, then answers from that perspective |
+| PercepToM | `PercepToM` | Reasons in three stages: perception, belief, and answer |
+| DWM | `DWM` | Builds segmented descriptions of the environment and characters' belief states |
+| Decompose-ToM | `DTOM` | Recursively identifies agents, rewrites the question, and builds character world models |
+| S3AP | `S3AP` | First generates a structured social-world representation |
+| IncrementalToM | `INCREMENTALTOM` | Maintains intermediate understanding checkpoints across sentence chunks; configurable with `--chunk_size` |
+| SharedEvidenceToM | `SHAREDEVIDENCETOM` | Extracts shared evidence known by the relevant characters |
+| AssembleToM | `AssembleToM` | Routes orders 0–2 to IncrementalToM and orders 3–4 to SharedEvidenceToM |
+
+General command format:
+
+```bash
+# HiToM
+python main.py --dataset hitom --category CoTP --method METHOD --model_name Qwen/Qwen3-1.7B --max_samples 10
+
+# BigToM
+python main.py --dataset bigtom --method METHOD --model_name Qwen/Qwen3-1.7B --max_samples 10
+```
+
+To reproduce the existing final BigToM results for
+`INCREMENTALTOM`/`AssembleToM`, use `--chunk_size 9`. For typical incremental
+HiToM runs, use `--chunk_size 3`.
