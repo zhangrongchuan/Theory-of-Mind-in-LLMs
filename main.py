@@ -153,7 +153,7 @@ def make_unique_output_path(output_path: str) -> str:
 
 def build_output_path(dataset_type: str, method: str, model_name: str) -> str:
     dataset_slug = slug(dataset_type)
-    method_slug = slug(method)
+    method_slug = slug(canonical_method_name(method))
     model_slug = model_name_slug(model_name)
     base_path = Path("res") / f"{dataset_slug}_{method_slug}_{model_slug}.jsonl"
     return make_unique_output_path(str(base_path))
@@ -162,7 +162,7 @@ def build_output_path(dataset_type: str, method: str, model_name: str) -> str:
 def find_latest_output_path(dataset_type: str, method: str, model_name: str) -> str:
     """Find the most recently numbered result path for resume or upgrade."""
     dataset_slug = slug(dataset_type)
-    method_slug = slug(method)
+    method_slug = slug(canonical_method_name(method))
     model_slug = model_name_slug(model_name)
     base_path = Path("res") / f"{dataset_slug}_{method_slug}_{model_slug}.jsonl"
 
@@ -196,7 +196,7 @@ def run_sharedevidencetom_solver(
     )
     output_text = solver.run(sample)
     prompt = solver.last_qa_prompt or (
-        f"SHAREDEVIDENCETOM Pipeline initiated for Question: "
+        f"SharedEvidenceToM Pipeline initiated for Question: "
         f"{sample['question']}"
     )
     extra_fields = {
@@ -255,7 +255,7 @@ def run_sharedevidencetom_bigtom_solver(
     )
     output_text = solver.run(sample)
     prompt = solver.last_qa_prompt or (
-        f"SHAREDEVIDENCETOM-BigToM Pipeline initiated for Question: "
+        f"SharedEvidenceToM-BigToM Pipeline initiated for Question: "
         f"{sample['question']}"
     )
     return output_text, prompt, {
@@ -460,9 +460,9 @@ def run_one_sample_hitom(
             prompt = "Error during execution"
 
     # ---------------------------------------------------------
-    # BRANCH: assemableTom
+    # BRANCH: AssembleToM
     # ---------------------------------------------------------
-    elif method_upper == "ASSEMABLETOM":
+    elif method_upper == "ASSEMBLETOM":
         try:
             question_order = infer_question_order(sample["question"])
             if question_order <= 2:
@@ -472,18 +472,18 @@ def run_one_sample_hitom(
                     qwen_max_new_tokens=qwen_max_new_tokens,
                     chunk_size=chunk_size,
                 )
-                extra_fields["assemabletom_route"] = "INCREMENTALTOM"
-                extra_fields["assemabletom_inferred_order"] = question_order
+                extra_fields["assembletom_route"] = "INCREMENTALTOM"
+                extra_fields["assembletom_inferred_order"] = question_order
             else:
                 output_text, prompt, extra_fields = run_sharedevidencetom_solver(
                     sample=sample,
                     qwen_model=qwen_model,
                     qwen_max_new_tokens=qwen_max_new_tokens,
                 )
-                extra_fields["assemabletom_route"] = "SHAREDEVIDENCETOM"
-                extra_fields["assemabletom_inferred_order"] = question_order
+                extra_fields["assembletom_route"] = "SHAREDEVIDENCETOM"
+                extra_fields["assembletom_inferred_order"] = question_order
         except Exception as e:
-            print(f"CRASH DETECTED in assemableTom: {e}")
+            print(f"CRASH DETECTED in AssembleToM: {e}")
             output_text = ""
             prompt = "Error during execution"
 
@@ -633,7 +633,7 @@ def run_one_sample_bigtom(
         )
         extra_fields.update(solver_fields)
 
-    elif method_upper == "ASSEMABLETOM":
+    elif method_upper == "ASSEMBLETOM":
         question_order = int(sample["question_order"])
         if question_order <= 2:
             output_text, prompt, belief_state_tracking, solver_fields = (
@@ -653,8 +653,8 @@ def run_one_sample_bigtom(
             )
             route = "SHAREDEVIDENCETOM"
         extra_fields.update(solver_fields)
-        extra_fields["assemabletom_route"] = route
-        extra_fields["assemabletom_inferred_order"] = question_order
+        extra_fields["assembletom_route"] = route
+        extra_fields["assembletom_inferred_order"] = question_order
 
     elif method_upper == "VP":
         prompt = build_vp_prompt_bigtom(sample)
@@ -1040,7 +1040,7 @@ if __name__ == "__main__":
             "IncrementalToM",
             "SHAREDEVIDENCETOM",
             "SharedEvidenceToM",
-            "assemableTom",
+            "AssembleToM",
         ],
         required=True,
         help="Method of the paper to benchmark"
@@ -1132,9 +1132,9 @@ if __name__ == "__main__":
     print(f"Starting benchmark...")
     print(f"Dataset: {args.dataset} | Category: {args.category or 'all'} | Method: {args.method}")
     method_key = canonical_method_name(args.method)
-    if method_key in {"VP", "SIMTOM", "INCREMENTALTOM", "SHAREDEVIDENCETOM", "ASSEMABLETOM"}:
+    if method_key in {"VP", "SIMTOM", "INCREMENTALTOM", "SHAREDEVIDENCETOM", "ASSEMBLETOM"}:
         print(f"Qwen model: {args.qwen_model}")
-    if method_key in {"INCREMENTALTOM", "ASSEMABLETOM"}:
+    if method_key in {"INCREMENTALTOM", "ASSEMBLETOM"}:
         print(f"Chunk size: {args.chunk_size}")
     print(f"Input: {input_path} | Output: {output_path}")
 
@@ -1165,4 +1165,3 @@ if __name__ == "__main__":
         )
 
     report_accuracy_by_order(output_path, dataset_type=args.dataset)
-

@@ -7,7 +7,7 @@ examples into binary A/B tasks and preserve the prompts and inference settings
 used in the existing final experiments for reproducibility.
 
 The main supported methods are `VP`, `SoO`, `SIMTOM`, `PercepToM`, `DWM`,
-`DTOM`, `S3AP`, `INCREMENTALTOM`, `SHAREDEVIDENCETOM`, and `assemableTom`.
+`DTOM`, `S3AP`, `INCREMENTALTOM`, `SHAREDEVIDENCETOM`, and `AssembleToM`.
 
 ## 1. Installation
 
@@ -53,7 +53,7 @@ Common arguments:
 | `--model_name MODEL` | Specify a Hugging Face model, such as `Qwen/Qwen3-0.6B` |
 | `--max_samples N` | Run only the first N examples; omit it to run the full dataset |
 | `--qwen_max_new_tokens N` | Override the default maximum generation length |
-| `--chunk_size N` | Set the sentence chunk size for IncrementalToM/assemableTom |
+| `--chunk_size N` | Set the sentence chunk size for IncrementalToM/AssembleToM |
 | `--input_path PATH` | Override the default input data file |
 | `--output_path PATH` | Override the default output file |
 | `--resume` | Resume from the end of an existing JSONL result file |
@@ -78,8 +78,8 @@ Available method arguments:
 | Decompose-ToM | `DTOM` | Recursively identifies agents, rewrites the question, and builds character world models |
 | S3AP | `S3AP` | First generates a structured social-world representation |
 | IncrementalToM | `INCREMENTALTOM` | Maintains intermediate understanding checkpoints across sentence chunks; configurable with `--chunk_size` |
-| SharedEvidenceToM | `SHAREDEVIDENCETOM` | Extracts shared epistemic evidence known by the relevant characters |
-| AssembleToM | `assemableTom` | Routes orders 0–2 to IncrementalToM and orders 3–4 to SharedEvidenceToM |
+| SharedEvidenceToM | `SHAREDEVIDENCETOM` | Extracts shared evidence known by the relevant characters |
+| AssembleToM | `AssembleToM` | Routes orders 0–2 to IncrementalToM and orders 3–4 to SharedEvidenceToM |
 
 General command format:
 
@@ -92,5 +92,5 @@ python main.py --dataset bigtom --method METHOD --model_name Qwen/Qwen3-1.7B --m
 ```
 
 To reproduce the existing final BigToM results for
-`INCREMENTALTOM`/`assemableTom`, use `--chunk_size 9`. For typical incremental
+`INCREMENTALTOM`/`AssembleToM`, use `--chunk_size 9`. For typical incremental
 HiToM runs, use `--chunk_size 3`.
